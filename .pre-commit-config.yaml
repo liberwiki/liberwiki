@@ -1,0 +1,34 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: debug-statements
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: detect-private-key
+
+  - repo: https://github.com/psf/black
+    rev: 24.4.2
+    hooks:
+      - id: black
+        args: [--line-length=120]
+        exclude: ^migrations/
+
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        args: [--profile=black, -m=3, -l=120]
+
+  - repo: https://github.com/hakancelikdev/unimport
+    rev: 1.2.1
+    hooks:
+      - id: unimport
+        args: [--remove, --include-star-import]
+
+  - repo: local
+    hooks:
+      - id: migration-check
+        name: migration-check
+        entry: scripts/pre-commit/migration_check.sh
+        language: script
