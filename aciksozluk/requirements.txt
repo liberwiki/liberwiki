@@ -3,3 +3,8 @@ iubeo==0.2.1
 python-dotenv==1.0.1
 psycopg==3.2.1
 sentry-sdk==2.13.0
+django-lifecycle==1.2.4
+django-pghistory==3.2.0
+django-extensions==3.2.3
+ipython==8.26.0
+django-admin-interface==0.28.8
