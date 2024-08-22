@@ -15,6 +15,6 @@ class UserAdmin(BaseModelAdmin, BaseUserAdmin):
         fieldsets = [
             fieldset("Personal info", ["first_name", "last_name", "email"], collapse=False),
             fieldset("Permissions", ["is_active", "is_staff", "is_superuser", "groups", "user_permissions"]),
-            fieldset("Important dates", ["last_login", "date_joined"]),
+            fieldset("Important dates", ["last_login", "date_joined", "created_at", "updated_at"]),
         ]
         return add_fieldsets if not obj else fieldsets

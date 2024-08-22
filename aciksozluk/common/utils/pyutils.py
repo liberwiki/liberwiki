@@ -57,3 +57,7 @@ def first_of(iterable, default=None, pred=None):
     # first_true([a,b,c], x) --> a or b or c or x
     # first_true([a,b], x, f) --> a if f(a) else b if f(b) else x
     return next(filter(pred, iterable), default)
+
+
+def not_none(value):
+    return value is not None

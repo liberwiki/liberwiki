@@ -2,7 +2,7 @@
 
 import uuid
 
-import core.validators.user
+import common.validators.allowed_characters
 import django.db.models.deletion
 import django.utils.timezone
 import pgtrigger.compiler
@@ -82,7 +82,13 @@ class Migration(migrations.Migration):
                         error_messages={"unique": "A user with that username already exists."},
                         help_text="Required. 150 characters or fewer. Letters (lowercase), digits or hyphens only, can't start with letters or hyphens.",
                         max_length=150,
-                        validators=[core.validators.user.username_validator],
+                        validators=[
+                            common.validators.allowed_characters.AllowedCharactersValidator(
+                                allowed_characters="abcdefghijklmnopqrstuvwxyz0123456789-",
+                                allowed_first="abcdefghijklmnopqrstuvwxyz",
+                                allowed_last="abcdefghijklmnopqrstuvwxyz0123456789",
+                            )
+                        ],
                         verbose_name="username",
                     ),
                 ),

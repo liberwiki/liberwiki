@@ -47,20 +47,20 @@ class BaseModel(LifecycleModelMixin, models.Model):
         return super().save(*args, **kwargs)
 
     @staticmethod
-    def _uuid_to_slug(value):
+    def _uuid_to_hex(value):
         return str(value.hex)
 
     @staticmethod
-    def _slug_to_uuid(slug):
+    def _hex_to_uuid(slug):
         return UUID(int=int(slug, 16))
 
     @classmethod
-    def get_from_slug(cls, slug):
-        return cls.objects.get(id=cls._slug_to_uuid(slug))
+    def get_from_hex(cls, hex):  # NOQA
+        return cls.objects.get(id=cls._hex_to_uuid(hex))
 
     @property
-    def slug(self):
-        return self._uuid_to_slug(self.id)
+    def hex(self):
+        return self._uuid_to_hex(self.id)
 
     @staticmethod
     def file_exists(field):

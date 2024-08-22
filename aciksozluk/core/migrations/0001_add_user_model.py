@@ -2,7 +2,7 @@
 
 import uuid
 
-import core.validators.user
+import common.validators.allowed_characters
 import django.contrib.auth.models
 import django.utils.timezone
 import django_lifecycle.mixins
@@ -83,7 +83,13 @@ class Migration(migrations.Migration):
                         help_text="Required. 150 characters or fewer. Letters (lowercase), digits or hyphens only, can't start with letters or hyphens.",
                         max_length=150,
                         unique=True,
-                        validators=[core.validators.user.username_validator],
+                        validators=[
+                            common.validators.allowed_characters.AllowedCharactersValidator(
+                                allowed_characters="abcdefghijklmnopqrstuvwxyz0123456789-",
+                                allowed_first="abcdefghijklmnopqrstuvwxyz",
+                                allowed_last="abcdefghijklmnopqrstuvwxyz0123456789",
+                            )
+                        ],
                         verbose_name="username",
                     ),
                 ),
