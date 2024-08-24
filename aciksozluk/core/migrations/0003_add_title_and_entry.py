@@ -53,7 +53,7 @@ class Migration(migrations.Migration):
                         unique=True,
                         validators=[
                             common.validators.allowed_characters.AllowedCharactersValidator(
-                                allowed_characters="abcdefghijklmnopqrstuvwxyz0123456789!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
+                                allowed_characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
                             )
                         ],
                         verbose_name="Title",

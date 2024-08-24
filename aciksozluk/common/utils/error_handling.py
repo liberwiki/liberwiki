@@ -1,4 +1,4 @@
-from contextlib import suppress
+from contextlib import ContextDecorator, suppress
 
 import sentry_sdk
 
@@ -49,3 +49,25 @@ def suppress_callable_to_sentry(*exceptions):
     Same as SuppressToSentry but as a decorator instead of a context manager.
     """
     return suppress_callable(exceptions, func=sentry_sdk.capture_exception)
+
+
+class TransformException(ContextDecorator):
+    """
+    Context manager that transforms the given exceptions into another exception.
+    Takes a list of exception types to transform, a new exception type to transform them into, and an optional
+    transformation function.
+    The transformation function gets the previous exception as an argument and should return the new exception.
+    """
+
+    def __init__(self, *exception_types, transform=None):
+        self.exception_types = exception_types
+        self.transform = transform
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if exc_type in self.exception_types:
+            new_exception = self.transform(exc_val) if self.transform else exc_val
+            raise new_exception from None
+        return False

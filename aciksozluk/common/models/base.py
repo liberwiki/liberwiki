@@ -1,9 +1,17 @@
 import uuid
 from uuid import UUID
 
-from django.db import models
+from django.db import models, transaction
 from django.utils import timezone
-from django_lifecycle import LifecycleModelMixin
+from django_lifecycle import (
+    AFTER_CREATE,
+    AFTER_SAVE,
+    AFTER_UPDATE,
+    BEFORE_CREATE,
+    BEFORE_SAVE,
+    BEFORE_UPDATE,
+    LifecycleModelMixin,
+)
 
 
 class BaseModel(LifecycleModelMixin, models.Model):
@@ -42,9 +50,34 @@ class BaseModel(LifecycleModelMixin, models.Model):
         instance = cls(**kwargs)
         return instance.save(skip_hooks=skip_hooks)
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
+        skip_hooks = kwargs.pop("skip_hooks", False)
+        save = super().save
+
+        if skip_hooks:
+            save(*args, **kwargs)
+            return
+
+        self._clear_watched_fk_model_cache()
+        is_new = self._state.adding
+
+        if is_new:
+            self._run_hooked_methods(BEFORE_CREATE, **kwargs)
+        else:
+            self._run_hooked_methods(BEFORE_UPDATE, **kwargs)
+
+        self._run_hooked_methods(BEFORE_SAVE, **kwargs)
         self.full_clean()
-        return super().save(*args, **kwargs)
+        save(*args, **kwargs)
+        self._run_hooked_methods(AFTER_SAVE, **kwargs)
+
+        if is_new:
+            self._run_hooked_methods(AFTER_CREATE, **kwargs)
+        else:
+            self._run_hooked_methods(AFTER_UPDATE, **kwargs)
+
+        transaction.on_commit(self._reset_initial_state)
 
     @staticmethod
     def _uuid_to_hex(value):

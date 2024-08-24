@@ -23,6 +23,9 @@ INSTALLED_APPS = [
     "colorfield",
     "admin_interface",
     "administration.apps.AdministrationConfig",  # Needs to be after admin_interface
+    "rest_framework",
+    "django_filters",
+    "drf_spectacular",
     "django_extensions",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -103,3 +106,25 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
+
+
+REST_FRAMEWORK = {
+    "PAGE_SIZE": 100,
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.SearchFilter",
+        "rest_framework.filters.OrderingFilter",
+    ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest.utils.permissions.ReadOnly",
+    ],
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "OpenField API",
+    "DESCRIPTION": f"Aciksozluk API",
+    "VERSION": "0.1.0",
+    "COMPONENT_SPLIT_REQUEST": True,
+}

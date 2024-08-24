@@ -17,8 +17,23 @@ class AllowedCharactersValidator:
         self.allowed_first = first_of([allowed_first, allowed_characters], pred=not_none)
         self.allowed_last = first_of([allowed_last, allowed_characters], pred=not_none)
         message = first_of([message, self.message], pred=not_none)
-        self.message = message.format(allowed_characters=self.allowed_characters)
+        self.message = message.format(allowed_characters=self.input_adjustments(self.allowed_characters))
         self.code = first_of([code, self.code], pred=not_none)
+
+    @staticmethod
+    def _force_unique(value):
+        return "".join(sorted(set(value), key=value.index))
+
+    @staticmethod
+    def _force_python_escape(value):
+        # If you have a % in the string, django's naive error_message % {value: value} failes
+        # due to % being a special character in % formatting that escapes itself.
+        if "%" in value:
+            return value.replace("%", "%%")
+
+    @classmethod
+    def input_adjustments(cls, value):
+        return cls._force_python_escape(cls._force_unique(value))
 
     def _raise_if_invalid(self, should_raise, value):
         if should_raise:

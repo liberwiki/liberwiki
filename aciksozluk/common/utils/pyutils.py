@@ -29,6 +29,17 @@ def returns(value):
     return wrapper
 
 
+def raises(exception):
+    """
+    Creates a lambda function that raises the given exception.
+    """
+
+    def wrapper(*a, **kw):
+        raise exception
+
+    return wrapper
+
+
 def camel_to_snake(name):
     """
     Convert PascalCase and camelCase to snake_case.
@@ -61,3 +72,61 @@ def first_of(iterable, default=None, pred=None):
 
 def not_none(value):
     return value is not None
+
+
+def cloned(f):
+    """
+    A decorator that returns a new function that calls the decorated function.
+    Some decorators edit the decorated function instead of returning new functions
+    But sometimes we want a new function, especially when using decorators functionally
+
+    Example:
+        foo = side_effect_decorator(original, side_effect1)
+        bar = side_effect_decorator(original, side_effect2)
+
+    Here the side effect is applied to original directly.
+    But we want a new function so that the original is not modified.
+
+    foo = side_effect_decorator(noop_function_cloner(original), side_effect1)
+    """
+
+    def wrapper(*a, **kw):
+        return f(*a, **kw)
+
+    return wrapper
+
+
+class Sentinel:
+    """Creates a sentinel object that ever only equals to itself"""
+
+    def __init__(self, name):
+        """
+        Name is the sentinel is preferably in the constant name convention like `SENTINEL_NAME`
+        """
+        self.name = name
+
+    def __repr__(self):
+        return f"<Sentinel:{self.name}>"
+
+    def __str__(self):
+        return "<Sentinel:{self.name}>"
+
+    def __bool__(self):
+        return False
+
+    def __eq__(self, other):
+        return self is other
+
+
+def purge_iterable(iterable, items):
+    """
+    Remove items from an iterable
+    """
+    return [item for item in iterable if item not in items]
+
+
+def purge_mapping(mapping, keys):
+    """
+    Remove keys from a mapping
+    """
+    return {key: value for key, value in mapping.items() if key not in keys}

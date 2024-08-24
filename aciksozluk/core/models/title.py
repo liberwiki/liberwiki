@@ -6,7 +6,7 @@ from common.validators import AllowedCharactersValidator
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils.translation import gettext as _
-from django_lifecycle import BEFORE_CREATE, hook
+from django_lifecycle import AFTER_UPDATE, BEFORE_CREATE, hook
 
 
 @track_model_history
@@ -18,7 +18,7 @@ class Title(BaseModel):
         max_length=255,
         unique=True,
         validators=[
-            AllowedCharactersValidator(allowed_characters=string.ascii_lowercase + string.digits + string.punctuation),
+            AllowedCharactersValidator(allowed_characters=string.ascii_letters + string.digits + string.punctuation),
         ],
         help_text=_("Name of the title."),
     )
@@ -41,5 +41,6 @@ class Title(BaseModel):
         verbose_name_plural = _("Titles")
 
     @hook(BEFORE_CREATE)
+    @hook(AFTER_UPDATE)
     def create_slug(self):
         self.slug = slugify(self.name)
