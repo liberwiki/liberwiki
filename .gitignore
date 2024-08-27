@@ -3,11 +3,21 @@
 __pycache__
 *.py[cod]
 
+# Node
+node_modules
+
+# TypeScript
+*.tsbuildinfo
 
 # Django
 media
 staticfiles
 
+# Next
+/.next/
+next
+out
+build
 
 # IDE
 .idea
@@ -16,3 +26,6 @@ staticfiles
 # ETC
 *.log
 *.env
+.DS_Store
+*.pem
+npm-debug.log*

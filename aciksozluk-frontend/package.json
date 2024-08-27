@@ -1,0 +1,49 @@
+{
+  "name": "aciksozluk-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "next-lint": "next lint",
+    "openapi:codegen": "openapi-typescript src/api/schema.yml -o src/api/schema.ts",
+    "lint:eslint": "eslint src --fix --ext .js,.ts,.tsx",
+    "lint:types": "tsc --noEmit",
+    "lint:prettier": "prettier --check 'src/**/*.{js,jsx,json,md,ts,tsx}'",
+    "lint": "npm run lint:eslint && npm run lint:types && npm run lint:prettier"
+  },
+  "dependencies": {
+    "@types/lodash": "^4.17.7",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "lodash": "^4.17.21",
+    "lucide-react": "^0.436.0",
+    "next": "14.2.7",
+    "react": "^18",
+    "react-dom": "^18",
+    "tailwind-merge": "^2.5.2",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.9.1",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@types/eslint__js": "^8.42.3",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@typescript-eslint/eslint-plugin": "^8.3.0",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.7",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "openapi-fetch": "^0.11.1",
+    "openapi-typescript": "^7.3.0",
+    "postcss": "^8",
+    "prettier": "^3.3.3",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.3.0"
+  }
+}

@@ -1,0 +1,1478 @@
+openapi: 3.0.3
+info:
+  title: OpenField API
+  version: 0.1.0
+  description: Aciksozluk API
+paths:
+  /api/v0/entries/:
+    get:
+      operationId: entries_list
+      description: List entries with optional filters
+      summary: List Entries
+      parameters:
+      - in: query
+        name: author
+        schema:
+          type: string
+          format: uuid
+        description: Unique identifier for this object
+      - in: query
+        name: created_at
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: created_at__gte
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: created_at__lte
+        schema:
+          type: string
+          format: date-time
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: title
+        schema:
+          type: string
+          format: uuid
+        description: Unique identifier for this object
+      - in: query
+        name: updated_at
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: updated_at__gte
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: updated_at__lte
+        schema:
+          type: string
+          format: date-time
+      tags:
+      - entries
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedEntryList'
+          description: ''
+    post:
+      operationId: entries_create
+      description: Create a new entry
+      summary: Create Entry
+      tags:
+      - entries
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntryRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EntryRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EntryRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entry'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntrySerializerError'
+          description: ''
+  /api/v0/entries/{id}/:
+    get:
+      operationId: entries_retrieve
+      description: Retrieve entry by id
+      summary: Retrieve Entry
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          description: Unique identifier for this object
+        required: true
+      tags:
+      - entries
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entry'
+          description: ''
+    put:
+      operationId: entries_update
+      description: Update an existing entry
+      summary: Put Entry
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          description: Unique identifier for this object
+        required: true
+      tags:
+      - entries
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntryUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EntryUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EntryUpdateRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entry'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntrySerializerError'
+          description: ''
+    patch:
+      operationId: entries_partial_update
+      description: Partially update an existing entry
+      summary: Patch Entry
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          description: Unique identifier for this object
+        required: true
+      tags:
+      - entries
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedEntryRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedEntryRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedEntryRequest'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entry'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntrySerializerError'
+          description: ''
+    delete:
+      operationId: entries_destroy
+      description: Delete an existing entry
+      summary: Delete Entry
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          description: Unique identifier for this object
+        required: true
+      tags:
+      - entries
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '204':
+          description: No response body
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntryDestroyError'
+          description: ''
+  /api/v0/titles/:
+    get:
+      operationId: titles_list
+      description: List titles with optional filters
+      summary: List Titles
+      parameters:
+      - in: query
+        name: created_at
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: created_at__gte
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: created_at__lte
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: name
+        schema:
+          type: string
+      - in: query
+        name: name__contains
+        schema:
+          type: string
+      - in: query
+        name: name__icontains
+        schema:
+          type: string
+      - in: query
+        name: name__iexact
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: updated_at
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: updated_at__gte
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: updated_at__lte
+        schema:
+          type: string
+          format: date-time
+      tags:
+      - titles
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTitleList'
+          description: ''
+    post:
+      operationId: titles_create
+      description: Create a title
+      summary: Create Title
+      tags:
+      - titles
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TitleRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TitleRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TitleRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Title'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TitleSerializerError'
+          description: ''
+  /api/v0/titles/{id}/:
+    get:
+      operationId: titles_retrieve
+      description: Retrieve title by id
+      summary: Retrieve Title
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          description: Unique identifier for this object
+        required: true
+      tags:
+      - titles
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Title'
+          description: ''
+    put:
+      operationId: titles_update
+      description: Update a title
+      summary: Put Title
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          description: Unique identifier for this object
+        required: true
+      tags:
+      - titles
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TitleRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TitleRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TitleRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Title'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TitleSerializerError'
+          description: ''
+    patch:
+      operationId: titles_partial_update
+      description: Partially update a title
+      summary: Patch Title
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          description: Unique identifier for this object
+        required: true
+      tags:
+      - titles
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTitleRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTitleRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTitleRequest'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Title'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TitleSerializerError'
+          description: ''
+    delete:
+      operationId: titles_destroy
+      description: Delete a title
+      summary: Delete Title
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          description: Unique identifier for this object
+        required: true
+      tags:
+      - titles
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '204':
+          description: No response body
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TitleDestroyError'
+          description: ''
+  /api/v0/users/:
+    get:
+      operationId: users_list
+      description: List users with optional filters
+      summary: List Users
+      parameters:
+      - in: query
+        name: created_at
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: created_at__gte
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: created_at__lte
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: is_active
+        schema:
+          type: boolean
+      - in: query
+        name: is_staff
+        schema:
+          type: boolean
+      - in: query
+        name: is_superuser
+        schema:
+          type: boolean
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: updated_at
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: updated_at__gte
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: updated_at__lte
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: username__icontains
+        schema:
+          type: string
+      - in: query
+        name: username__iexact
+        schema:
+          type: string
+      tags:
+      - users
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPublicUserList'
+          description: ''
+  /api/v0/users/{id}/:
+    get:
+      operationId: users_retrieve
+      description: Retrieve user by id
+      summary: Retrieve User
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          description: Unique identifier for this object
+        required: true
+      tags:
+      - users
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicUser'
+          description: ''
+  /api/v0/users/me/:
+    get:
+      operationId: users_me_retrieve
+      description: Retrieve the current user
+      summary: Retrieve Me
+      tags:
+      - users
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: users_me_update
+      description: Update the current user
+      summary: Put Me
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSerializerError'
+          description: ''
+    patch:
+      operationId: users_me_partial_update
+      description: Partially update the current user
+      summary: Patch Me
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSerializerError'
+          description: ''
+components:
+  schemas:
+    Entry:
+      type: object
+      description: |-
+        Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
+        read only.
+
+        GET /api/v1/people/5/
+        {
+            "id": 5,
+            "first_name": "John",
+            "last_name": "Doe",
+            "labels": [7]
+        }
+
+        GET /api/v1/people/5/?include=labels
+        {
+            "id": 5,
+            "first_name": "John",
+            "last_name": "Doe",
+            "labels": [
+                {
+                    "id": 7,
+                    "name": "label-name"
+                }
+            ]
+        }
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unique identifier for this object
+        author:
+          type: string
+          format: uuid
+          description: Author of the entry.
+          readOnly: true
+        title:
+          type: string
+          format: uuid
+          description: Title of the entry.
+        content:
+          description: Content of the entry. In tiptap format.
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Date and time this object was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Date and time this object was last updated
+      required:
+      - author
+      - content
+      - created_at
+      - id
+      - title
+      - updated_at
+    EntryDestroyError:
+      type: object
+      properties:
+        protected_elements:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProtectedElement'
+      required:
+      - protected_elements
+    EntryRequest:
+      type: object
+      description: |-
+        Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
+        read only.
+
+        GET /api/v1/people/5/
+        {
+            "id": 5,
+            "first_name": "John",
+            "last_name": "Doe",
+            "labels": [7]
+        }
+
+        GET /api/v1/people/5/?include=labels
+        {
+            "id": 5,
+            "first_name": "John",
+            "last_name": "Doe",
+            "labels": [
+                {
+                    "id": 7,
+                    "name": "label-name"
+                }
+            ]
+        }
+      properties:
+        title:
+          type: string
+          format: uuid
+          description: Title of the entry.
+        content:
+          description: Content of the entry. In tiptap format.
+      required:
+      - content
+      - title
+    EntrySerializerError:
+      type: object
+      properties:
+        id:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        author:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        title:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        content:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        created_at:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        updated_at:
+          type: array
+          items:
+            type: string
+          readOnly: true
+      required:
+      - author
+      - content
+      - created_at
+      - id
+      - title
+      - updated_at
+    EntryUpdateRequest:
+      type: object
+      description: |-
+        Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
+        read only.
+
+        GET /api/v1/people/5/
+        {
+            "id": 5,
+            "first_name": "John",
+            "last_name": "Doe",
+            "labels": [7]
+        }
+
+        GET /api/v1/people/5/?include=labels
+        {
+            "id": 5,
+            "first_name": "John",
+            "last_name": "Doe",
+            "labels": [
+                {
+                    "id": 7,
+                    "name": "label-name"
+                }
+            ]
+        }
+      properties:
+        content:
+          description: Content of the entry. In tiptap format.
+      required:
+      - content
+    PaginatedEntryList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Entry'
+    PaginatedPublicUserList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicUser'
+    PaginatedTitleList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Title'
+    PatchedEntryRequest:
+      type: object
+      description: |-
+        Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
+        read only.
+
+        GET /api/v1/people/5/
+        {
+            "id": 5,
+            "first_name": "John",
+            "last_name": "Doe",
+            "labels": [7]
+        }
+
+        GET /api/v1/people/5/?include=labels
+        {
+            "id": 5,
+            "first_name": "John",
+            "last_name": "Doe",
+            "labels": [
+                {
+                    "id": 7,
+                    "name": "label-name"
+                }
+            ]
+        }
+      properties:
+        title:
+          type: string
+          format: uuid
+          description: Title of the entry.
+        content:
+          description: Content of the entry. In tiptap format.
+    PatchedTitleRequest:
+      type: object
+      description: |-
+        Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
+        read only.
+
+        GET /api/v1/people/5/
+        {
+            "id": 5,
+            "first_name": "John",
+            "last_name": "Doe",
+            "labels": [7]
+        }
+
+        GET /api/v1/people/5/?include=labels
+        {
+            "id": 5,
+            "first_name": "John",
+            "last_name": "Doe",
+            "labels": [
+                {
+                    "id": 7,
+                    "name": "label-name"
+                }
+            ]
+        }
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Title
+          description: Name of the title.
+          maxLength: 255
+    PatchedUserRequest:
+      type: object
+      description: |-
+        Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
+        read only.
+
+        GET /api/v1/people/5/
+        {
+            "id": 5,
+            "first_name": "John",
+            "last_name": "Doe",
+            "labels": [7]
+        }
+
+        GET /api/v1/people/5/?include=labels
+        {
+            "id": 5,
+            "first_name": "John",
+            "last_name": "Doe",
+            "labels": [
+                {
+                    "id": 7,
+                    "name": "label-name"
+                }
+            ]
+        }
+      properties:
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+    ProtectedElement:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+      required:
+      - id
+      - type
+    PublicUser:
+      type: object
+      description: |-
+        Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
+        read only.
+
+        GET /api/v1/people/5/
+        {
+            "id": 5,
+            "first_name": "John",
+            "last_name": "Doe",
+            "labels": [7]
+        }
+
+        GET /api/v1/people/5/?include=labels
+        {
+            "id": 5,
+            "first_name": "John",
+            "last_name": "Doe",
+            "labels": [
+                {
+                    "id": 7,
+                    "name": "label-name"
+                }
+            ]
+        }
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unique identifier for this object
+        username:
+          type: string
+          readOnly: true
+          description: Required. 150 characters or fewer. Letters (lowercase), digits
+            or hyphens only, can't start with letters or hyphens.
+        is_active:
+          type: boolean
+          readOnly: true
+          title: Active
+          description: Designates whether this user should be treated as active. Unselect
+            this instead of deleting accounts.
+        is_staff:
+          type: boolean
+          readOnly: true
+          title: Staff status
+          description: Designates whether the user can log into this admin site.
+        is_superuser:
+          type: boolean
+          readOnly: true
+          title: Superuser status
+          description: Designates that this user has all permissions without explicitly
+            assigning them.
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Date and time this object was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Date and time this object was last updated
+        title_count:
+          type: integer
+          readOnly: true
+        entry_count:
+          type: integer
+          readOnly: true
+      required:
+      - created_at
+      - entry_count
+      - id
+      - is_active
+      - is_staff
+      - is_superuser
+      - title_count
+      - updated_at
+      - username
+    Title:
+      type: object
+      description: |-
+        Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
+        read only.
+
+        GET /api/v1/people/5/
+        {
+            "id": 5,
+            "first_name": "John",
+            "last_name": "Doe",
+            "labels": [7]
+        }
+
+        GET /api/v1/people/5/?include=labels
+        {
+            "id": 5,
+            "first_name": "John",
+            "last_name": "Doe",
+            "labels": [
+                {
+                    "id": 7,
+                    "name": "label-name"
+                }
+            ]
+        }
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unique identifier for this object
+        name:
+          type: string
+          title: Title
+          description: Name of the title.
+          maxLength: 255
+        slug:
+          type: string
+          readOnly: true
+          description: Slug of the title to display in urls.
+          pattern: ^[-a-zA-Z0-9_]+$
+        entry_count:
+          type: integer
+          readOnly: true
+        created_by:
+          type: string
+          format: uuid
+          description: Creator of the title.
+          readOnly: true
+      required:
+      - created_by
+      - entry_count
+      - id
+      - name
+      - slug
+    TitleDestroyError:
+      type: object
+      properties:
+        protected_elements:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProtectedElement'
+      required:
+      - protected_elements
+    TitleRequest:
+      type: object
+      description: |-
+        Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
+        read only.
+
+        GET /api/v1/people/5/
+        {
+            "id": 5,
+            "first_name": "John",
+            "last_name": "Doe",
+            "labels": [7]
+        }
+
+        GET /api/v1/people/5/?include=labels
+        {
+            "id": 5,
+            "first_name": "John",
+            "last_name": "Doe",
+            "labels": [
+                {
+                    "id": 7,
+                    "name": "label-name"
+                }
+            ]
+        }
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Title
+          description: Name of the title.
+          maxLength: 255
+      required:
+      - name
+    TitleSerializerError:
+      type: object
+      properties:
+        id:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        name:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        slug:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        entry_count:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        created_by:
+          type: array
+          items:
+            type: string
+          readOnly: true
+      required:
+      - created_by
+      - entry_count
+      - id
+      - name
+      - slug
+    User:
+      type: object
+      description: |-
+        Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
+        read only.
+
+        GET /api/v1/people/5/
+        {
+            "id": 5,
+            "first_name": "John",
+            "last_name": "Doe",
+            "labels": [7]
+        }
+
+        GET /api/v1/people/5/?include=labels
+        {
+            "id": 5,
+            "first_name": "John",
+            "last_name": "Doe",
+            "labels": [
+                {
+                    "id": 7,
+                    "name": "label-name"
+                }
+            ]
+        }
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unique identifier for this object
+        username:
+          type: string
+          readOnly: true
+          description: Required. 150 characters or fewer. Letters (lowercase), digits
+            or hyphens only, can't start with letters or hyphens.
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          readOnly: true
+          title: Email address
+        is_active:
+          type: boolean
+          readOnly: true
+          title: Active
+          description: Designates whether this user should be treated as active. Unselect
+            this instead of deleting accounts.
+        is_staff:
+          type: boolean
+          readOnly: true
+          title: Staff status
+          description: Designates whether the user can log into this admin site.
+        is_superuser:
+          type: boolean
+          readOnly: true
+          title: Superuser status
+          description: Designates that this user has all permissions without explicitly
+            assigning them.
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Date and time this object was created
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Date and time this object was last updated
+        title_count:
+          type: integer
+          readOnly: true
+        entry_count:
+          type: integer
+          readOnly: true
+      required:
+      - created_at
+      - email
+      - entry_count
+      - id
+      - is_active
+      - is_staff
+      - is_superuser
+      - title_count
+      - updated_at
+      - username
+    UserRequest:
+      type: object
+      description: |-
+        Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
+        read only.
+
+        GET /api/v1/people/5/
+        {
+            "id": 5,
+            "first_name": "John",
+            "last_name": "Doe",
+            "labels": [7]
+        }
+
+        GET /api/v1/people/5/?include=labels
+        {
+            "id": 5,
+            "first_name": "John",
+            "last_name": "Doe",
+            "labels": [
+                {
+                    "id": 7,
+                    "name": "label-name"
+                }
+            ]
+        }
+      properties:
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+    UserSerializerError:
+      type: object
+      properties:
+        id:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        username:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        first_name:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        last_name:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        email:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        is_active:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        is_staff:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        is_superuser:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        created_at:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        updated_at:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        title_count:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        entry_count:
+          type: array
+          items:
+            type: string
+          readOnly: true
+      required:
+      - created_at
+      - email
+      - entry_count
+      - first_name
+      - id
+      - is_active
+      - is_staff
+      - is_superuser
+      - last_name
+      - title_count
+      - updated_at
+      - username
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
