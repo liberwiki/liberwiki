@@ -42,6 +42,7 @@
     "it": false
   },
   "rules": {
+    "react/no-unknown-property": 0,
     "@typescript-eslint/ban-ts-ignore": 0,
     "@typescript-eslint/ban-ts-comment": 0,
     "@typescript-eslint/explicit-function-return-type": 0,
@@ -78,6 +79,7 @@
     "package.json",
     "tsconfig.json",
     ".eslint*",
-    ".prettier*"
+    ".prettier*",
+    "src/components/shadcn"
   ]
 }

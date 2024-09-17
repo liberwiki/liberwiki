@@ -51,7 +51,7 @@ def suppress_callable_to_sentry(*exceptions):
     return suppress_callable(exceptions, func=sentry_sdk.capture_exception)
 
 
-class TransformException(ContextDecorator):
+class TransformExceptions(ContextDecorator):
     """
     Context manager that transforms the given exceptions into another exception.
     Takes a list of exception types to transform, a new exception type to transform them into, and an optional
@@ -59,15 +59,16 @@ class TransformException(ContextDecorator):
     The transformation function gets the previous exception as an argument and should return the new exception.
     """
 
-    def __init__(self, *exception_types, transform=None):
+    def __init__(self, *exception_types, transform=None, keep_original=True):
         self.exception_types = exception_types
         self.transform = transform
+        self.keep_original = keep_original
 
     def __enter__(self):
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        if exc_type in self.exception_types:
+        if isinstance(exc_val, self.exception_types):
             new_exception = self.transform(exc_val) if self.transform else exc_val
-            raise new_exception from None
+            raise new_exception from (self.keep_original and exc_val or None)
         return False

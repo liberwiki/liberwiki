@@ -31,3 +31,10 @@ repos:
         name: migration-check
         entry: scripts/pre-commit/migration_check.sh
         language: script
+
+  - repo: local
+    hooks:
+      - id: lint-frontend
+        name: lint-frontend
+        entry: scripts/pre-commit/lint_frontend.sh
+        language: script

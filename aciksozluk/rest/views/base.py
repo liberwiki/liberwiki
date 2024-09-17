@@ -1,4 +1,4 @@
-from common.utils.error_handling import TransformException
+from common.utils.error_handling import TransformExceptions
 from common.utils.pyutils import Sentinel, with_attrs
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.db.models.deletion import ProtectedError
@@ -13,7 +13,7 @@ from rest_framework.viewsets import ModelViewSet
 
 REQUIRED_BASE_MODEL_VIEWSET_ATTRIBUTE = Sentinel("REQUIRED_BASE_MODEL_VIEWSET_ATTRIBUTE")
 
-django_to_drf_validation_error = TransformException(
+django_to_drf_validation_error = TransformExceptions(
     ValidationError,
     transform=lambda e: DRFValidationError(detail=e.message_dict),
 )
