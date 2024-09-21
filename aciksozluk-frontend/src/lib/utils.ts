@@ -1,5 +1,8 @@
+import tailwindConfig from '~/tailwind.config'
+
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import resolveConfig from 'tailwindcss/resolveConfig'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -22,4 +25,8 @@ export function withAttributes<T extends Record<string, string>>(fn: Function, a
   })
   // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   return fn as Function & T
+}
+
+export function useTailwindConfig() {
+  return resolveConfig(tailwindConfig)
 }

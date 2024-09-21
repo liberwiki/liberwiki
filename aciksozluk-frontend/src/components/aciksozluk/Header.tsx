@@ -1,3 +1,5 @@
+'use client'
+
 import { CommandMenu } from '@/components/aciksozluk/CommandMenu'
 import { MobileNav } from '@/components/aciksozluk/MobileNav'
 import { Button } from '@/components/shadcn/button'

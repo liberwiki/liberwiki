@@ -8,13 +8,13 @@ export function RightColumn() {
     <div className="w-full">
       <div className={cn('pb-4')}>
         <div className="py-1">
-          <AspectRatio ratio={16 / 9} className="bg-muted" />
+          <AspectRatio ratio={16 / 9} className="bg-black" />
         </div>
         <div className="py-1">
-          <AspectRatio ratio={16 / 9} className="bg-muted" />
+          <AspectRatio ratio={16 / 9} className="bg-black" />
         </div>
         <div className="py-1">
-          <AspectRatio ratio={16 / 9} className="bg-muted" />
+          <AspectRatio ratio={16 / 9} className="bg-black" />
         </div>
       </div>
     </div>
