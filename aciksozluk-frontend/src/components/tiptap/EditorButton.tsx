@@ -2,9 +2,9 @@
 
 import React from 'react'
 
-import { Toggle } from '@/components/shadcn/toggle'
+import * as Icons from 'lucide-react'
 
-import { LucideIcon } from 'lucide-react'
+import { Toggle } from '@/components/shadcn/toggle'
 
 interface EditorButtonProps {
   pressed?: boolean
@@ -12,7 +12,7 @@ interface EditorButtonProps {
   ariaLabel?: string
   className?: string
   style?: React.CSSProperties
-  icon?: LucideIcon
+  icon?: Icons.LucideIcon
 }
 
 const EditorButton = ({

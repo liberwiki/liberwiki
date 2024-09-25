@@ -95,7 +95,9 @@
 .tiptap-editor .ProseMirror {
     min-height: 200px;
     height: 100%;
+}
 
+.ProseMirror {
     > * {
         margin-top: 0.5em;
         margin-bottom: 0.5em;
@@ -146,9 +148,29 @@
         list-style-type: disc;
     }
 
+
     ol {
         list-style-type: decimal;
     }
+
+
+    ul ul {
+        list-style-type: circle;
+    }
+
+    ol ol {
+        list-style-type: lower-alpha;
+    }
+
+    ul ul ul {
+        list-style-type: square;
+    }
+
+
+    ol ol ol {
+        list-style-type: lower-roman;
+    }
+
 }
 
 /* End of editor styles */

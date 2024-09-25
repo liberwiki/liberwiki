@@ -1,8 +1,10 @@
-import tailwindConfig from '~/tailwind.config'
+import aciksozlukTailwindConfig from '~/tailwind.config'
 
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import resolveConfig from 'tailwindcss/resolveConfig'
+
+export const tailwindConfig = resolveConfig(aciksozlukTailwindConfig)
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -27,6 +29,13 @@ export function withAttributes<T extends Record<string, string>>(fn: Function, a
   return fn as Function & T
 }
 
-export function useTailwindConfig() {
-  return resolveConfig(tailwindConfig)
+export function makeCallable<T, R>(originalCallable: (arg: T) => R) {
+  // Usage
+  //
+  // I hate writing () => someFunction(data) for everything that nees a function
+  // This utility allows me to turn
+  // <SomeComponent onClick={() => someFunction(data))} />
+  // into
+  // <SomeComponent onClick={makeCallable(someFunction)(data)} />
+  return (data: T) => () => originalCallable(data)
 }

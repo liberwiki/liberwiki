@@ -1,6 +1,7 @@
 'use client'
 
 import { AspectRatio } from '@/components/shadcn/aspect-ratio'
+
 import { cn } from '@/lib/utils'
 
 export function RightColumn() {

@@ -5,9 +5,14 @@
   "trailingComma": "es5",
   "plugins": ["@trivago/prettier-plugin-sort-imports"],
   "importOrder": [
-    "^react(?:\/.*)?$",
-    "^@sentry(?:\/.*)?$",
     "^~(?:\/.*)?$",
+    "^next(?:\/.*)?$",
+    "^react(?:\/.*)?$",
+    "^lucide-react(?:\/.*)?$",
+    "^lodash(?:\/.*)?$",
+    "^@sentry(?:\/.*)?$",
+    "^@radix-ui(?:\/.*)?$",
+    "^@/components(?:\/.*)?$",
     "^@(?:\/.*)?$",
     "<THIRD_PARTY_MODULES>"
   ],

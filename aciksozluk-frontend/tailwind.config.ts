@@ -1,5 +1,26 @@
 import type { Config } from "tailwindcss"
 
+const screens = ['sm', 'md', 'lg', 'xl', '2xl'];
+const displayUtilities = [
+  'hidden',
+  'block',
+  'inline-block',
+  'flex',
+  'inline-flex',
+  'grid',
+  'inline-grid',
+  'table',
+  'inline-table',
+  'table-row',
+  'table-cell',
+  'table-caption',
+  'list-item',
+  'run-in',
+  'contents',
+  'inherit'
+];
+
+
 const config = {
   darkMode: ["class"],
   content: [
@@ -75,6 +96,10 @@ const config = {
     },
   },
   plugins: [require("tailwindcss-animate")],
+  safelist: [
+    // This is for Overlay component to work
+    ...screens.flatMap(screen =>displayUtilities.map(util => `${screen}:${util}`))
+  ]
 } satisfies Config
 
 export default config
