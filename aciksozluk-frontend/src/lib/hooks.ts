@@ -1,4 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+
+import { AcikSozlukApi } from '@/api/api'
+import config from '@/config/config'
+import { getCookie } from '@/lib/serverActions'
 
 export function useElementAttribute<T extends HTMLElement, K extends keyof T>(attributeKey: K) {
   const ref = useRef<T | null>(null)
@@ -24,6 +28,7 @@ export function useElementAttribute<T extends HTMLElement, K extends keyof T>(at
 
 export function useFormState<T>(initialState: T) {
   const [formState, setFormState] = useState<T>(initialState)
+  const [formErrors, setFormErrors] = useState<Partial<Record<keyof T, string[]>> & { non_field_errors?: string[] }>()
 
   function handleFormState({ key, inputType }: { key: keyof T; inputType: 'event' | 'value' }) {
     return (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> | T[keyof T]) => {
@@ -41,5 +46,12 @@ export function useFormState<T>(initialState: T) {
   const handleFormStateValue = (key: keyof T) => handleFormState({ key, inputType: 'value' })
   const handleFormStateEvent = (key: keyof T) => handleFormState({ key, inputType: 'event' })
 
-  return { formState, setFormState, handleFormStateValue, handleFormStateEvent }
+  return { formState, setFormState, formErrors, setFormErrors, handleFormStateValue, handleFormStateEvent }
+}
+
+export function useAcikSozlukAPI() {
+  async function getBearerToken() {
+    return await getCookie(config.api.bearerTokenCookieName)
+  }
+  return new AcikSozlukApi(getBearerToken)
 }

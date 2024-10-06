@@ -4,6 +4,57 @@ info:
   version: 0.1.0
   description: Aciksozluk API
 paths:
+  /api/v0/auth/tokens/:
+    post:
+      operationId: auth_tokens_create
+      description: Get your active auth token
+      summary: Obtain Auth Token
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthTokenRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AuthTokenRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AuthTokenRequest'
+        required: true
+      security:
+      - tokenAuth: []
+      - basicAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthTokenSerializerError'
+          description: ''
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+          description: ''
+    delete:
+      operationId: auth_tokens_destroy
+      description: Delete auth token, logging out of all devices
+      summary: Delete Auth Token
+      tags:
+      - auth
+      security:
+      - tokenAuth: []
+      - basicAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
   /api/v0/entries/:
     get:
       operationId: entries_list
@@ -43,6 +94,12 @@ paths:
         description: A page number within the paginated result set.
         schema:
           type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
       - name: search
         required: false
         in: query
@@ -55,6 +112,10 @@ paths:
           type: string
           format: uuid
         description: Unique identifier for this object
+      - in: query
+        name: title__slug
+        schema:
+          type: string
       - in: query
         name: updated_at
         schema:
@@ -73,8 +134,9 @@ paths:
       tags:
       - entries
       security:
-      - cookieAuth: []
+      - tokenAuth: []
       - basicAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
@@ -101,8 +163,9 @@ paths:
               $ref: '#/components/schemas/EntryRequest'
         required: true
       security:
-      - cookieAuth: []
+      - tokenAuth: []
       - basicAuth: []
+      - cookieAuth: []
       responses:
         '201':
           content:
@@ -132,8 +195,9 @@ paths:
       tags:
       - entries
       security:
-      - cookieAuth: []
+      - tokenAuth: []
       - basicAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
@@ -168,8 +232,9 @@ paths:
               $ref: '#/components/schemas/EntryUpdateRequest'
         required: true
       security:
-      - cookieAuth: []
+      - tokenAuth: []
       - basicAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
@@ -209,8 +274,9 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedEntryRequest'
       security:
-      - cookieAuth: []
+      - tokenAuth: []
       - basicAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
@@ -239,8 +305,9 @@ paths:
       tags:
       - entries
       security:
-      - cookieAuth: []
+      - tokenAuth: []
       - basicAuth: []
+      - cookieAuth: []
       responses:
         '204':
           description: No response body
@@ -272,6 +339,26 @@ paths:
           type: string
           format: date-time
       - in: query
+        name: entry_count
+        schema:
+          type: number
+      - in: query
+        name: entry_count__gt
+        schema:
+          type: number
+      - in: query
+        name: entry_count__gte
+        schema:
+          type: number
+      - in: query
+        name: entry_count__lt
+        schema:
+          type: number
+      - in: query
+        name: entry_count__lte
+        schema:
+          type: number
+      - in: query
         name: name
         schema:
           type: string
@@ -299,10 +386,20 @@ paths:
         description: A page number within the paginated result set.
         schema:
           type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
       - name: search
         required: false
         in: query
         description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: slug
         schema:
           type: string
       - in: query
@@ -323,8 +420,9 @@ paths:
       tags:
       - titles
       security:
-      - cookieAuth: []
+      - tokenAuth: []
       - basicAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
@@ -351,8 +449,9 @@ paths:
               $ref: '#/components/schemas/TitleRequest'
         required: true
       security:
-      - cookieAuth: []
+      - tokenAuth: []
       - basicAuth: []
+      - cookieAuth: []
       responses:
         '201':
           content:
@@ -382,97 +481,15 @@ paths:
       tags:
       - titles
       security:
-      - cookieAuth: []
+      - tokenAuth: []
       - basicAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Title'
-          description: ''
-    put:
-      operationId: titles_update
-      description: Update a title
-      summary: Put Title
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-          description: Unique identifier for this object
-        required: true
-      tags:
-      - titles
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TitleRequest'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/TitleRequest'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/TitleRequest'
-        required: true
-      security:
-      - cookieAuth: []
-      - basicAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Title'
-          description: ''
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TitleSerializerError'
-          description: ''
-    patch:
-      operationId: titles_partial_update
-      description: Partially update a title
-      summary: Patch Title
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-          description: Unique identifier for this object
-        required: true
-      tags:
-      - titles
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedTitleRequest'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedTitleRequest'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PatchedTitleRequest'
-      security:
-      - cookieAuth: []
-      - basicAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Title'
-          description: ''
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TitleSerializerError'
           description: ''
     delete:
       operationId: titles_destroy
@@ -489,8 +506,9 @@ paths:
       tags:
       - titles
       security:
-      - cookieAuth: []
+      - tokenAuth: []
       - basicAuth: []
+      - cookieAuth: []
       responses:
         '204':
           description: No response body
@@ -522,6 +540,18 @@ paths:
           type: string
           format: date-time
       - in: query
+        name: entry_count
+        schema:
+          type: number
+      - in: query
+        name: entry_count__gte
+        schema:
+          type: number
+      - in: query
+        name: entry_count__lte
+        schema:
+          type: number
+      - in: query
         name: is_active
         schema:
           type: boolean
@@ -545,12 +575,30 @@ paths:
         description: A page number within the paginated result set.
         schema:
           type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
       - name: search
         required: false
         in: query
         description: A search term.
         schema:
           type: string
+      - in: query
+        name: title_count
+        schema:
+          type: number
+      - in: query
+        name: title_count__gte
+        schema:
+          type: number
+      - in: query
+        name: title_count__lte
+        schema:
+          type: number
       - in: query
         name: updated_at
         schema:
@@ -577,8 +625,9 @@ paths:
       tags:
       - users
       security:
-      - cookieAuth: []
+      - tokenAuth: []
       - basicAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
@@ -602,8 +651,9 @@ paths:
       tags:
       - users
       security:
-      - cookieAuth: []
+      - tokenAuth: []
       - basicAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
@@ -619,8 +669,9 @@ paths:
       tags:
       - users
       security:
-      - cookieAuth: []
+      - tokenAuth: []
       - basicAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
@@ -646,8 +697,9 @@ paths:
             schema:
               $ref: '#/components/schemas/UserRequest'
       security:
-      - cookieAuth: []
+      - tokenAuth: []
       - basicAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
@@ -679,8 +731,9 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedUserRequest'
       security:
-      - cookieAuth: []
+      - tokenAuth: []
       - basicAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
@@ -696,6 +749,50 @@ paths:
           description: ''
 components:
   schemas:
+    AuthToken:
+      type: object
+      properties:
+        token:
+          type: string
+          readOnly: true
+      required:
+      - token
+    AuthTokenRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          writeOnly: true
+          minLength: 1
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - email
+      - password
+    AuthTokenSerializerError:
+      type: object
+      properties:
+        email:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        password:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        token:
+          type: array
+          items:
+            type: string
+          readOnly: true
+      required:
+      - email
+      - password
+      - token
     Entry:
       type: object
       description: |-
@@ -874,69 +971,57 @@ components:
       - content
     PaginatedEntryList:
       type: object
-      required:
-      - count
-      - results
       properties:
         count:
           type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
+          description: Total number of items available.
+          example: 1102
+        page_size:
+          type: integer
+          description: Number of results to return per page.
+          example: 100
+        total_pages:
+          type: integer
+          description: Total number of pages.
+          example: 17
         results:
           type: array
           items:
             $ref: '#/components/schemas/Entry'
     PaginatedPublicUserList:
       type: object
-      required:
-      - count
-      - results
       properties:
         count:
           type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
+          description: Total number of items available.
+          example: 1102
+        page_size:
+          type: integer
+          description: Number of results to return per page.
+          example: 100
+        total_pages:
+          type: integer
+          description: Total number of pages.
+          example: 17
         results:
           type: array
           items:
             $ref: '#/components/schemas/PublicUser'
     PaginatedTitleList:
       type: object
-      required:
-      - count
-      - results
       properties:
         count:
           type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
+          description: Total number of items available.
+          example: 1102
+        page_size:
+          type: integer
+          description: Number of results to return per page.
+          example: 100
+        total_pages:
+          type: integer
+          description: Total number of pages.
+          example: 17
         results:
           type: array
           items:
@@ -974,39 +1059,6 @@ components:
           description: Title of the entry.
         content:
           description: Content of the entry. In tiptap format.
-    PatchedTitleRequest:
-      type: object
-      description: |-
-        Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
-        read only.
-
-        GET /api/v1/people/5/
-        {
-            "id": 5,
-            "first_name": "John",
-            "last_name": "Doe",
-            "labels": [7]
-        }
-
-        GET /api/v1/people/5/?include=labels
-        {
-            "id": 5,
-            "first_name": "John",
-            "last_name": "Doe",
-            "labels": [
-                {
-                    "id": 7,
-                    "name": "label-name"
-                }
-            ]
-        }
-      properties:
-        name:
-          type: string
-          minLength: 1
-          title: Title
-          description: Name of the title.
-          maxLength: 255
     PatchedUserRequest:
       type: object
       description: |-
@@ -1476,3 +1528,8 @@ components:
       type: apiKey
       in: cookie
       name: sessionid
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"

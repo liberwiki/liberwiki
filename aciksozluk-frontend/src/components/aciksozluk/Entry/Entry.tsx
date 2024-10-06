@@ -1,47 +1,62 @@
-'use client'
-
 import Link from 'next/link'
 
 import { useState } from 'react'
 
 import * as Icons from 'lucide-react'
 
-import _ from 'lodash'
-
+import Editor from '@/components/aciksozluk/Editor'
 import { Button } from '@/components/shadcn/button'
 import { Card, CardContent } from '@/components/shadcn/card'
 import { Overlay, OverlayContent, OverlayTrigger } from '@/components/shadcn/overlay'
-import Editor from '@/components/tiptap/Editor'
 
-import { entryContents as contents } from '@/lib/testData'
+import { components } from '@/api/schema'
+import { useAcikSozlukAPI } from '@/lib/hooks'
 import { cn } from '@/lib/utils'
 
-export function Entry({ id }: { id: string }) {
-  console.log(id)
+import { format } from 'date-fns'
+import { toast } from 'sonner'
+
+export function Entry({
+  entry,
+  onDelete = () => {},
+}: {
+  entry: components['schemas']['Entry']
+  onDelete?: () => void
+}) {
+  const aciksozluk = useAcikSozlukAPI()
+  const { mutateAsync: deleteEntry } = aciksozluk.deleteEntry(entry.id)
   const [isUpvoted, setIsUpvoted] = useState<boolean>(false)
   const [isDownvoted, setIsDownvoted] = useState<boolean>(false)
   const [isBookmarked, setIsBookmarked] = useState<boolean>(false)
 
-  const handleUpvote = () => {
+  async function handleUpvote() {
     setIsUpvoted(!isUpvoted)
     if (isDownvoted) setIsDownvoted(false)
   }
 
-  const handleDownvote = () => {
+  async function handleDownvote() {
     setIsDownvoted(!isDownvoted)
     if (isUpvoted) setIsUpvoted(false)
   }
 
-  const handleBookmark = () => {
+  async function handleBookmark() {
     setIsBookmarked(!isBookmarked)
+  }
+
+  async function handleDelete() {
+    await deleteEntry()
+    onDelete()
+    toast('Your entry has been deleted.', {
+      description: format(new Date(), "EEEE, MMMM dd, yyyy 'at' hh:mm a"),
+    })
   }
 
   return (
     <Card className="w-full mx-auto border-0 my-2">
       <CardContent className="pt-6">
-        <p className="text-lg mb-4">
-          <Editor readonly={true} content={_.sample(contents) as object} />
-        </p>
+        <div className="text-lg mb-4">
+          <Editor readonly={true} content={entry.content as object} />
+        </div>
         <div className="flex justify-between items-center -mx-4">
           <div className="flex space-x-2">
             <Button variant="ghost" size="icon" onClick={handleUpvote} className={isUpvoted ? 'text-green-500' : ''}>
@@ -73,13 +88,19 @@ export function Entry({ id }: { id: string }) {
               </OverlayTrigger>
               <OverlayContent side="bottom" align="end">
                 <div className="space-y-2">
-                  <Button variant="ghost" className="w-full justify-start">
+                  <Button variant="ghost" className="w-full justify-start" disabled>
                     Edit
                   </Button>
-                  <Button variant="ghost" className="w-full justify-start">
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start"
+                    onClick={() => {
+                      handleDelete()
+                    }}
+                  >
                     Delete
                   </Button>
-                  <Button variant="ghost" className="w-full justify-start">
+                  <Button variant="ghost" className="w-full justify-start" disabled>
                     Report
                   </Button>
                 </div>

@@ -1,7 +1,7 @@
 from django.urls import include, path
 from drf_spectacular.utils import extend_schema
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView
-from rest.views import EntryViewSet, TitleViewSet, UserViewSet
+from rest.views import AuthTokenView, EntryViewSet, TitleViewSet, UserViewSet
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
@@ -14,6 +14,10 @@ viewsets = [
 
 for viewset in viewsets:
     router.register(viewset.endpoint, viewset, basename=viewset.endpoint)
+
+non_router_url_patterns = [
+    path("auth/tokens/", AuthTokenView.as_view(), name="auth-tokens"),
+]
 
 # Documentation
 
@@ -31,6 +35,7 @@ v0_urlpatterns = [
         name="redoc",
     ),
     *router.urls,
+    *non_router_url_patterns,
 ]
 
 # urlpatterns v0 configuration, when moving to v2 move all current patterns to rest.v0 app and restructure this file

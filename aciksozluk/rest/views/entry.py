@@ -15,18 +15,15 @@ class EntryViewSet(BaseModelViewSet):
     serializer_class = EntrySerializer
 
     permission_classes = [
-        (
-            (
-                IsAuthenticated & DjangoModelPermissions & (is_owner("author"))
-                | prevent_actions("update", "partial_update", "destroy")
-            )
-        )
+        IsAuthenticated & DjangoModelPermissions & (is_owner("author"))
+        | prevent_actions("update", "partial_update", "destroy", "create")
         | ReadOnly
     ]
 
     filterset_fields = {
         "author": ["exact"],
         "title": ["exact"],
+        "title__slug": ["exact"],
         "created_at": ["exact", "gte", "lte"],
         "updated_at": ["exact", "gte", "lte"],
     }

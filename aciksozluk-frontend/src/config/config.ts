@@ -2,7 +2,14 @@ const config = {
   exampleLink: 'http://example.com',
   name: 'ACIKSOZLUK', // process.env.ACIKSOZLUK__NAME,
   api: {
-    baseUrl: process.env.ACIKSOZLUK__DOMAIN,
+    baseUrl: 'http://aciksozluk.org:80', // process.env.ACIKSOZLUK__DOMAIN,
+    bearerTokenCookieName: 'BearerToken',
+    bearerTokenHeaderName: 'Authorization',
+    bearerTokenPrefix: 'Token',
+  },
+  ux: {
+    defaultTitlePageSize: 50,
+    defaultEntryPageSize: 25,
   },
 }
 

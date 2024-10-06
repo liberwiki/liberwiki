@@ -3,6 +3,7 @@ from common.utils.pyutils import Sentinel, with_attrs
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.db.models.deletion import ProtectedError
 from django.utils.functional import classproperty
+from django_filters.rest_framework.filterset import FilterSet
 from rest.utils.permissions import ReadOnly
 from rest.utils.schema_helpers import fake_list_serializer, fake_serializer
 from rest_framework import status
@@ -28,7 +29,8 @@ class BaseModelViewSet(ModelViewSet):
     filterset_fields = {}
     declared_filters = {}
     serializer_class_action_map = {}
-    ordering = ["-created_at"]  # This is overwritten by the order query parameter
+    ordering = ["created_at"]  # This is overwritten by the order query parameter
+    filterset_base = FilterSet
 
     perform_create = django_to_drf_validation_error(ModelViewSet.perform_create)
     perform_update = django_to_drf_validation_error(ModelViewSet.perform_update)

@@ -3,14 +3,37 @@ import * as Icons from 'lucide-react'
 import { Button } from '@/components/shadcn/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
 
-export function Paginator({ currentPage, totalPages }: { currentPage: number; totalPages: number }) {
+import { cn } from '@/lib/utils'
+
+export function Paginator({
+  currentPage,
+  totalPages,
+  onPageChange,
+  className = '',
+  force = false,
+}: {
+  currentPage: number
+  totalPages: number
+  onPageChange: (p: number) => void
+  className?: string
+  force?: boolean
+}) {
+  if (!force && totalPages <= 1) {
+    return null
+  }
   return (
-    <div className="flex w-full items-center justify-end space-x-6 gap-2">
-      <Button variant="outline" size="sm" disabled={currentPage === 1} aria-label="Previous page">
-        <Icons.ChevronLeft className="h-4 w-4" />
+    <div className={cn('flex w-full items-center justify-end space-x-6 gap-2', className)}>
+      <Button
+        variant="outline"
+        size="sm"
+        disabled={currentPage === 1}
+        aria-label="Previous page"
+        onClick={() => onPageChange(currentPage - 1)}
+      >
+        <Icons.ChevronLeft className="h-3 w-3" />
       </Button>
       <div className="flex items-center space-x-2 !ml-0">
-        <Select value={currentPage.toString()}>
+        <Select value={currentPage.toString()} onValueChange={(value) => onPageChange(parseInt(value))}>
           <SelectTrigger className="w-16 h-9">
             <SelectValue />
           </SelectTrigger>
@@ -23,7 +46,13 @@ export function Paginator({ currentPage, totalPages }: { currentPage: number; to
           </SelectContent>
         </Select>
         <span>/</span>
-        <Button variant="outline" size="sm" disabled={currentPage === totalPages} aria-label="Max Page">
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={currentPage === totalPages}
+          aria-label="Max Page"
+          onClick={() => onPageChange(totalPages)}
+        >
           {totalPages}
         </Button>
       </div>
@@ -33,8 +62,9 @@ export function Paginator({ currentPage, totalPages }: { currentPage: number; to
         disabled={currentPage === totalPages}
         aria-label="Next page"
         className="!ml-0"
+        onClick={() => onPageChange(currentPage + 1)}
       >
-        <Icons.ChevronRight className="h-4 w-4" />
+        <Icons.ChevronRight className="h-3 w-3" />
       </Button>
     </div>
   )

@@ -8,6 +8,10 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 class UserAdmin(BaseModelAdmin, BaseUserAdmin):
     autocomplete_fields = ["groups", "user_permissions"]
     list_filter = ["is_staff", "is_active"]
+    readonly_fields = [
+        "created_at",
+        "updated_at",
+    ]
 
     def get_fieldsets(self, request, obj=None):
         fieldset = self.fieldset_field

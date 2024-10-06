@@ -1,15 +1,21 @@
-'use client'
-
 import * as Icons from 'lucide-react'
 
 import { Button } from '@/components/shadcn/button'
 import { Card, CardContent } from '@/components/shadcn/card'
-import useAcikSozlukEditor from '@/components/tiptap/aciksozlukEditor'
 
 import EditorButton from './EditorButton'
+import useAcikSozlukEditor from './aciksozlukEditor'
 import { EditorContent } from '@tiptap/react'
 
-export default function Editor({ content, readonly }: { content: object; readonly: boolean }) {
+export function Editor({
+  content,
+  readonly,
+  onSubmit = () => {},
+}: {
+  content?: object
+  readonly: boolean
+  onSubmit?: (content: object) => void
+}) {
   const editor = useAcikSozlukEditor({ content })
   if (!editor) {
     return null
@@ -30,6 +36,13 @@ export default function Editor({ content, readonly }: { content: object; readonl
       return
     }
     editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run()
+  }
+
+  async function handleSubmit() {
+    if (editor) {
+      onSubmit(editor.getJSON())
+      editor.commands.clearContent(true)
+    }
   }
 
   return (
@@ -112,7 +125,7 @@ export default function Editor({ content, readonly }: { content: object; readonl
         <div className="mt-4 text-sm text-gray-400 flex items-center justify-between">
           Character count: {editor.storage.characterCount.characters()} | Word count:{' '}
           {editor.storage.characterCount.words()}
-          <Button variant="outline" size="sm" aria-label="Submit">
+          <Button variant="outline" size="sm" aria-label="Submit" onClick={handleSubmit}>
             Submit
           </Button>
         </div>

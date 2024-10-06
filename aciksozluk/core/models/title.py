@@ -18,7 +18,9 @@ class Title(BaseModel):
         max_length=255,
         unique=True,
         validators=[
-            AllowedCharactersValidator(allowed_characters=string.ascii_letters + string.digits + string.punctuation),
+            AllowedCharactersValidator(
+                allowed_characters=string.ascii_letters + string.digits + string.punctuation + " "
+            ),
         ],
         help_text=_("Name of the title."),
     )

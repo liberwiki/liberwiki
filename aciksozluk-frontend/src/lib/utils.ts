@@ -39,3 +39,72 @@ export function makeCallable<T, R>(originalCallable: (arg: T) => R) {
   // <SomeComponent onClick={makeCallable(someFunction)(data)} />
   return (data: T) => () => originalCallable(data)
 }
+
+export function slugify(value: string, allowUnicode: boolean = false): string {
+  /**
+   * Convert to ASCII if 'allowUnicode' is false. Convert spaces or repeated
+   * dashes to single dashes. Remove characters that aren't alphanumerics,
+   * underscores, or hyphens. Convert to lowercase. Also strip leading and
+   * trailing whitespace, dashes, and underscores.
+   */
+  // Django's slugify function ported to typescript, so we can save some api calls.
+  if (allowUnicode) {
+    value = value.normalize('NFKC')
+  } else {
+    value = value
+      .normalize('NFKD')
+      // eslint-disable-next-line no-control-regex
+      .replace(/[^\x00-\x7F]/g, '')
+      .replace(/[\r\n]+/g, '')
+      .trim()
+  }
+
+  value = value.replace(/[^\w\s-]/g, '').toLowerCase()
+
+  return value.replace(/[-\s]+/g, '-').replace(/^[-_]+|[-_]+$/g, '')
+}
+
+export function checkRequiredKeys<T extends Record<string, unknown>>(obj: T, keyGroups: Array<Array<keyof T>>): void {
+  /**
+   * Check if the object has exactly one of the required key groups.
+   * Used when a function can take multiple different sets of arguments but only some of them makes sense together.
+   *  For instance, a function that can take either a or b, but not a and b at the same time and at least 1 is required.
+   **/
+  // const obj1 = { a: 1, b: undefined, c: undefined, d: undefined, e: undefined };
+  // const obj2 = { a: undefined, b: 1, c: 2, d: undefined, e: undefined };
+  // const obj3 = { a: undefined, b: undefined, c: undefined, d: 1, e: 2 };
+  // const requiredKeys = [["a"], ["b", "c"], ["d", "e"]];
+  // checkRequiredKeys(obj1, requiredKeys);
+  // checkRequiredKeys(obj2, requiredKeys);
+  // checkRequiredKeys(obj3, requiredKeys);
+  // checkRequiredKeys({ a: 1, b: 2, c: 3 }, [["a"], ["b", "c"]]); // Throws error
+  const matchingGroups = keyGroups.filter(
+    (group) =>
+      group.every((key) => obj[key] !== undefined) &&
+      Object.keys(obj).every((key) => {
+        return group.includes(key as keyof T) || obj[key] === undefined
+      })
+  )
+
+  if (matchingGroups.length !== 1) {
+    throw new Error(`Object keys do not match exactly one required collection. ${JSON.stringify(keyGroups)}`)
+  }
+}
+
+export function getLazyValue<T>(input: T | (() => T)) {
+  if (typeof input === 'function') {
+    return (input as () => T)()
+  }
+  return input
+}
+
+export async function getLazyValueAsync<T>(input: T | (() => Promise<T>) | (() => T)) {
+  if (typeof input === 'function') {
+    const result = (input as () => Promise<T>)()
+    if (result instanceof Promise) {
+      return await result
+    }
+    return result
+  }
+  return input
+}

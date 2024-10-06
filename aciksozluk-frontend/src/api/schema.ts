@@ -4,6 +4,30 @@
  */
 
 export interface paths {
+  '/api/v0/auth/tokens/': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Obtain Auth Token
+     * @description Get your active auth token
+     */
+    post: operations['auth_tokens_create']
+    /**
+     * Delete Auth Token
+     * @description Delete auth token, logging out of all devices
+     */
+    delete: operations['auth_tokens_destroy']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/api/v0/entries/': {
     parameters: {
       query?: never
@@ -96,11 +120,7 @@ export interface paths {
      * @description Retrieve title by id
      */
     get: operations['titles_retrieve']
-    /**
-     * Put Title
-     * @description Update a title
-     */
-    put: operations['titles_update']
+    put?: never
     post?: never
     /**
      * Delete Title
@@ -109,11 +129,7 @@ export interface paths {
     delete: operations['titles_destroy']
     options?: never
     head?: never
-    /**
-     * Patch Title
-     * @description Partially update a title
-     */
-    patch: operations['titles_partial_update']
+    patch?: never
     trace?: never
   }
   '/api/v0/users/': {
@@ -188,6 +204,18 @@ export interface paths {
 export type webhooks = Record<string, never>
 export interface components {
   schemas: {
+    AuthToken: {
+      readonly token: string
+    }
+    AuthTokenRequest: {
+      email: string
+      password: string
+    }
+    AuthTokenSerializerError: {
+      readonly email: string[]
+      readonly password: string[]
+      readonly token: string[]
+    }
     /** @description Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
      *     read only.
      *
@@ -311,49 +339,58 @@ export interface components {
       content: unknown
     }
     PaginatedEntryList: {
-      /** @example 123 */
-      count: number
       /**
-       * Format: uri
-       * @example http://api.example.org/accounts/?page=4
+       * @description Total number of items available.
+       * @example 1102
        */
-      next?: string | null
+      count?: number
       /**
-       * Format: uri
-       * @example http://api.example.org/accounts/?page=2
+       * @description Number of results to return per page.
+       * @example 100
        */
-      previous?: string | null
-      results: components['schemas']['Entry'][]
+      page_size?: number
+      /**
+       * @description Total number of pages.
+       * @example 17
+       */
+      total_pages?: number
+      results?: components['schemas']['Entry'][]
     }
     PaginatedPublicUserList: {
-      /** @example 123 */
-      count: number
       /**
-       * Format: uri
-       * @example http://api.example.org/accounts/?page=4
+       * @description Total number of items available.
+       * @example 1102
        */
-      next?: string | null
+      count?: number
       /**
-       * Format: uri
-       * @example http://api.example.org/accounts/?page=2
+       * @description Number of results to return per page.
+       * @example 100
        */
-      previous?: string | null
-      results: components['schemas']['PublicUser'][]
+      page_size?: number
+      /**
+       * @description Total number of pages.
+       * @example 17
+       */
+      total_pages?: number
+      results?: components['schemas']['PublicUser'][]
     }
     PaginatedTitleList: {
-      /** @example 123 */
-      count: number
       /**
-       * Format: uri
-       * @example http://api.example.org/accounts/?page=4
+       * @description Total number of items available.
+       * @example 1102
        */
-      next?: string | null
+      count?: number
       /**
-       * Format: uri
-       * @example http://api.example.org/accounts/?page=2
+       * @description Number of results to return per page.
+       * @example 100
        */
-      previous?: string | null
-      results: components['schemas']['Title'][]
+      page_size?: number
+      /**
+       * @description Total number of pages.
+       * @example 17
+       */
+      total_pages?: number
+      results?: components['schemas']['Title'][]
     }
     /** @description Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
      *     read only.
@@ -386,36 +423,6 @@ export interface components {
       title?: string
       /** @description Content of the entry. In tiptap format. */
       content?: unknown
-    }
-    /** @description Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
-     *     read only.
-     *
-     *     GET /api/v1/people/5/
-     *     {
-     *         "id": 5,
-     *         "first_name": "John",
-     *         "last_name": "Doe",
-     *         "labels": [7]
-     *     }
-     *
-     *     GET /api/v1/people/5/?include=labels
-     *     {
-     *         "id": 5,
-     *         "first_name": "John",
-     *         "last_name": "Doe",
-     *         "labels": [
-     *             {
-     *                 "id": 7,
-     *                 "name": "label-name"
-     *             }
-     *         ]
-     *     } */
-    PatchedTitleRequest: {
-      /**
-       * Title
-       * @description Name of the title.
-       */
-      name?: string
     }
     /** @description Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
      *     read only.
@@ -707,6 +714,57 @@ export interface components {
 }
 export type $defs = Record<string, never>
 export interface operations {
+  auth_tokens_create: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AuthTokenRequest']
+        'application/x-www-form-urlencoded': components['schemas']['AuthTokenRequest']
+        'multipart/form-data': components['schemas']['AuthTokenRequest']
+      }
+    }
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AuthToken']
+        }
+      }
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AuthTokenSerializerError']
+        }
+      }
+    }
+  }
+  auth_tokens_destroy: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description No response body */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
   entries_list: {
     parameters: {
       query?: {
@@ -719,10 +777,13 @@ export interface operations {
         ordering?: string
         /** @description A page number within the paginated result set. */
         page?: number
+        /** @description Number of results to return per page. */
+        page_size?: number
         /** @description A search term. */
         search?: string
         /** @description Unique identifier for this object */
         title?: string
+        title__slug?: string
         updated_at?: string
         updated_at__gte?: string
         updated_at__lte?: string
@@ -901,6 +962,11 @@ export interface operations {
         created_at?: string
         created_at__gte?: string
         created_at__lte?: string
+        entry_count?: number
+        entry_count__gt?: number
+        entry_count__gte?: number
+        entry_count__lt?: number
+        entry_count__lte?: number
         name?: string
         name__contains?: string
         name__icontains?: string
@@ -909,8 +975,11 @@ export interface operations {
         ordering?: string
         /** @description A page number within the paginated result set. */
         page?: number
+        /** @description Number of results to return per page. */
+        page_size?: number
         /** @description A search term. */
         search?: string
+        slug?: string
         updated_at?: string
         updated_at__gte?: string
         updated_at__lte?: string
@@ -985,41 +1054,6 @@ export interface operations {
       }
     }
   }
-  titles_update: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['TitleRequest']
-        'application/x-www-form-urlencoded': components['schemas']['TitleRequest']
-        'multipart/form-data': components['schemas']['TitleRequest']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['Title']
-        }
-      }
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['TitleSerializerError']
-        }
-      }
-    }
-  }
   titles_destroy: {
     parameters: {
       query?: never
@@ -1048,47 +1082,15 @@ export interface operations {
       }
     }
   }
-  titles_partial_update: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody?: {
-      content: {
-        'application/json': components['schemas']['PatchedTitleRequest']
-        'application/x-www-form-urlencoded': components['schemas']['PatchedTitleRequest']
-        'multipart/form-data': components['schemas']['PatchedTitleRequest']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['Title']
-        }
-      }
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['TitleSerializerError']
-        }
-      }
-    }
-  }
   users_list: {
     parameters: {
       query?: {
         created_at?: string
         created_at__gte?: string
         created_at__lte?: string
+        entry_count?: number
+        entry_count__gte?: number
+        entry_count__lte?: number
         is_active?: boolean
         is_staff?: boolean
         is_superuser?: boolean
@@ -1096,8 +1098,13 @@ export interface operations {
         ordering?: string
         /** @description A page number within the paginated result set. */
         page?: number
+        /** @description Number of results to return per page. */
+        page_size?: number
         /** @description A search term. */
         search?: string
+        title_count?: number
+        title_count__gte?: number
+        title_count__lte?: number
         updated_at?: string
         updated_at__gte?: string
         updated_at__lte?: string

@@ -14,7 +14,7 @@ import StarterKit from '@tiptap/starter-kit'
 import { all, createLowlight } from 'lowlight'
 import { Markdown } from 'tiptap-markdown'
 
-function useAcikSozlukEditor({ content }: { content: object }) {
+function useAcikSozlukEditor({ content }: { content?: object }) {
   const lowlight = createLowlight(all)
 
   return useEditor({

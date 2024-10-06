@@ -1,6 +1,5 @@
-from functools import lru_cache
-
 from common.utils.pyutils import purge_iterable, purge_mapping
+from memoization import cached
 from rest_framework import serializers
 
 type_serializer_map = {
@@ -15,10 +14,12 @@ type_serializer_map = {
 }
 
 
+@cached
 def fake_list_serializer(child_serializer, **kwargs):
     return serializers.ListSerializer(child=child_serializer, **kwargs)
 
 
+@cached
 def fake_serializer(
     name,
     schema=None,
@@ -77,7 +78,7 @@ def fake_serializer(
     return serializer(**(serializer_kwargs or {}))
 
 
-@lru_cache(maxsize=None)
+@cached
 def error_serializer(serializer, overrides=None):
     return fake_serializer(
         name=f"{serializer.__name__}Error",

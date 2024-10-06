@@ -22,8 +22,10 @@ INSTALLED_APPS = [
     "pghistory.admin",
     "colorfield",
     "admin_interface",
+    "corsheaders",
     "administration.apps.AdministrationConfig",  # Needs to be after admin_interface
     "rest_framework",
+    "rest_framework.authtoken",
     "django_filters",
     "drf_spectacular",
     "django_extensions",
@@ -39,6 +41,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "pghistory.middleware.HistoryMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -110,7 +113,7 @@ X_FRAME_OPTIONS = "SAMEORIGIN"
 
 REST_FRAMEWORK = {
     "PAGE_SIZE": 100,
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "DEFAULT_PAGINATION_CLASS": "rest.utils.pagination.PageNumberPagination",
     "DEFAULT_FILTER_BACKENDS": [
         "django_filters.rest_framework.DjangoFilterBackend",
         "rest_framework.filters.SearchFilter",
@@ -120,6 +123,11 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest.utils.permissions.ReadOnly",
     ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    ],
 }
 
 SPECTACULAR_SETTINGS = {
@@ -128,3 +136,5 @@ SPECTACULAR_SETTINGS = {
     "VERSION": "0.1.0",
     "COMPONENT_SPLIT_REQUEST": True,
 }
+
+CORS_ALLOW_ALL_ORIGINS = DEBUG
