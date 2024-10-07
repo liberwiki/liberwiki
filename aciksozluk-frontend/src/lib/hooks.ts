@@ -2,9 +2,22 @@ import React, { useEffect, useRef, useState } from 'react'
 
 import { AcikSozlukApi } from '@/api/api'
 import config from '@/config/config'
-import { getCookie } from '@/lib/serverActions'
+
+import Cookie from 'js-cookie'
 
 export function useElementAttribute<T extends HTMLElement, K extends keyof T>(attributeKey: K) {
+  /**
+   * Get the value of an attribute of an element for the given ref.
+   */
+  // Usage
+  //
+  // const {
+  //   ref: targetElementRef,
+  //   attributeValue: requestedAttributeValue,
+  // } = useElementAttribute<SomeJSXElementThatTakesARef, keyof SomeJSXElementThatTakesARef>('requestedAttributeValue')
+  //
+  // requestedAttributeValue should be a key of SomeJSXElementThatTakesARef in this case
+  //
   const ref = useRef<T | null>(null)
   const [attributeValue, setAttributeValue] = useState<T[K] | null>(null)
 
@@ -27,6 +40,27 @@ export function useElementAttribute<T extends HTMLElement, K extends keyof T>(at
 }
 
 export function useFormState<T>(initialState: T) {
+  /**
+   * A hook to manage form state, errors, and event/change handlers
+   */
+
+  // Usage
+  //
+  // const {
+  // formState,
+  // setFormState,
+  // formErrors,
+  // setFormErrors,
+  // handleFormStateValue,
+  // handleFormStateEvent,
+  // } = useFormState<{key: string}>({key: ''})
+  //
+  // formState: is the current state of the form
+  // setFormState:  is a function to update the form state directly, should be rarely used
+  // formErrors:  is the current form errors
+  // setFormErrors:  is a function to update the form errors directly, should be rarely used
+  // handleFormStateValue("key"): is a function that when called with a key, onChange={handleFormStateValue("key")}
+  // handleFormStateEvent("key"): is a function that when called with a key, onEvent={handleFormStateEvent("key")}
   const [formState, setFormState] = useState<T>(initialState)
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof T, string[]>> & { non_field_errors?: string[] }>()
 
@@ -50,8 +84,5 @@ export function useFormState<T>(initialState: T) {
 }
 
 export function useAcikSozlukAPI() {
-  async function getBearerToken() {
-    return await getCookie(config.api.bearerTokenCookieName)
-  }
-  return new AcikSozlukApi(getBearerToken)
+  return new AcikSozlukApi(() => Cookie.get(config.api.bearerTokenCookieName) || null)
 }

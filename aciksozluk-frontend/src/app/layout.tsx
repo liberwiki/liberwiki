@@ -21,9 +21,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <Providers>
-      <html lang="en" suppressHydrationWarning>
+      <html lang="en" suppressHydrationWarning className="bg-black">
         <head title="aciksozluk" />
-        <body className={cn('min-h-screen bg-background font-sans antialiased dark', inter.className)}>
+        <body className={cn('min-h-screen bg-black font-sans antialiased dark', inter.className)}>
           {children}
           <Toaster />
         </body>

@@ -2,22 +2,34 @@ import _ from 'lodash'
 
 import { components, paths } from '@/api/schema'
 import config from '@/config/config'
-import { getLazyValueAsync } from '@/lib/utils'
+import { getLazyValue } from '@/lib/utils'
 
-import { UseQueryResult, useMutation, useQuery } from '@tanstack/react-query'
+import { UseQueryOptions, UseQueryResult, useMutation, useQuery } from '@tanstack/react-query'
 import createClient, { FetchResponse } from 'openapi-fetch'
 import type { MediaType } from 'openapi-typescript-helpers'
 
+type APIQuery<T extends keyof paths> = paths[T] extends { get: { parameters: { query?: infer Q } } } ? Q : never
+type APIResponse<T extends keyof paths, TMethod extends keyof paths[T]> = paths[T][TMethod]
+type RemainingUseQueryOptions<T extends keyof paths> = Omit<
+  UseQueryOptions<FetchResponse<APIResponse<T, 'get'>, unknown, MediaType>>,
+  'queryKey' | 'queryFn'
+>
+type Component<T extends keyof components['schemas']> = components['schemas'][T]
+
 export class AcikSozlukApi {
   config = config.api
-  bearerToken: string | null | (() => Promise<string | null>) | (() => string | null)
+  bearerToken: string | null | (() => string | null)
 
   constructor(bearerToken: typeof this.bearerToken) {
     this.bearerToken = bearerToken
   }
 
+  public async isAuthenticated(): Promise<boolean> {
+    return !!(await getLazyValue<string | null>(this.bearerToken))
+  }
+
   fetchWrapper = async (input: RequestInfo, init?: RequestInit): Promise<Response> => {
-    const bearerToken = await getLazyValueAsync<string | null>(this.bearerToken)
+    const bearerToken = await getLazyValue<string | null>(this.bearerToken)
 
     init = init || {}
     init.headers = (init.headers instanceof Headers ? init.headers : { ...init.headers }) as Record<string, string>
@@ -76,8 +88,7 @@ export class AcikSozlukApi {
   public obtainAuthToken = () => {
     return useMutation({
       mutationKey: ['obtainAuthToken'],
-      mutationFn: (data: components['schemas']['AuthTokenRequest']) =>
-        this.client.POST('/api/v0/auth/tokens/', { body: data }),
+      mutationFn: (data: Component<'AuthTokenRequest'>) => this.client.POST('/api/v0/auth/tokens/', { body: data }),
     })
   }
 
@@ -88,26 +99,32 @@ export class AcikSozlukApi {
     })
   }
 
-  public users = (filters?: paths['/api/v0/users/']['get']['parameters']['query']) => {
+  public users = (
+    filters?: APIQuery<'/api/v0/users/'>,
+    useQueryOptions?: RemainingUseQueryOptions<'/api/v0/users/'>
+  ) => {
     const queryResult = useQuery({
       queryKey: ['users', filters],
       queryFn: () => this.client.GET('/api/v0/users/', { params: { query: filters } }),
+      ...useQueryOptions,
     })
     return this.processQueryResult(queryResult)
   }
 
-  public user = (id: string) => {
+  public user = (id: string, useQueryOptions?: RemainingUseQueryOptions<'/api/v0/users/{id}/'>) => {
     const queryResult = useQuery({
       queryKey: ['user', id],
       queryFn: () => this.client.GET(`/api/v0/users/{id}/`, { params: { path: { id } } }),
+      ...useQueryOptions,
     })
     return this.processQueryResult(queryResult)
   }
 
-  public me = () => {
+  public me = (useQueryOptions?: RemainingUseQueryOptions<'/api/v0/users/me/'>) => {
     const queryResult = useQuery({
       queryKey: ['me'],
       queryFn: () => this.client.GET('/api/v0/users/me/'),
+      ...useQueryOptions,
     })
     return this.processQueryResult(queryResult)
   }
@@ -115,30 +132,34 @@ export class AcikSozlukApi {
   public putMe = () => {
     return useMutation({
       mutationKey: ['putMe'],
-      mutationFn: (data: components['schemas']['UserRequest']) => this.client.PUT('/api/v0/users/me/', { body: data }),
+      mutationFn: (data: Component<'UserRequest'>) => this.client.PUT('/api/v0/users/me/', { body: data }),
     })
   }
 
   public patchMe = () => {
     return useMutation({
       mutationKey: ['patchMe'],
-      mutationFn: (data: components['schemas']['PatchedUserRequest']) =>
-        this.client.PATCH('/api/v0/users/me/', { body: data }),
+      mutationFn: (data: Component<'PatchedUserRequest'>) => this.client.PATCH('/api/v0/users/me/', { body: data }),
     })
   }
 
-  public titles = (filters?: paths['/api/v0/titles/']['get']['parameters']['query']) => {
+  public titles = (
+    filters?: APIQuery<'/api/v0/titles/'>,
+    useQueryOptions?: RemainingUseQueryOptions<'/api/v0/titles/'>
+  ) => {
     const queryResult = useQuery({
       queryKey: ['titles', filters],
       queryFn: () => this.client.GET('/api/v0/titles/', { params: { query: filters } }),
+      ...useQueryOptions,
     })
     return this.processQueryResult(queryResult)
   }
 
-  public title = (id: string) => {
+  public title = (id: string, useQueryOptions?: RemainingUseQueryOptions<'/api/v0/titles/{id}/'>) => {
     const queryResult = useQuery({
       queryKey: ['title', id],
       queryFn: () => this.client.GET(`/api/v0/titles/{id}/`, { params: { path: { id } } }),
+      ...useQueryOptions,
     })
     return this.processQueryResult(queryResult)
   }
@@ -146,7 +167,7 @@ export class AcikSozlukApi {
   public createTitle = () => {
     return useMutation({
       mutationKey: ['createTitle'],
-      mutationFn: (data: components['schemas']['TitleRequest']) => this.client.POST('/api/v0/titles/', { body: data }),
+      mutationFn: (data: Component<'TitleRequest'>) => this.client.POST('/api/v0/titles/', { body: data }),
     })
   }
 
@@ -157,18 +178,23 @@ export class AcikSozlukApi {
     })
   }
 
-  public entries = (filters?: paths['/api/v0/entries/']['get']['parameters']['query']) => {
+  public entries = (
+    filters?: APIQuery<'/api/v0/entries/'>,
+    useQueryOptions?: RemainingUseQueryOptions<'/api/v0/entries/'>
+  ) => {
     const queryResult = useQuery({
       queryKey: ['entries', filters],
       queryFn: () => this.client.GET('/api/v0/entries/', { params: { query: filters } }),
+      ...useQueryOptions,
     })
     return this.processQueryResult(queryResult)
   }
 
-  public entry = (id: string) => {
+  public entry = (id: string, useQueryOptions?: RemainingUseQueryOptions<'/api/v0/entries/{id}/'>) => {
     const queryResult = useQuery({
       queryKey: ['entry', id],
       queryFn: () => this.client.GET(`/api/v0/entries/{id}/`, { params: { path: { id } } }),
+      ...useQueryOptions,
     })
     return this.processQueryResult(queryResult)
   }
@@ -176,14 +202,14 @@ export class AcikSozlukApi {
   public createEntry = () => {
     return useMutation({
       mutationKey: ['createEntry'],
-      mutationFn: (data: components['schemas']['EntryRequest']) => this.client.POST('/api/v0/entries/', { body: data }),
+      mutationFn: (data: Component<'EntryRequest'>) => this.client.POST('/api/v0/entries/', { body: data }),
     })
   }
 
   public putEntry = (id: string) => {
     return useMutation({
       mutationKey: ['putEntry', id],
-      mutationFn: (data: components['schemas']['EntryRequest']) =>
+      mutationFn: (data: Component<'EntryRequest'>) =>
         this.client.PUT(`/api/v0/entries/{id}/`, { params: { path: { id } }, body: data }),
     })
   }
@@ -191,7 +217,7 @@ export class AcikSozlukApi {
   public patchEntry = (id: string) => {
     return useMutation({
       mutationKey: ['patchEntry', id],
-      mutationFn: (data: components['schemas']['EntryRequest']) =>
+      mutationFn: (data: Component<'PatchedEntryRequest'>) =>
         this.client.PATCH(`/api/v0/entries/{id}/`, { params: { path: { id } }, body: data }),
     })
   }

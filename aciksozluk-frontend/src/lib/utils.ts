@@ -1,5 +1,7 @@
 import aciksozlukTailwindConfig from '~/tailwind.config'
 
+import { NextRequest, NextResponse } from 'next/server'
+
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import resolveConfig from 'tailwindcss/resolveConfig'
@@ -32,7 +34,7 @@ export function withAttributes<T extends Record<string, string>>(fn: Function, a
 export function makeCallable<T, R>(originalCallable: (arg: T) => R) {
   // Usage
   //
-  // I hate writing () => someFunction(data) for everything that nees a function
+  // I hate writing () => someFunction(data) for everything that needs a function
   // This utility allows me to turn
   // <SomeComponent onClick={() => someFunction(data))} />
   // into
@@ -68,7 +70,7 @@ export function checkRequiredKeys<T extends Record<string, unknown>>(obj: T, key
   /**
    * Check if the object has exactly one of the required key groups.
    * Used when a function can take multiple different sets of arguments but only some of them makes sense together.
-   *  For instance, a function that can take either a or b, but not a and b at the same time and at least 1 is required.
+   * For instance, a function that can take either a or b, but not a and b at the same time and at least 1 is required.
    **/
   // const obj1 = { a: 1, b: undefined, c: undefined, d: undefined, e: undefined };
   // const obj2 = { a: undefined, b: 1, c: 2, d: undefined, e: undefined };
@@ -92,6 +94,9 @@ export function checkRequiredKeys<T extends Record<string, unknown>>(obj: T, key
 }
 
 export function getLazyValue<T>(input: T | (() => T)) {
+  /**
+   * Get the value of a lazy value, which can be either a function or a value.
+   */
   if (typeof input === 'function') {
     return (input as () => T)()
   }
@@ -99,6 +104,9 @@ export function getLazyValue<T>(input: T | (() => T)) {
 }
 
 export async function getLazyValueAsync<T>(input: T | (() => Promise<T>) | (() => T)) {
+  /**
+   * Get the value of a lazy value, which can be either a function, an async function or a value.
+   */
   if (typeof input === 'function') {
     const result = (input as () => Promise<T>)()
     if (result instanceof Promise) {
@@ -107,4 +115,14 @@ export async function getLazyValueAsync<T>(input: T | (() => Promise<T>) | (() =
     return result
   }
   return input
+}
+
+export function runMiddlewareIfPathStartsWith(path: RegExp) {
+  return function (middleware: (request: NextRequest) => Promise<NextResponse | void>) {
+    return async function (request: NextRequest) {
+      if (path.test(request.nextUrl.pathname)) {
+        return await middleware(request)
+      }
+    }
+  }
 }
