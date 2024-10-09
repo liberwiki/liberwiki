@@ -5,7 +5,7 @@ import type { APIQuery, APIType, RemainingUseQueryOptions } from '@/api/typeHelp
 import config from '@/config/config'
 import { getLazyValue } from '@/lib/utils'
 
-import { UseQueryResult, useMutation, useQuery } from '@tanstack/react-query'
+import { UseQueryResult, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import createClient, { FetchResponse } from 'openapi-fetch'
 import type { MediaType } from 'openapi-typescript-helpers'
 
@@ -16,6 +16,8 @@ export class AcikSozlukApi {
   constructor(bearerToken: typeof this.bearerToken) {
     this.bearerToken = bearerToken
   }
+
+  useQueryClient = useQueryClient
 
   public async isAuthenticated(): Promise<boolean> {
     return !!getLazyValue<string | null>(this.bearerToken)

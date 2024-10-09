@@ -2,7 +2,7 @@ const config = {
   exampleLink: 'http://example.com',
   name: process.env.NEXT_PUBLIC__ACIKSOZLUK__NAME,
   api: {
-    baseUrl: process.env.NEXT_PUBLIC__ACIKSOZLUK__DOMAIN,
+    baseUrl: process.env.NEXT_PUBLIC__ACIKSOZLUK__API__BASE_URL,
     bearerTokenCookieName: 'BearerToken',
     bearerTokenHeaderName: 'Authorization',
     bearerTokenPrefix: 'Token',

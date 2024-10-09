@@ -62,7 +62,6 @@ export function AdvancedSearch() {
     if (titles?.results?.length !== 0) {
       router.push(`/titles/${titles?.results?.[0]?.slug}`)
     } else {
-      console.log('No title found, redirecting to search page:', searchState.search)
       router.push(`/titles/${searchState.search}`)
     }
   }

@@ -52,14 +52,14 @@ export function Title({ title }: { title: APIType<'Title'> }) {
   })
 
   async function handleEditorSubmit(content: object) {
-    await createEntry({ title: title?.id as string, content })
-    toast('Your entry has been created.', {
-      description: format(new Date(), "EEEE, MMMM dd, yyyy 'at' hh:mm a"),
-      action: {
-        label: 'Undo',
-        onClick: () => console.log('Undo'),
-      },
-    })
+    const { response: createEntryResponse } = await createEntry({ title: title?.id as string, content })
+    if (createEntryResponse.ok) {
+      toast('Your entry has been created.', { description: format(new Date(), "EEEE, MMMM dd, yyyy 'at' hh:mm a") })
+    } else {
+      toast('An error occurred while creating your entry. Please try again later.', {
+        description: format(new Date(), "EEEE, MMMM dd, yyyy 'at' hh:mm a"),
+      })
+    }
     setCurrentPage(entries?.total_pages || 1)
     refetch()
   }

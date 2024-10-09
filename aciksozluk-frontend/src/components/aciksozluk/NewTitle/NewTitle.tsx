@@ -14,22 +14,24 @@ import { toast } from 'sonner'
 export function NewTitle({ newTitle }: { newTitle: string }) {
   newTitle = decodeURI(newTitle)
   const aciksozluk = useAcikSozlukAPI()
+  const queryClient = aciksozluk.useQueryClient()
   const router = useRouter()
 
   const { mutateAsync: createTitle } = aciksozluk.createTitle()
   const { mutateAsync: createEntry } = aciksozluk.createEntry()
 
   async function handleEditorSubmit(content: object) {
-    const { data: title } = await createTitle({ name: newTitle })
-    await createEntry({ title: title?.id as string, content })
-    toast('Your entry has been created.', {
-      description: format(new Date(), "EEEE, MMMM dd, yyyy 'at' hh:mm a"),
-      action: {
-        label: 'Undo',
-        onClick: () => console.log('Undo'),
-      },
-    })
+    const { data: title, response: createTitleResponse } = await createTitle({ name: newTitle })
+    const { response: createEntryResponse } = await createEntry({ title: title?.id as string, content })
+    if (createTitleResponse.ok && createEntryResponse.ok) {
+      toast('Your entry has been created.', { description: format(new Date(), "EEEE, MMMM dd, yyyy 'at' hh:mm a") })
+    } else {
+      toast('An error occurred while creating your entry. Please try again later.', {
+        description: format(new Date(), "EEEE, MMMM dd, yyyy 'at' hh:mm a"),
+      })
+    }
     router.push(`/titles/${title?.slug}`)
+    await queryClient.invalidateQueries()
   }
 
   return (
