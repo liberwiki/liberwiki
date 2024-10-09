@@ -82,6 +82,16 @@ paths:
         schema:
           type: string
           format: date-time
+      - in: query
+        name: include
+        schema:
+          type: string
+          enum:
+          - author
+          - author,title
+          - title
+        explode: false
+        style: form
       - name: ordering
         required: false
         in: query
@@ -192,6 +202,16 @@ paths:
           format: uuid
           description: Unique identifier for this object
         required: true
+      - in: query
+        name: include
+        schema:
+          type: string
+          enum:
+          - author
+          - author,title
+          - title
+        explode: false
+        style: form
       tags:
       - entries
       security:
@@ -207,7 +227,7 @@ paths:
           description: ''
     put:
       operationId: entries_update
-      description: Update an existing entry
+      description: Update an existing entry by id
       summary: Put Entry
       parameters:
       - in: path
@@ -250,7 +270,7 @@ paths:
           description: ''
     patch:
       operationId: entries_partial_update
-      description: Partially update an existing entry
+      description: Partially update an existing entry by id
       summary: Patch Entry
       parameters:
       - in: path
@@ -266,13 +286,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedEntryRequest'
+              $ref: '#/components/schemas/PatchedEntryUpdateRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedEntryRequest'
+              $ref: '#/components/schemas/PatchedEntryUpdateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedEntryRequest'
+              $ref: '#/components/schemas/PatchedEntryUpdateRequest'
       security:
       - tokenAuth: []
       - basicAuth: []
@@ -292,7 +312,7 @@ paths:
           description: ''
     delete:
       operationId: entries_destroy
-      description: Delete an existing entry
+      description: Delete an existing Entry by id
       summary: Delete Entry
       parameters:
       - in: path
@@ -358,6 +378,14 @@ paths:
         name: entry_count__lte
         schema:
           type: number
+      - in: query
+        name: include
+        schema:
+          type: string
+          enum:
+          - created_by
+        explode: false
+        style: form
       - in: query
         name: name
         schema:
@@ -432,7 +460,7 @@ paths:
           description: ''
     post:
       operationId: titles_create
-      description: Create a title
+      description: Create a new title
       summary: Create Title
       tags:
       - titles
@@ -478,6 +506,14 @@ paths:
           format: uuid
           description: Unique identifier for this object
         required: true
+      - in: query
+        name: include
+        schema:
+          type: string
+          enum:
+          - created_by
+        explode: false
+        style: form
       tags:
       - titles
       security:
@@ -493,7 +529,7 @@ paths:
           description: ''
     delete:
       operationId: titles_destroy
-      description: Delete a title
+      description: Delete an existing Title by id
       summary: Delete Title
       parameters:
       - in: path
@@ -551,6 +587,12 @@ paths:
         name: entry_count__lte
         schema:
           type: number
+      - in: query
+        name: include
+        schema:
+          type: string
+        explode: false
+        style: form
       - in: query
         name: is_active
         schema:
@@ -648,6 +690,12 @@ paths:
           format: uuid
           description: Unique identifier for this object
         required: true
+      - in: query
+        name: include
+        schema:
+          type: string
+        explode: false
+        style: form
       tags:
       - users
       security:
@@ -1026,7 +1074,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Title'
-    PatchedEntryRequest:
+    PatchedEntryUpdateRequest:
       type: object
       description: |-
         Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
@@ -1053,10 +1101,6 @@ components:
             ]
         }
       properties:
-        title:
-          type: string
-          format: uuid
-          description: Title of the entry.
         content:
           description: Content of the entry. In tiptap format.
     PatchedUserRequest:

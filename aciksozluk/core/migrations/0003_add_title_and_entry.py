@@ -137,6 +137,8 @@ class Migration(migrations.Migration):
                 ),
             ],
             options={
+                "verbose_name": "Entry",
+                "verbose_name_plural": "Entries",
                 "abstract": False,
             },
             bases=(django_lifecycle.mixins.LifecycleModelMixin, models.Model),

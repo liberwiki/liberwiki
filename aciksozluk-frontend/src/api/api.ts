@@ -1,20 +1,13 @@
 import _ from 'lodash'
 
-import { components, paths } from '@/api/schema'
+import { paths } from '@/api/schema'
+import type { APIQuery, APIType, RemainingUseQueryOptions } from '@/api/typeHelpers'
 import config from '@/config/config'
 import { getLazyValue } from '@/lib/utils'
 
-import { UseQueryOptions, UseQueryResult, useMutation, useQuery } from '@tanstack/react-query'
+import { UseQueryResult, useMutation, useQuery } from '@tanstack/react-query'
 import createClient, { FetchResponse } from 'openapi-fetch'
 import type { MediaType } from 'openapi-typescript-helpers'
-
-type APIQuery<T extends keyof paths> = paths[T] extends { get: { parameters: { query?: infer Q } } } ? Q : never
-type APIResponse<T extends keyof paths, TMethod extends keyof paths[T]> = paths[T][TMethod]
-type RemainingUseQueryOptions<T extends keyof paths> = Omit<
-  UseQueryOptions<FetchResponse<APIResponse<T, 'get'>, unknown, MediaType>>,
-  'queryKey' | 'queryFn'
->
-type Component<T extends keyof components['schemas']> = components['schemas'][T]
 
 export class AcikSozlukApi {
   config = config.api
@@ -25,11 +18,11 @@ export class AcikSozlukApi {
   }
 
   public async isAuthenticated(): Promise<boolean> {
-    return !!(await getLazyValue<string | null>(this.bearerToken))
+    return !!getLazyValue<string | null>(this.bearerToken)
   }
 
   fetchWrapper = async (input: RequestInfo, init?: RequestInit): Promise<Response> => {
-    const bearerToken = await getLazyValue<string | null>(this.bearerToken)
+    const bearerToken = getLazyValue<string | null>(this.bearerToken)
 
     init = init || {}
     init.headers = (init.headers instanceof Headers ? init.headers : { ...init.headers }) as Record<string, string>
@@ -88,7 +81,7 @@ export class AcikSozlukApi {
   public obtainAuthToken = () => {
     return useMutation({
       mutationKey: ['obtainAuthToken'],
-      mutationFn: (data: Component<'AuthTokenRequest'>) => this.client.POST('/api/v0/auth/tokens/', { body: data }),
+      mutationFn: (data: APIType<'AuthTokenRequest'>) => this.client.POST('/api/v0/auth/tokens/', { body: data }),
     })
   }
 
@@ -132,14 +125,14 @@ export class AcikSozlukApi {
   public putMe = () => {
     return useMutation({
       mutationKey: ['putMe'],
-      mutationFn: (data: Component<'UserRequest'>) => this.client.PUT('/api/v0/users/me/', { body: data }),
+      mutationFn: (data: APIType<'UserRequest'>) => this.client.PUT('/api/v0/users/me/', { body: data }),
     })
   }
 
   public patchMe = () => {
     return useMutation({
       mutationKey: ['patchMe'],
-      mutationFn: (data: Component<'PatchedUserRequest'>) => this.client.PATCH('/api/v0/users/me/', { body: data }),
+      mutationFn: (data: APIType<'PatchedUserRequest'>) => this.client.PATCH('/api/v0/users/me/', { body: data }),
     })
   }
 
@@ -167,7 +160,7 @@ export class AcikSozlukApi {
   public createTitle = () => {
     return useMutation({
       mutationKey: ['createTitle'],
-      mutationFn: (data: Component<'TitleRequest'>) => this.client.POST('/api/v0/titles/', { body: data }),
+      mutationFn: (data: APIType<'TitleRequest'>) => this.client.POST('/api/v0/titles/', { body: data }),
     })
   }
 
@@ -202,14 +195,14 @@ export class AcikSozlukApi {
   public createEntry = () => {
     return useMutation({
       mutationKey: ['createEntry'],
-      mutationFn: (data: Component<'EntryRequest'>) => this.client.POST('/api/v0/entries/', { body: data }),
+      mutationFn: (data: APIType<'EntryRequest'>) => this.client.POST('/api/v0/entries/', { body: data }),
     })
   }
 
   public putEntry = (id: string) => {
     return useMutation({
       mutationKey: ['putEntry', id],
-      mutationFn: (data: Component<'EntryRequest'>) =>
+      mutationFn: (data: APIType<'EntryRequest'>) =>
         this.client.PUT(`/api/v0/entries/{id}/`, { params: { path: { id } }, body: data }),
     })
   }
@@ -217,7 +210,7 @@ export class AcikSozlukApi {
   public patchEntry = (id: string) => {
     return useMutation({
       mutationKey: ['patchEntry', id],
-      mutationFn: (data: Component<'PatchedEntryRequest'>) =>
+      mutationFn: (data: APIType<'PatchedEntryUpdateRequest'>) =>
         this.client.PATCH(`/api/v0/entries/{id}/`, { params: { path: { id } }, body: data }),
     })
   }

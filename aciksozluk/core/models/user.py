@@ -31,3 +31,7 @@ class User(AbstractUser, BaseModel):
             "unique": _("A user with that username already exists."),
         },
     )
+
+    class Meta:
+        verbose_name = _("User")
+        verbose_name_plural = _("Users")

@@ -1,12 +1,14 @@
 from common.utils.error_handling import TransformExceptions
-from common.utils.pyutils import Sentinel, with_attrs
+from common.utils.pyutils import Sentinel, all_combinations, cloned, raises, with_attrs
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.db.models.deletion import ProtectedError
 from django.utils.functional import classproperty
 from django_filters.rest_framework.filterset import FilterSet
+from drf_spectacular.utils import OpenApiParameter, OpenApiTypes, extend_schema
 from rest.utils.permissions import ReadOnly
-from rest.utils.schema_helpers import fake_list_serializer, fake_serializer
+from rest.utils.schema_helpers import error_serializer, fake_list_serializer, fake_serializer
 from rest_framework import status
+from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.exceptions import ValidationError as DRFValidationError
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 from rest_framework.response import Response
@@ -31,6 +33,8 @@ class BaseModelViewSet(ModelViewSet):
     serializer_class_action_map = {}
     ordering = ["created_at"]  # This is overwritten by the order query parameter
     filterset_base = FilterSet
+    crud_extend_default_schema = {}
+    disallowed_methods = []
 
     perform_create = django_to_drf_validation_error(ModelViewSet.perform_create)
     perform_update = django_to_drf_validation_error(ModelViewSet.perform_update)
@@ -67,7 +71,7 @@ class BaseModelViewSet(ModelViewSet):
                 )
             },
             readonly=True,
-        )
+        ),
     )
     def destroy(self, request, *args, **kwargs):
         # If possible, delete the object cascading related objects that depends on this.
@@ -85,10 +89,12 @@ class BaseModelViewSet(ModelViewSet):
             return Response(data=response_data, status=status.HTTP_400_BAD_REQUEST)
 
     def __init_subclass__(cls, **kwargs):
-        cls._register_viewset()
         cls._required_attribute("model")
         cls._required_attribute("endpoint")
         cls._required_attribute("serializer_class")
+        cls._override_crud_methods()
+        cls._disallowed_methods()
+        cls._register_viewset()
         return super().__init_subclass__(**kwargs)
 
     @classmethod
@@ -106,3 +112,156 @@ class BaseModelViewSet(ModelViewSet):
     @classmethod
     def get_viewset_for_model(cls, model):
         return cls.all_viewsets.get(model)
+
+    @classmethod
+    def _override_crud_methods(cls):
+        override = lambda method, replacement: method if method.__name__ in cls.__dict__ else replacement
+        extra_schema = lambda key: cls.crud_extend_default_schema.get(key, {})
+        cls.list = override(cls.list, cls._make_list(**extra_schema("list")))
+        cls.retrieve = override(cls.retrieve, cls._make_retrieve(**extra_schema("retrieve")))
+        cls.create = override(cls.create, cls._make_create(**extra_schema("create")))
+        cls.update = override(cls.update, cls._make_update(**extra_schema("update")))
+        cls.partial_update = override(cls.partial_update, cls._make_partial_update(**extra_schema("partial_update")))
+        cls.destroy = override(cls.destroy, cls._make_destroy(**extra_schema("destroy")))
+
+    @classmethod
+    def _disallowed_methods(cls):
+        override = lambda method: method if method.__name__ not in cls.disallowed_methods else make_disallowed_method()
+        cls.list = override(cls.list)
+        cls.retrieve = override(cls.retrieve)
+        cls.create = override(cls.create)
+        cls.update = override(cls.update)
+        cls.partial_update = override(cls.partial_update)
+        cls.destroy = override(cls.destroy)
+
+    @classmethod
+    def _make_list(cls, **extend_schema_kwargs):
+        meta = cls.model._meta  # NOQA
+        include_fields = list(cls.serializer_class.Meta.relational_fields.keys())  # NOQA
+        extend_schema_kwargs = (
+            dict(
+                summary=f"List {meta.verbose_name_plural}",
+                description=f"List {meta.verbose_name_plural.lower()} with optional filters",
+                parameters=[
+                    OpenApiParameter(
+                        "include",
+                        type=OpenApiTypes.STR,
+                        style="form",
+                        explode=False,
+                        enum=[",".join(c) for c in all_combinations(include_fields)],
+                    ),
+                ],
+                responses={
+                    200: cls.serializer_class(many=True),  # NOQA, __init_subclass__ ensures cls.serializer_class is set
+                },
+            )
+            | extend_schema_kwargs
+        )
+        list_method = extend_schema(**extend_schema_kwargs)(cloned(BaseModelViewSet.list))
+        return list_method
+
+    @classmethod
+    def _make_retrieve(cls, **extend_schema_kwargs):
+        meta = cls.model._meta  # NOQA
+        include_fields = list(cls.serializer_class.Meta.relational_fields.keys())  # NOQA
+        extend_schema_kwargs = (
+            dict(
+                summary=f"Retrieve {meta.verbose_name}",
+                description=f"Retrieve {meta.verbose_name.lower()} by id",
+                parameters=[
+                    OpenApiParameter(
+                        "include",
+                        type=OpenApiTypes.STR,
+                        style="form",
+                        explode=False,
+                        enum=[",".join(c) for c in all_combinations(include_fields)],
+                    ),
+                ],
+                responses={
+                    200: cls.serializer_class,
+                },
+            )
+            | extend_schema_kwargs
+        )
+        retrieve_method = extend_schema(**extend_schema_kwargs)(cloned(BaseModelViewSet.retrieve))
+        return retrieve_method
+
+    @classmethod
+    def _make_create(cls, **extend_schema_kwargs):
+        meta = cls.model._meta  # NOQA
+        extend_schema_kwargs = (
+            dict(
+                summary=f"Create {meta.verbose_name}",
+                description=f"Create a new {meta.verbose_name.lower()}",
+                responses={
+                    201: cls.serializer_class,
+                    400: error_serializer(cls.serializer_class),
+                },
+            )
+            | extend_schema_kwargs
+        )
+        create_method = extend_schema(**extend_schema_kwargs)(cloned(BaseModelViewSet.create))
+        return create_method
+
+    @classmethod
+    def _make_update(cls, **extend_schema_kwargs):
+        meta = cls.model._meta  # NOQA
+        extend_schema_kwargs = (
+            dict(
+                summary=f"Put {meta.verbose_name}",
+                description=f"Update an existing {meta.verbose_name.lower()} by id",
+                request=fake_serializer(
+                    name=f"{meta.verbose_name}UpdateSerializer",
+                    base=cls.serializer_class,
+                ),
+                responses={
+                    200: cls.serializer_class,
+                    400: error_serializer(cls.serializer_class),
+                },
+            )
+            | extend_schema_kwargs
+        )
+        update_method = extend_schema(**extend_schema_kwargs)(cloned(BaseModelViewSet.update))
+        return update_method
+
+    @classmethod
+    def _make_partial_update(cls, **extend_schema_kwargs):
+        meta = cls.model._meta  # NOQA
+        extend_schema_kwargs = (
+            dict(
+                summary=f"Patch {meta.verbose_name}",
+                description=f"Partially update an existing {meta.verbose_name.lower()} by id",
+                request=fake_serializer(
+                    name=f"{meta.verbose_name}UpdateSerializer",
+                    base=cls.serializer_class,
+                ),
+                responses={
+                    200: cls.serializer_class,
+                    400: error_serializer(cls.serializer_class),
+                },
+            )
+            | extend_schema_kwargs
+        )
+        partial_update_method = extend_schema(**extend_schema_kwargs)(cloned(BaseModelViewSet.partial_update))
+        return partial_update_method
+
+    @classmethod
+    def _make_destroy(cls, **extend_schema_kwargs):
+        meta = cls.model._meta  # NOQA
+        extend_schema_kwargs = (
+            dict(
+                summary=f"Delete {meta.verbose_name}",
+                description=f"Delete an existing {meta.verbose_name} by id",
+                responses={
+                    204: None,
+                    400: BaseModelViewSet.destroy.default_400_schema(f"{meta.verbose_name}DestroyError"),
+                },
+            )
+            | extend_schema_kwargs
+        )
+        destroy_method = extend_schema(**extend_schema_kwargs)(cloned(BaseModelViewSet.destroy))
+        return destroy_method
+
+
+def make_disallowed_method():
+    return extend_schema(exclude=True)(raises(MethodNotAllowed("Put is not allowed for this endpoint")))

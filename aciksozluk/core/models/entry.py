@@ -29,3 +29,7 @@ class Entry(BaseModel):
         verbose_name=_("Content"),
         help_text=_("Content of the entry. In tiptap format."),
     )
+
+    class Meta:
+        verbose_name = _("Entry")
+        verbose_name_plural = _("Entries")

@@ -1,4 +1,3 @@
-from common.utils.pyutils import cloned, raises
 from core.models import User
 from django.db.models import Count
 from django_filters import NumberFilter
@@ -7,7 +6,6 @@ from rest.serializers import PublicUserSerializer, UserSerializer
 from rest.utils.filters import make_filters
 from rest.utils.schema_helpers import error_serializer
 from rest_framework.decorators import action
-from rest_framework.exceptions import MethodNotAllowed
 
 from .base import BaseModelViewSet
 
@@ -37,26 +35,12 @@ class UserViewSet(BaseModelViewSet):
         **make_filters("title_count", NumberFilter, ["exact", "gte", "lte"]),
     }
 
-    create = extend_schema(exclude=True)(raises(MethodNotAllowed("Create is not allowed for this endpoint")))
-    update = extend_schema(exclude=True)(raises(MethodNotAllowed("Put is not allowed for this endpoint")))
-    partial_update = extend_schema(exclude=True)(raises(MethodNotAllowed("Patch is not allowed for this endpoint")))
-    destroy = extend_schema(exclude=True)(raises(MethodNotAllowed("Destroy is not allowed for this endpoint")))
+    disallowed_methods = ["create", "update", "partial_update", "destroy"]
 
-    list = extend_schema(
-        summary="List Users",
-        description="List users with optional filters",
-        responses={
-            200: PublicUserSerializer(many=True),
-        },
-    )(cloned(BaseModelViewSet.list))
-
-    retrieve = extend_schema(
-        summary="Retrieve User",
-        description="Retrieve user by id",
-        responses={
-            200: PublicUserSerializer,
-        },
-    )(cloned(BaseModelViewSet.retrieve))
+    crud_extend_default_schema = dict(
+        list=dict(responses={200: PublicUserSerializer(many=True)}),
+        retrieve=dict(responses={200: PublicUserSerializer}),
+    )
 
     @extend_schema(
         summary="Retrieve Me",

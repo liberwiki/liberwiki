@@ -4,9 +4,9 @@ import Link from 'next/link'
 
 import * as React from 'react'
 
-import { components } from '@/api/schema'
+import { APIType } from '@/api'
 
-export function NavTitle({ title, children }: { children: React.ReactNode; title: components['schemas']['Title'] }) {
+export function NavTitle({ title, children }: { children: React.ReactNode; title: APIType<'Title'> }) {
   return (
     <Link
       className="mb-1 rounded-md px-2 py-2 text-sm hover:bg-accent text-muted-foreground w-full flex justify-between items-center"

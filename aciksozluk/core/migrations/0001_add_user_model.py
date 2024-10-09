@@ -117,8 +117,8 @@ class Migration(migrations.Migration):
                 ),
             ],
             options={
-                "verbose_name": "user",
-                "verbose_name_plural": "users",
+                "verbose_name": "User",
+                "verbose_name_plural": "Users",
                 "abstract": False,
             },
             bases=(django_lifecycle.mixins.LifecycleModelMixin, models.Model),

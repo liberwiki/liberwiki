@@ -1,4 +1,6 @@
 import re
+from functools import wraps
+from itertools import combinations
 
 
 def noop(*a, **kw):
@@ -90,6 +92,7 @@ def cloned(f):
     foo = side_effect_decorator(noop_function_cloner(original), side_effect1)
     """
 
+    @wraps(f)
     def wrapper(*a, **kw):
         return f(*a, **kw)
 
@@ -130,3 +133,10 @@ def purge_mapping(mapping, keys):
     Remove keys from a mapping
     """
     return {key: value for key, value in mapping.items() if key not in keys}
+
+
+def all_combinations(options):
+    """
+    Returns all possible combinations of the given options
+    """
+    return [list(comb) for r in range(1, len(options) + 1) for comb in combinations(options, r)]

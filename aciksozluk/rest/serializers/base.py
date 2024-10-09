@@ -76,6 +76,12 @@ class ConditionalSerializerMixin:
         with suppress(AssertionError):
             return super().bind(*a, **kw)  # NOQA
 
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+        if hasattr(cls, "Meta"):  # NOQA
+            if not hasattr(cls.Meta, cls.CONDITIONAL_SERIALIZER_RELATIONAL_FIELDS_KEY):  # NOQA
+                setattr(cls.Meta, cls.CONDITIONAL_SERIALIZER_RELATIONAL_FIELDS_KEY, {})  # NOQA
+
 
 class OnlyCreateNoUpdateMixin:
     ONLY_CREATE_NO_UPDATE_FIELDS_KEY = "create_no_update_fields"

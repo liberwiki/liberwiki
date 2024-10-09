@@ -9,7 +9,7 @@ import { Button } from '@/components/shadcn/button'
 import { Card, CardContent } from '@/components/shadcn/card'
 import { Overlay, OverlayContent, OverlayTrigger } from '@/components/shadcn/overlay'
 
-import { components } from '@/api/schema'
+import { APIType, Includes } from '@/api/typeHelpers'
 import { useAcikSozlukAPI } from '@/lib/hooks'
 import { cn } from '@/lib/utils'
 
@@ -20,7 +20,7 @@ export function Entry({
   entry,
   onDelete = () => {},
 }: {
-  entry: components['schemas']['Entry']
+  entry: Includes<APIType<'Entry'>, 'author', APIType<'User'>>
   onDelete?: () => void
 }) {
   const aciksozluk = useAcikSozlukAPI()
@@ -75,7 +75,7 @@ export function Entry({
           <div className="flex space-x-2 items-center">
             <div className="text-sm text-gray-500">
               <Link href="/" className="font-medium text-primary hover:underline">
-                isik-kaplan
+                {entry.author.username}
               </Link>
               <span className="mx-1">•</span>
               <span>09.21.2024</span>

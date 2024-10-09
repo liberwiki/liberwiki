@@ -66,20 +66,20 @@ export interface paths {
     get: operations['entries_retrieve']
     /**
      * Put Entry
-     * @description Update an existing entry
+     * @description Update an existing entry by id
      */
     put: operations['entries_update']
     post?: never
     /**
      * Delete Entry
-     * @description Delete an existing entry
+     * @description Delete an existing Entry by id
      */
     delete: operations['entries_destroy']
     options?: never
     head?: never
     /**
      * Patch Entry
-     * @description Partially update an existing entry
+     * @description Partially update an existing entry by id
      */
     patch: operations['entries_partial_update']
     trace?: never
@@ -99,7 +99,7 @@ export interface paths {
     put?: never
     /**
      * Create Title
-     * @description Create a title
+     * @description Create a new title
      */
     post: operations['titles_create']
     delete?: never
@@ -124,7 +124,7 @@ export interface paths {
     post?: never
     /**
      * Delete Title
-     * @description Delete a title
+     * @description Delete an existing Title by id
      */
     delete: operations['titles_destroy']
     options?: never
@@ -415,12 +415,7 @@ export interface components {
      *             }
      *         ]
      *     } */
-    PatchedEntryRequest: {
-      /**
-       * Format: uuid
-       * @description Title of the entry.
-       */
-      title?: string
+    PatchedEntryUpdateRequest: {
       /** @description Content of the entry. In tiptap format. */
       content?: unknown
     }
@@ -773,6 +768,7 @@ export interface operations {
         created_at?: string
         created_at__gte?: string
         created_at__lte?: string
+        include?: 'author' | 'author,title' | 'title'
         /** @description Which field to use when ordering the results. */
         ordering?: string
         /** @description A page number within the paginated result set. */
@@ -839,7 +835,9 @@ export interface operations {
   }
   entries_retrieve: {
     parameters: {
-      query?: never
+      query?: {
+        include?: 'author' | 'author,title' | 'title'
+      }
       header?: never
       path: {
         id: string
@@ -932,9 +930,9 @@ export interface operations {
     }
     requestBody?: {
       content: {
-        'application/json': components['schemas']['PatchedEntryRequest']
-        'application/x-www-form-urlencoded': components['schemas']['PatchedEntryRequest']
-        'multipart/form-data': components['schemas']['PatchedEntryRequest']
+        'application/json': components['schemas']['PatchedEntryUpdateRequest']
+        'application/x-www-form-urlencoded': components['schemas']['PatchedEntryUpdateRequest']
+        'multipart/form-data': components['schemas']['PatchedEntryUpdateRequest']
       }
     }
     responses: {
@@ -967,6 +965,7 @@ export interface operations {
         entry_count__gte?: number
         entry_count__lt?: number
         entry_count__lte?: number
+        include?: 'created_by'
         name?: string
         name__contains?: string
         name__icontains?: string
@@ -1035,7 +1034,9 @@ export interface operations {
   }
   titles_retrieve: {
     parameters: {
-      query?: never
+      query?: {
+        include?: 'created_by'
+      }
       header?: never
       path: {
         id: string
@@ -1091,6 +1092,7 @@ export interface operations {
         entry_count?: number
         entry_count__gte?: number
         entry_count__lte?: number
+        include?: string
         is_active?: boolean
         is_staff?: boolean
         is_superuser?: boolean
@@ -1129,7 +1131,9 @@ export interface operations {
   }
   users_retrieve: {
     parameters: {
-      query?: never
+      query?: {
+        include?: string
+      }
       header?: never
       path: {
         id: string

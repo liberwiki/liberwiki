@@ -18,13 +18,13 @@ import { Overlay, OverlayContent, OverlayTrigger } from '@/components/shadcn/ove
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover'
 import { Separator } from '@/components/shadcn/separator'
 
-import { components } from '@/api/schema'
+import { APIType, includesType } from '@/api'
 import { useAcikSozlukAPI, useFormState } from '@/lib/hooks'
 
 import { format } from 'date-fns'
 import { toast } from 'sonner'
 
-export function Title({ title }: { title: components['schemas']['Title'] }) {
+export function Title({ title }: { title: APIType<'Title'> }) {
   const aciksozluk = useAcikSozlukAPI()
   const [currentPage, setCurrentPage] = useState<number>(1)
 
@@ -33,7 +33,7 @@ export function Title({ title }: { title: components['schemas']['Title'] }) {
     isSuccess,
     data: entries,
     refetch,
-  } = aciksozluk.entries({ page: currentPage, title__slug: title.slug, page_size: 25 })
+  } = aciksozluk.entries({ page: currentPage, title__slug: title.slug, page_size: 25, include: 'author' })
 
   const {
     formState: searchState,
@@ -207,7 +207,9 @@ export function Title({ title }: { title: components['schemas']['Title'] }) {
       </div>
       {isSuccess &&
         ((entries?.results?.length || 0) > 0 ? (
-          entries?.results?.map((entry) => <Entry key={entry.id} entry={entry} onDelete={handleEntryDelete} />)
+          entries?.results?.map((entry) => (
+            <Entry key={entry.id} entry={includesType(entry, 'author', 'User')} onDelete={handleEntryDelete} />
+          ))
         ) : (
           <div className="text-center text-gray-500 p-10">
             No entries found. Be the first one to share your information.
