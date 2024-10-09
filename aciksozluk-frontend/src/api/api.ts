@@ -19,7 +19,7 @@ export class AcikSozlukApi {
 
   useQueryClient = useQueryClient
 
-  public async isAuthenticated(): Promise<boolean> {
+  public isAuthenticated(): boolean {
     return !!getLazyValue<string | null>(this.bearerToken)
   }
 

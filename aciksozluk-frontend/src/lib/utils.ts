@@ -2,6 +2,8 @@ import aciksozlukTailwindConfig from '~/tailwind.config'
 
 import { NextRequest, NextResponse } from 'next/server'
 
+import _ from 'lodash'
+
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import resolveConfig from 'tailwindcss/resolveConfig'
@@ -117,9 +119,15 @@ export async function getLazyValueAsync<T>(input: T | (() => Promise<T>) | (() =
   return input
 }
 
-export function runMiddlewareIfPathStartsWith(path: RegExp) {
+export function runMiddlewareIfPathMatches(path: RegExp, exemptNextPaths: boolean = true) {
   return function (middleware: (request: NextRequest) => Promise<NextResponse | void>) {
     return async function (request: NextRequest) {
+      const nextPatterns = [/^\/_next/]
+
+      if (exemptNextPaths && _.some(nextPatterns, (pattern) => pattern.test(request.nextUrl.pathname))) {
+        return
+      }
+
       if (path.test(request.nextUrl.pathname)) {
         return await middleware(request)
       }

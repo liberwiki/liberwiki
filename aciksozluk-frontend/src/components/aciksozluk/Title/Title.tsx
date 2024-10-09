@@ -75,7 +75,7 @@ export function Title({ title }: { title: APIType<'Title'> }) {
   return (
     <>
       <div>
-        <Link className="h-1 p-6 text-xl font-bold" href="/">
+        <Link className="h-1 p-6 text-xl font-bold" href={{ pathname: '/' }}>
           {title?.name}
         </Link>
         <div className="text-sm px-6 py-2 text-gray-500 flex justify-between items-center max-lg:flex-wrap">

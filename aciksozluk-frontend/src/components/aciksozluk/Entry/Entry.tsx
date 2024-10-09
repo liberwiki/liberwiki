@@ -74,7 +74,7 @@ export function Entry({
           </div>
           <div className="flex space-x-2 items-center">
             <div className="text-sm text-gray-500">
-              <Link href="/" className="font-medium text-primary hover:underline">
+              <Link href={{ pathname: '/' }} className="font-medium text-primary hover:underline">
                 {entry.author.username}
               </Link>
               <span className="mx-1">•</span>

@@ -1,9 +1,12 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
-import authMiddleware from '@/middlewares/authMiddleware'
+import * as AuthMiddlewares from '@/middlewares/authMiddlewares'
 
-const middlewares: ((request: NextRequest) => Promise<NextResponse | void>)[] = [authMiddleware]
+const middlewares: ((request: NextRequest) => Promise<NextResponse | void>)[] = [
+  AuthMiddlewares.redirectAuthenticatedBackToTitles,
+  AuthMiddlewares.redirectAnonymousToIndex,
+]
 
 export async function middleware(request: NextRequest) {
   for (const mw of middlewares) {
