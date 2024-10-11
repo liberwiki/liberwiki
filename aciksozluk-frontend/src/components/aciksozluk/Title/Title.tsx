@@ -20,7 +20,8 @@ import { Separator } from '@/components/shadcn/separator'
 
 import { APIType, includesType } from '@/api'
 import config from '@/config/config'
-import { useAcikSozlukAPI, useFormState } from '@/lib/hooks'
+import { useFormState } from '@/lib/hooks'
+import { useAcikSozlukAPI } from '@/lib/serverHooks'
 
 import { format } from 'date-fns'
 import { toast } from 'sonner'

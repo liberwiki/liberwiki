@@ -1,5 +1,3 @@
-'use client'
-
 import Link from 'next/link'
 
 import * as Icons from 'lucide-react'
@@ -8,13 +6,14 @@ import { Button } from '@/components/shadcn/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/shadcn/sheet'
 
 import config from '@/config/config'
-import { useAcikSozlukAPI } from '@/lib/hooks'
+import { useAcikSozlukAPI } from '@/lib/serverHooks'
 
 import { AdvancedSearch } from './AdvancedSearch'
 import { MobileNav } from './MobileNav'
 
-export function Header() {
+export async function Header() {
   const aciksozluk = useAcikSozlukAPI()
+
   return (
     <header className="sticky top-0 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-white">
       <div className="container flex h-14 items-center max-md:px-4 gap-2">
@@ -31,7 +30,7 @@ export function Header() {
           </div>
         </div>
         <div className="lg:w-1/6 flex justify-end">
-          {aciksozluk.isAuthenticated() ? (
+          {(await aciksozluk.isAuthenticated()) ? (
             <>
               <Button
                 variant="ghost"

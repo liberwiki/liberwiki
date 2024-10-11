@@ -3,7 +3,7 @@ import _ from 'lodash'
 import { paths } from '@/api/schema'
 import type { APIQuery, APIType, RemainingUseQueryOptions } from '@/api/typeHelpers'
 import config from '@/config/config'
-import { getLazyValue } from '@/lib/utils'
+import { getLazyValueAsync } from '@/lib/utils'
 
 import { UseQueryResult, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import createClient, { FetchResponse } from 'openapi-fetch'
@@ -11,7 +11,7 @@ import type { MediaType } from 'openapi-typescript-helpers'
 
 export class AcikSozlukApi {
   config = config.api
-  bearerToken: string | null | (() => string | null)
+  bearerToken: string | null | (() => Promise<string | null>)
 
   constructor(bearerToken: typeof this.bearerToken) {
     this.bearerToken = bearerToken
@@ -19,12 +19,12 @@ export class AcikSozlukApi {
 
   useQueryClient = useQueryClient
 
-  public isAuthenticated(): boolean {
-    return !!getLazyValue<string | null>(this.bearerToken)
+  public async isAuthenticated(): Promise<boolean> {
+    return !!(await getLazyValueAsync<string | null>(this.bearerToken))
   }
 
   fetchWrapper = async (input: RequestInfo, init?: RequestInit): Promise<Response> => {
-    const bearerToken = getLazyValue<string | null>(this.bearerToken)
+    const bearerToken = await getLazyValueAsync<string | null>(this.bearerToken)
 
     init = init || {}
     init.headers = (init.headers instanceof Headers ? init.headers : { ...init.headers }) as Record<string, string>

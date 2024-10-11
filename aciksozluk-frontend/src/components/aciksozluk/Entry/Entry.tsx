@@ -10,7 +10,7 @@ import { Card, CardContent } from '@/components/shadcn/card'
 import { Overlay, OverlayContent, OverlayTrigger } from '@/components/shadcn/overlay'
 
 import { APIType, Includes } from '@/api/typeHelpers'
-import { useAcikSozlukAPI } from '@/lib/hooks'
+import { useAcikSozlukAPI } from '@/lib/serverHooks'
 import { cn } from '@/lib/utils'
 
 import { format } from 'date-fns'

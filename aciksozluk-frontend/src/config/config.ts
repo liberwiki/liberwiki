@@ -11,6 +11,7 @@ const config = {
     defaultTitlePageSize: 50,
     defaultEntryPageSize: 25,
   },
+  membersOnly: true,
 }
 
 export default config

@@ -6,11 +6,9 @@ import LeftColumn from '@/components/aciksozluk/LeftColumn'
 import RightColumn from '@/components/aciksozluk/RightColumn'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
 
-import RootLayout from '@/app/layout'
-
 export default function TitleLayout({ children }: { children: React.ReactNode }) {
   return (
-    <RootLayout>
+    <>
       <Header />
       <main className="contents">
         <div vaul-drawer-wrapper="">
@@ -34,6 +32,6 @@ export default function TitleLayout({ children }: { children: React.ReactNode })
         </div>
       </main>
       <Footer />
-    </RootLayout>
+    </>
   )
 }

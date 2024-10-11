@@ -1,10 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 
-import { AcikSozlukApi } from '@/api/api'
-import config from '@/config/config'
-
-import Cookie from 'js-cookie'
-
 export function useElementAttribute<T extends HTMLElement, K extends keyof T>(attributeKey: K) {
   /**
    * Get the value of an attribute of an element for the given ref.
@@ -81,8 +76,4 @@ export function useFormState<T>(initialState: T) {
   const handleFormStateEvent = (key: keyof T) => handleFormState({ key, inputType: 'event' })
 
   return { formState, setFormState, formErrors, setFormErrors, handleFormStateValue, handleFormStateEvent }
-}
-
-export function useAcikSozlukAPI() {
-  return new AcikSozlukApi(() => Cookie.get(config.api.bearerTokenCookieName) || null)
 }

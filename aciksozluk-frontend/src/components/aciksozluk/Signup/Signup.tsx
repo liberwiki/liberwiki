@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 import React from 'react'
 
 import { Button } from '@/components/shadcn/button'
@@ -6,7 +8,9 @@ import { Input } from '@/components/shadcn/input'
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '@/components/shadcn/input-otp'
 import { Label } from '@/components/shadcn/label'
 
-import { useAcikSozlukAPI, useFormState } from '@/lib/hooks'
+import config from '@/config/config'
+import { useFormState } from '@/lib/hooks'
+import { useAcikSozlukAPI } from '@/lib/serverHooks'
 
 export function Signup() {
   const aciksozluk = useAcikSozlukAPI()
@@ -65,10 +69,11 @@ export function Signup() {
                 value={signupState.email}
                 onChange={handleSignupStateEvent('email')}
                 errorText={signupErrors?.email?.join(' ')}
+                autoComplete="username"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="usernae">Username</Label>
+              <Label htmlFor="username">Username</Label>
               <Input
                 id="username"
                 type="text"
@@ -77,6 +82,7 @@ export function Signup() {
                 value={signupState.username}
                 onChange={handleSignupStateEvent('username')}
                 errorText={signupErrors?.username?.join(' ')}
+                autoComplete="username"
               />
             </div>
             <div className="space-y-2">
@@ -89,6 +95,7 @@ export function Signup() {
                 value={signupState.password}
                 onChange={handleSignupStateEvent('password')}
                 errorText={signupErrors?.password?.join(' ')}
+                autoComplete="new-password"
               />
             </div>
             <div className="space-y-2">
@@ -101,6 +108,7 @@ export function Signup() {
                 value={signupState.password_confirmation}
                 onChange={handleSignupStateEvent('password_confirmation')}
                 errorText={signupErrors?.password_confirmation?.join(' ')}
+                autoComplete="new-password"
               />
             </div>
             <div className="space-y-2">
@@ -135,6 +143,18 @@ export function Signup() {
             <Button type="submit" className="w-full">
               Signup
             </Button>
+            <div className="w-100 flex justify-center">
+              <Link href={{ pathname: '/auth/login' }} className="hover:underline">
+                Login instead?
+              </Link>
+            </div>
+            {!config.membersOnly && (
+              <div className="w-100 flex justify-center">
+                <Link href={{ pathname: '/titles' }} className="hover:underline">
+                  Back to webiste?
+                </Link>
+              </div>
+            )}
           </div>
         </form>
       </CardContent>

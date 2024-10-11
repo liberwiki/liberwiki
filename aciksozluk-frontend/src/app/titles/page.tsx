@@ -3,7 +3,7 @@
 import Title from '@/components/aciksozluk/Title'
 
 import { includesType } from '@/api'
-import { useAcikSozlukAPI } from '@/lib/hooks'
+import { useAcikSozlukAPI } from '@/lib/serverHooks'
 
 export default function TitlePage() {
   const aciksozluk = useAcikSozlukAPI()

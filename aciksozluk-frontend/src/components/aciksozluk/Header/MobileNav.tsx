@@ -9,7 +9,7 @@ import { Button } from '@/components/shadcn/button'
 import { ScrollArea, ScrollBar } from '@/components/shadcn/scroll-area'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/shadcn/sheet'
 
-import { useAcikSozlukAPI } from '@/lib/hooks'
+import { useAcikSozlukAPI } from '@/lib/serverHooks'
 
 import { Paginator } from '../Paginator/Paginator'
 

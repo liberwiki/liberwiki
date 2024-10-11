@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import Editor from '@/components/aciksozluk/Editor'
 import { Separator } from '@/components/shadcn/separator'
 
-import { useAcikSozlukAPI } from '@/lib/hooks'
+import { useAcikSozlukAPI } from '@/lib/serverHooks'
 
 import { format } from 'date-fns'
 import { toast } from 'sonner'

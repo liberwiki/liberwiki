@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 
 import NavTitle from '@/components/aciksozluk/NavTitle'
 
-import { useAcikSozlukAPI } from '@/lib/hooks'
+import { useAcikSozlukAPI } from '@/lib/serverHooks'
 
 import { Paginator } from '../Paginator/Paginator'
 

@@ -3,7 +3,7 @@
 import NewTitle from '@/components/aciksozluk/NewTitle'
 import Title from '@/components/aciksozluk/Title'
 
-import { useAcikSozlukAPI } from '@/lib/hooks'
+import { useAcikSozlukAPI } from '@/lib/serverHooks'
 
 export default function TitlePage({ params }: { params: { slug: string } }) {
   const aciksozluk = useAcikSozlukAPI()

@@ -17,7 +17,8 @@ import { Overlay, OverlayContent, OverlayTrigger } from '@/components/shadcn/ove
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
 
-import { useAcikSozlukAPI, useElementAttribute, useFormState } from '@/lib/hooks'
+import { useElementAttribute, useFormState } from '@/lib/hooks'
+import { useAcikSozlukAPI } from '@/lib/serverHooks'
 import { cn } from '@/lib/utils'
 
 import { format } from 'date-fns'

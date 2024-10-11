@@ -1,3 +1,6 @@
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+
 import React from 'react'
 
 import { Button } from '@/components/shadcn/button'
@@ -5,11 +8,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/shadcn/input'
 import { Label } from '@/components/shadcn/label'
 
-import { useAcikSozlukAPI, useFormState } from '@/lib/hooks'
+import config from '@/config/config'
+import { useFormState } from '@/lib/hooks'
 import { setCookie } from '@/lib/serverActions'
+import { useAcikSozlukAPI } from '@/lib/serverHooks'
 
 export function Login() {
   const aciksozluk = useAcikSozlukAPI()
+  const router = useRouter()
   const { mutateAsync: obtainAuthToken } = aciksozluk.obtainAuthToken()
 
   const {
@@ -31,6 +37,7 @@ export function Login() {
     } else {
       setLoginErrors(data.error)
     }
+    router.push('/titles/')
   }
 
   return (
@@ -51,6 +58,7 @@ export function Login() {
                 required
                 value={loginState.email}
                 onChange={handleLoginStateEvent('email')}
+                autoComplete="username"
               />
             </div>
             <div className="space-y-2">
@@ -62,6 +70,7 @@ export function Login() {
                 required
                 value={loginState.password}
                 onChange={handleLoginStateEvent('password')}
+                autoComplete="current-password"
               />
             </div>
             {loginErrors?.non_field_errors && (
@@ -70,6 +79,18 @@ export function Login() {
             <Button type="submit" className="w-full">
               Login
             </Button>
+            <div className="w-100 flex justify-center">
+              <Link href={{ pathname: '/auth/signup' }} className="hover:underline">
+                Signup instead?
+              </Link>
+            </div>
+            {!config.membersOnly && (
+              <div className="w-100 flex justify-center">
+                <Link href={{ pathname: '/titles' }} className="hover:underline">
+                  Back to webiste?
+                </Link>
+              </div>
+            )}
           </div>
         </form>
       </CardContent>

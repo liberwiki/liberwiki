@@ -5,6 +5,8 @@ import config from '@/config/config'
 import { getCookie } from '@/lib/serverActions'
 import { runMiddlewareIfPathMatches } from '@/lib/utils'
 
+const membersOnly = config.membersOnly
+
 export const redirectAuthenticatedBackToTitles = runMiddlewareIfPathMatches(/^\/auth\//)(async function (
   request: NextRequest
 ) {
@@ -19,7 +21,7 @@ export const redirectAnonymousToIndex = runMiddlewareIfPathMatches(/^(?!\/$|\/au
   request: NextRequest
 ) {
   const isAuthenticated = !!(await getCookie(config.api.bearerTokenCookieName))
-  if (!isAuthenticated) {
+  if (membersOnly && !isAuthenticated) {
     return NextResponse.redirect(new URL('/', request.url))
   }
   return NextResponse.next()
