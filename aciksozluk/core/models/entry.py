@@ -2,6 +2,7 @@ from common.models import BaseModel
 from common.utils.db import track_model_history
 from django.db import models
 from django.utils.translation import gettext as _
+from django_lifecycle import AFTER_DELETE, hook
 
 
 @track_model_history
@@ -33,3 +34,8 @@ class Entry(BaseModel):
     class Meta:
         verbose_name = _("Entry")
         verbose_name_plural = _("Entries")
+
+    @hook(AFTER_DELETE)
+    def delete_title_if_no_entries(self):
+        if self.title.entries.count() == 0:
+            self.title.delete()

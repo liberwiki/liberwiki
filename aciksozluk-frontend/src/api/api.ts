@@ -94,6 +94,13 @@ export class AcikSozlukApi {
     })
   }
 
+  public signup = () => {
+    return useMutation({
+      mutationKey: ['signup'],
+      mutationFn: (data: APIType<'SignupRequest'>) => this.client.POST('/api/v0/auth/signup/', { body: data }),
+    })
+  }
+
   public users = (
     filters?: APIQuery<'/api/v0/users/'>,
     useQueryOptions?: RemainingUseQueryOptions<'/api/v0/users/'>

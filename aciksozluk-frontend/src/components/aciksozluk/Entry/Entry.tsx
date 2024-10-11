@@ -46,9 +46,7 @@ export function Entry({
   async function handleDelete() {
     await deleteEntry()
     onDelete()
-    toast('Your entry has been deleted.', {
-      description: format(new Date(), "EEEE, MMMM dd, yyyy 'at' hh:mm a"),
-    })
+    toast('Your entry has been deleted.', { description: format(new Date(), "EEEE, MMMM dd, yyyy 'at' hh:mm a") })
   }
 
   return (

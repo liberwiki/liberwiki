@@ -1,15 +1,16 @@
 from drf_spectacular.utils import extend_schema
-from rest.serializers import AuthTokenSerializer
+from rest.serializers import AuthTokenSerializer, SignupSerializer
+from rest.utils.permissions import IsAnonymous, prevent_actions
 from rest.utils.schema_helpers import error_serializer
 from rest_framework.authtoken.models import Token
-from rest_framework.permissions import AllowAny
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.views import APIView
+from rest_framework.viewsets import GenericViewSet
 
 
-class AuthTokenView(APIView):
-    permission_classes = [AllowAny]
-    serializer_class = AuthTokenSerializer
+class AuthViewSet(GenericViewSet):
+    endpoint = "auth"
 
     def get_serializer_context(self):
         return {"request": self.request, "format": self.format_kwarg, "view": self}
@@ -24,15 +25,25 @@ class AuthTokenView(APIView):
         responses={
             400: error_serializer(AuthTokenSerializer),
             200: AuthTokenSerializer(read_only=True),
+            201: AuthTokenSerializer(read_only=True),
         },
         request=AuthTokenSerializer,
     )
-    def post(self, request, *args, **kwargs):
+    @action(
+        detail=False,
+        methods=["POST"],
+        serializer_class=AuthTokenSerializer,
+        url_path="tokens",
+        permission_classes=[
+            (IsAnonymous & prevent_actions("delete")) | IsAuthenticated & prevent_actions("obtain_auth_token"),
+        ],
+    )
+    def obtain_auth_token(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.user
         token, created = Token.objects.get_or_create(user=user)
-        return Response({"token": token.key})
+        return Response({"token": token.key}, status=201 if created else 200)
 
     @extend_schema(
         summary="Delete Auth Token",
@@ -42,6 +53,22 @@ class AuthTokenView(APIView):
         },
         request=AuthTokenSerializer,
     )
-    def delete(self):
+    @obtain_auth_token.mapping.delete
+    def delete_auth_token(self, request, *args, **kwargs):
         self.request.auth_token.delete()
         return Response(status=204)
+
+    @extend_schema(
+        summary="Signup",
+        description="Signup with an invitation code",
+        responses={
+            400: error_serializer(SignupSerializer),
+            201: None,
+        },
+    )
+    @action(detail=False, methods=["POST"], serializer_class=SignupSerializer, permission_classes=[IsAnonymous])
+    def signup(self, request, *args, **kwargs):
+        serializer = SignupSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=201)

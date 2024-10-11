@@ -32,3 +32,13 @@ def prevent_actions(*actions):
         has_permission=has_permission,
     )
     return type(name, bases, attrs)
+
+
+class IsAnonymous(BasePermission):
+    """
+    Custom permission to only allow access to unauthenticated users (anonymous).
+    """
+
+    def has_permission(self, request, view):
+        # Return True only if the user is not authenticated
+        return not request.user.is_authenticated

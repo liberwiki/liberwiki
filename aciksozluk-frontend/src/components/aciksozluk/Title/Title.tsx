@@ -19,21 +19,25 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/pop
 import { Separator } from '@/components/shadcn/separator'
 
 import { APIType, includesType } from '@/api'
+import config from '@/config/config'
 import { useAcikSozlukAPI, useFormState } from '@/lib/hooks'
 
 import { format } from 'date-fns'
 import { toast } from 'sonner'
 
 export function Title({ title }: { title: APIType<'Title'> }) {
+  const entryPerPage = config.ux.defaultEntryPageSize
   const aciksozluk = useAcikSozlukAPI()
+
   const [currentPage, setCurrentPage] = useState<number>(1)
 
+  const queryClient = aciksozluk.useQueryClient()
   const { mutateAsync: createEntry } = aciksozluk.createEntry()
   const {
     isSuccess,
     data: entries,
     refetch,
-  } = aciksozluk.entries({ page: currentPage, title__slug: title.slug, page_size: 25, include: 'author' })
+  } = aciksozluk.entries({ page: currentPage, title__slug: title.slug, page_size: entryPerPage, include: 'author' })
 
   const {
     formState: searchState,
@@ -55,17 +59,24 @@ export function Title({ title }: { title: APIType<'Title'> }) {
     const { response: createEntryResponse } = await createEntry({ title: title?.id as string, content })
     if (createEntryResponse.ok) {
       toast('Your entry has been created.', { description: format(new Date(), "EEEE, MMMM dd, yyyy 'at' hh:mm a") })
+      await queryClient.invalidateQueries()
+      if (entries) {
+        // If the current page is full, and a new entry is created, go to the next page
+        setCurrentPage(entries.count % entryPerPage === 0 ? entries.total_pages + 1 : entries.total_pages)
+      }
     } else {
       toast('An error occurred while creating your entry. Please try again later.', {
         description: format(new Date(), "EEEE, MMMM dd, yyyy 'at' hh:mm a"),
       })
     }
-    setCurrentPage(entries?.total_pages || 1)
-    refetch()
   }
 
   async function handleEntryDelete() {
-    await refetch()
+    if (entries) {
+      // If current page only has 1 entry, and it is deleted, go to the previous page
+      setCurrentPage(entries.count % entryPerPage === 1 ? entries.total_pages - 1 : entries.total_pages)
+    }
+    await queryClient.invalidateQueries()
   }
 
   useEffect(() => {
@@ -206,8 +217,9 @@ export function Title({ title }: { title: APIType<'Title'> }) {
         </div>
       </div>
       {isSuccess &&
-        ((entries?.results?.length || 0) > 0 ? (
-          entries?.results?.map((entry) => (
+        entries &&
+        ((entries.results.length || 0) > 0 ? (
+          entries.results.map((entry) => (
             <Entry key={entry.id} entry={includesType(entry, 'author', 'User')} onDelete={handleEntryDelete} />
           ))
         ) : (

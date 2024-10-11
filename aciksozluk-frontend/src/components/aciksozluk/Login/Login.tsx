@@ -10,7 +10,7 @@ import { setCookie } from '@/lib/serverActions'
 
 export function Login() {
   const aciksozluk = useAcikSozlukAPI()
-  const { mutateAsync } = aciksozluk.obtainAuthToken()
+  const { mutateAsync: obtainAuthToken } = aciksozluk.obtainAuthToken()
 
   const {
     formState: loginState,
@@ -24,7 +24,7 @@ export function Login() {
 
   async function handleLogin(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    const data = await mutateAsync(loginState)
+    const data = await obtainAuthToken(loginState)
     if (data.response.ok) {
       await setCookie('BearerToken', data?.data?.token as string)
       setLoginErrors({})
@@ -34,7 +34,7 @@ export function Login() {
   }
 
   return (
-    <Card className="mx-auto max-w-sm">
+    <Card className="mx-auto max-w-md">
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl font-bold">Login</CardTitle>
         <CardDescription>Enter your email and password to login to your account</CardDescription>

@@ -1,10 +1,10 @@
-from .auth import AuthTokenView
+from .auth import AuthViewSet
 from .entry import EntryViewSet
 from .title import TitleViewSet
 from .user import UserViewSet
 
 __all__ = [
-    "AuthTokenView",
+    "AuthViewSet",
     "EntryViewSet",
     "TitleViewSet",
     "UserViewSet",

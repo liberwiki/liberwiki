@@ -4,6 +4,26 @@
  */
 
 export interface paths {
+  '/api/v0/auth/signup/': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Signup
+     * @description Signup with an invitation code
+     */
+    post: operations['auth_signup_create']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/api/v0/auth/tokens/': {
     parameters: {
       query?: never
@@ -343,54 +363,54 @@ export interface components {
        * @description Total number of items available.
        * @example 1102
        */
-      count?: number
+      count: number
       /**
        * @description Number of results to return per page.
        * @example 100
        */
-      page_size?: number
+      page_size: number
       /**
        * @description Total number of pages.
        * @example 17
        */
-      total_pages?: number
-      results?: components['schemas']['Entry'][]
+      total_pages: number
+      results: components['schemas']['Entry'][]
     }
     PaginatedPublicUserList: {
       /**
        * @description Total number of items available.
        * @example 1102
        */
-      count?: number
+      count: number
       /**
        * @description Number of results to return per page.
        * @example 100
        */
-      page_size?: number
+      page_size: number
       /**
        * @description Total number of pages.
        * @example 17
        */
-      total_pages?: number
-      results?: components['schemas']['PublicUser'][]
+      total_pages: number
+      results: components['schemas']['PublicUser'][]
     }
     PaginatedTitleList: {
       /**
        * @description Total number of items available.
        * @example 1102
        */
-      count?: number
+      count: number
       /**
        * @description Number of results to return per page.
        * @example 100
        */
-      page_size?: number
+      page_size: number
       /**
        * @description Total number of pages.
        * @example 17
        */
-      total_pages?: number
-      results?: components['schemas']['Title'][]
+      total_pages: number
+      results: components['schemas']['Title'][]
     }
     /** @description Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
      *     read only.
@@ -509,6 +529,29 @@ export interface components {
       readonly updated_at: string
       readonly title_count: number
       readonly entry_count: number
+    }
+    SignupRequest: {
+      /**
+       * Email address
+       * Format: email
+       */
+      email?: string
+      /** @description Required. 150 characters or fewer. Letters (lowercase), digits or hyphens only, can't start with letters or hyphens. */
+      username: string
+      first_name?: string
+      last_name?: string
+      password: string
+      password_confirmation: string
+      invitation_code: string
+    }
+    SignupSerializerError: {
+      readonly email: string[]
+      readonly username: string[]
+      readonly first_name: string[]
+      readonly last_name: string[]
+      readonly password: string[]
+      readonly password_confirmation: string[]
+      readonly invitation_code: string[]
     }
     /** @description Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
      *     read only.
@@ -709,6 +752,38 @@ export interface components {
 }
 export type $defs = Record<string, never>
 export interface operations {
+  auth_signup_create: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['SignupRequest']
+        'application/x-www-form-urlencoded': components['schemas']['SignupRequest']
+        'multipart/form-data': components['schemas']['SignupRequest']
+      }
+    }
+    responses: {
+      /** @description No response body */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['SignupSerializerError']
+        }
+      }
+    }
+  }
   auth_tokens_create: {
     parameters: {
       query?: never
@@ -725,6 +800,14 @@ export interface operations {
     }
     responses: {
       200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AuthToken']
+        }
+      }
+      201: {
         headers: {
           [name: string]: unknown
         }

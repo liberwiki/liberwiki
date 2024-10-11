@@ -10,20 +10,11 @@ class TitleAdmin(BaseModelAdmin):
     readonly_fields = ["created_at", "updated_at", "slug"]
     list_display = ["name", "created_by", "entry_count", "created_at", "updated_at"]
     search_fields = ["name"]
-    list_filter = [
-        "created_by",
-        "created_at",
-        "updated_at",
-    ]
+    list_filter = ["created_by", "created_at", "updated_at"]
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
         return queryset.annotate(entry_count=Count("entries")).select_related("created_by")
-
-    def save_model(self, request, obj, form, change):
-        if not change:
-            obj.created_by = request.user
-        super().save_model(request, obj, form, change)
 
     @admin.display(description="Entry Count")
     def entry_count(self, obj):

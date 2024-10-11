@@ -7,7 +7,12 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 @admin.register(User)
 class UserAdmin(BaseModelAdmin, BaseUserAdmin):
     autocomplete_fields = ["groups", "user_permissions"]
-    list_filter = ["is_staff", "is_active"]
+    list_filter = [
+        "is_staff",
+        "is_active",
+        "created_at",
+        "updated_at",
+    ]
     readonly_fields = [
         "created_at",
         "updated_at",

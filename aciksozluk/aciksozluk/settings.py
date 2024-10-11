@@ -23,9 +23,9 @@ INSTALLED_APPS = [
     "colorfield",
     "admin_interface",
     "corsheaders",
-    "administration.apps.AdministrationConfig",  # Needs to be after admin_interface
     "rest_framework",
     "rest_framework.authtoken",
+    "administration.apps.AdministrationConfig",  # Needs to be after admin_interface + rest_framework.authtoken
     "django_filters",
     "drf_spectacular",
     "django_extensions",

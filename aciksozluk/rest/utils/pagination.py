@@ -31,4 +31,5 @@ class PageNumberPagination(pagination.PageNumberPagination):
                 },
                 "results": schema,
             },
+            "required": ["count", "page_size", "total_pages", "results"],
         }

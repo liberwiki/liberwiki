@@ -4,6 +4,38 @@ info:
   version: 0.1.0
   description: Aciksozluk API
 paths:
+  /api/v0/auth/signup/:
+    post:
+      operationId: auth_signup_create
+      description: Signup with an invitation code
+      summary: Signup
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
+        required: true
+      security:
+      - tokenAuth: []
+      - basicAuth: []
+      - cookieAuth: []
+      responses:
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignupSerializerError'
+          description: ''
+        '201':
+          description: No response body
   /api/v0/auth/tokens/:
     post:
       operationId: auth_tokens_create
@@ -27,7 +59,6 @@ paths:
       - tokenAuth: []
       - basicAuth: []
       - cookieAuth: []
-      - {}
       responses:
         '400':
           content:
@@ -36,6 +67,12 @@ paths:
                 $ref: '#/components/schemas/AuthTokenSerializerError'
           description: ''
         '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+          description: ''
+        '201':
           content:
             application/json:
               schema:
@@ -51,7 +88,6 @@ paths:
       - tokenAuth: []
       - basicAuth: []
       - cookieAuth: []
-      - {}
       responses:
         '204':
           description: No response body
@@ -1036,6 +1072,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Entry'
+      required:
+      - count
+      - page_size
+      - total_pages
+      - results
     PaginatedPublicUserList:
       type: object
       properties:
@@ -1055,6 +1096,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PublicUser'
+      required:
+      - count
+      - page_size
+      - total_pages
+      - results
     PaginatedTitleList:
       type: object
       properties:
@@ -1074,6 +1120,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Title'
+      required:
+      - count
+      - page_size
+      - total_pages
+      - results
     PatchedEntryUpdateRequest:
       type: object
       description: |-
@@ -1228,6 +1279,90 @@ components:
       - is_superuser
       - title_count
       - updated_at
+      - username
+    SignupRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        username:
+          type: string
+          minLength: 1
+          description: Required. 150 characters or fewer. Letters (lowercase), digits
+            or hyphens only, can't start with letters or hyphens.
+          maxLength: 150
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+        password_confirmation:
+          type: string
+          writeOnly: true
+          minLength: 1
+        invitation_code:
+          type: string
+          writeOnly: true
+          minLength: 8
+          maxLength: 8
+      required:
+      - invitation_code
+      - password
+      - password_confirmation
+      - username
+    SignupSerializerError:
+      type: object
+      properties:
+        email:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        username:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        first_name:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        last_name:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        password:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        password_confirmation:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        invitation_code:
+          type: array
+          items:
+            type: string
+          readOnly: true
+      required:
+      - email
+      - first_name
+      - invitation_code
+      - last_name
+      - password
+      - password_confirmation
       - username
     Title:
       type: object

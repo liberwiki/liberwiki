@@ -8,7 +8,6 @@ import { runMiddlewareIfPathMatches } from '@/lib/utils'
 export const redirectAuthenticatedBackToTitles = runMiddlewareIfPathMatches(/^\/auth\//)(async function (
   request: NextRequest
 ) {
-  console.log('redirectAuthenticatedBackToTitles')
   const isAuthenticated = !!(await getCookie(config.api.bearerTokenCookieName))
   if (isAuthenticated) {
     return NextResponse.redirect(new URL('/titles', request.url))
@@ -20,7 +19,6 @@ export const redirectAnonymousToIndex = runMiddlewareIfPathMatches(/^(?!\/$|\/au
   request: NextRequest
 ) {
   const isAuthenticated = !!(await getCookie(config.api.bearerTokenCookieName))
-  console.log(request.nextUrl.pathname, 'redirectAnonymousToIndex', isAuthenticated)
   if (!isAuthenticated) {
     return NextResponse.redirect(new URL('/', request.url))
   }

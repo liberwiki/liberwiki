@@ -30,6 +30,7 @@ class AllowedCharactersValidator:
         # due to % being a special character in % formatting that escapes itself.
         if "%" in value:
             return value.replace("%", "%%")
+        return value
 
     @classmethod
     def input_adjustments(cls, value):

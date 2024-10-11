@@ -1,8 +1,11 @@
+from common.utils.pyutils import returns
 from django.contrib.admin import ModelAdmin
 from django.utils.translation import gettext_lazy as _
 
 
 class BaseModelAdmin(ModelAdmin):
+    has_add_permission = returns(False)  # Most of the time we don't want anything to be added from the admin panel
+
     @staticmethod
     def _ensure_list(value):
         return list(value or [])
