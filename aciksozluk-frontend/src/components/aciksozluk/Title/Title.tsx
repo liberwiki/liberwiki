@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import * as Icons from 'lucide-react'
 
@@ -33,11 +33,6 @@ export function Title({ title }: { title: APIType<'Title'> }) {
 
   const queryClient = aciksozluk.useQueryClient()
   const { mutateAsync: createEntry } = aciksozluk.createEntry()
-  const {
-    isSuccess,
-    data: entries,
-    refetch,
-  } = aciksozluk.entries({ page: currentPage, title__slug: title.slug, page_size: entryPerPage, include: 'author' })
 
   const {
     formState: searchState,
@@ -55,11 +50,19 @@ export function Title({ title }: { title: APIType<'Title'> }) {
     toDate: undefined,
   })
 
+  const { isSuccess, data: entries } = aciksozluk.entries({
+    page: currentPage,
+    title__slug: title.slug,
+    page_size: entryPerPage,
+    include: 'author',
+  })
+
   async function handleEditorSubmit(content: object) {
     const { response: createEntryResponse } = await createEntry({ title: title?.id as string, content })
     if (createEntryResponse.ok) {
       toast('Your entry has been created.', { description: format(new Date(), "EEEE, MMMM dd, yyyy 'at' hh:mm a") })
-      await queryClient.invalidateQueries()
+      await queryClient.invalidateQueries({ queryKey: ['titles'] })
+      await queryClient.invalidateQueries({ queryKey: ['entries'] })
       if (entries) {
         // If the current page is full, and a new entry is created, go to the next page
         setCurrentPage(entries.count % entryPerPage === 0 ? entries.total_pages + 1 : entries.total_pages)
@@ -72,16 +75,12 @@ export function Title({ title }: { title: APIType<'Title'> }) {
   }
 
   async function handleEntryDelete() {
+    // I couldn't get this logic working without explicitly passing a function to the Entry component
     if (entries) {
       // If current page only has 1 entry, and it is deleted, go to the previous page
       setCurrentPage(entries.count % entryPerPage === 1 ? entries.total_pages - 1 : entries.total_pages)
     }
-    await queryClient.invalidateQueries()
   }
-
-  useEffect(() => {
-    refetch()
-  }, [currentPage, refetch])
 
   return (
     <>
@@ -123,7 +122,7 @@ export function Title({ title }: { title: APIType<'Title'> }) {
                   <p className="font-medium text-primary hover:underline">Search</p>
                 </Button>
               </OverlayTrigger>
-              <OverlayContent align="start" side="bottom">
+              <OverlayContent align="start" side="bottom" className="w-full">
                 <div className="grid gap-6">
                   <div className="space-y-2">
                     <h4 className="font-semibold text-lg leading-none">Advanced Entry Search</h4>
@@ -176,14 +175,17 @@ export function Title({ title }: { title: APIType<'Title'> }) {
                         </div>
                       </div>
                     </div>
-                    <Input
-                      id="textSearch"
-                      type="text"
-                      name="textSearch"
-                      placeholder="Enter keywords..."
-                      value={searchState.textSearch}
-                      onChange={handleSearchStateEvent('textSearch')}
-                    />
+                    <div className="space-y-2 flex flex-col gap-2">
+                      <Label htmlFor="ketextSearch">Keywords</Label>
+                      <Input
+                        id="textSearch"
+                        type="text"
+                        name="textSearch"
+                        placeholder="Enter keywords..."
+                        value={searchState.textSearch}
+                        onChange={handleSearchStateEvent('textSearch')}
+                      />
+                    </div>
                     <div className="flex items-center space-x-2 py-2">
                       <Checkbox
                         id="mine"

@@ -24,6 +24,7 @@ export function Entry({
   onDelete?: () => void
 }) {
   const aciksozluk = useAcikSozlukAPI()
+  const queryClient = aciksozluk.useQueryClient()
   const { mutateAsync: deleteEntry } = aciksozluk.deleteEntry(entry.id)
   const [isUpvoted, setIsUpvoted] = useState<boolean>(false)
   const [isDownvoted, setIsDownvoted] = useState<boolean>(false)
@@ -45,6 +46,8 @@ export function Entry({
 
   async function handleDelete() {
     await deleteEntry()
+    await queryClient.invalidateQueries({ queryKey: ['titles'] })
+    await queryClient.invalidateQueries({ queryKey: ['entries'] })
     onDelete()
     toast('Your entry has been deleted.', { description: format(new Date(), "EEEE, MMMM dd, yyyy 'at' hh:mm a") })
   }
@@ -76,7 +79,7 @@ export function Entry({
                 {entry.author.username}
               </Link>
               <span className="mx-1">•</span>
-              <span>09.21.2024</span>
+              <span>{format(new Date(entry.created_at), 'dd.MM.yyyy')}</span>
             </div>
             <Overlay breakpoint="md">
               <OverlayTrigger>
@@ -89,13 +92,7 @@ export function Entry({
                   <Button variant="ghost" className="w-full justify-start" disabled>
                     Edit
                   </Button>
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start"
-                    onClick={() => {
-                      handleDelete()
-                    }}
-                  >
+                  <Button variant="ghost" className="w-full justify-start" onClick={handleDelete}>
                     Delete
                   </Button>
                   <Button variant="ghost" className="w-full justify-start" disabled>
