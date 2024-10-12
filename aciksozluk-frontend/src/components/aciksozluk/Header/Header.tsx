@@ -2,14 +2,13 @@ import Link from 'next/link'
 
 import * as Icons from 'lucide-react'
 
+import { AdvancedSearch } from '@/components/aciksozluk/Header/AdvancedSearch'
+import { MobileNav } from '@/components/aciksozluk/Header/MobileNav'
 import { Button } from '@/components/shadcn/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/shadcn/sheet'
 
-import config from '@/config/config'
+import config from '@/config'
 import { useAcikSozlukAPI } from '@/lib/serverHooks'
-
-import { AdvancedSearch } from './AdvancedSearch'
-import { MobileNav } from './MobileNav'
 
 export async function Header() {
   const aciksozluk = useAcikSozlukAPI()
@@ -31,7 +30,7 @@ export async function Header() {
         </div>
         <div className="lg:w-1/6 flex justify-end">
           {(await aciksozluk.isAuthenticated()) ? (
-            <>
+            <Link href={{ pathname: '/account/profile' }}>
               <Button
                 variant="ghost"
                 className="px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 gap-2"
@@ -39,7 +38,7 @@ export async function Header() {
                 <Icons.User className="h-6 w-6" />
                 <span className="max-xl:hidden">Profile</span>
               </Button>
-            </>
+            </Link>
           ) : (
             <>
               <div className="hidden lg:contents">

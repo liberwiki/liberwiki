@@ -60,7 +60,7 @@ export function AdvancedSearch() {
   async function handleSearch(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     await refetch()
-    if (titles?.results?.length !== 0) {
+    if (titles && titles.results.length !== 0) {
       router.push(`/titles/${titles?.results?.[0]?.slug}`)
     } else {
       router.push(`/titles/${searchState.search}`)

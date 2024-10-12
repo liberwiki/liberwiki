@@ -1,5 +1,5 @@
 from drf_spectacular.utils import extend_schema
-from rest.serializers import AuthTokenSerializer, SignupSerializer
+from rest.serializers import AuthTokenSerializer, SignupSerializer, VerifyEmailSerializer
 from rest.utils.permissions import IsAnonymous, prevent_actions
 from rest.utils.schema_helpers import error_serializer
 from rest_framework.authtoken.models import Token
@@ -72,3 +72,24 @@ class AuthViewSet(GenericViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=201)
+
+    @extend_schema(
+        summary="Verify Email",
+        description="Verify email address",
+        responses={
+            400: error_serializer(VerifyEmailSerializer),
+            204: None,
+        },
+    )
+    @action(
+        detail=False,
+        methods=["POST"],
+        serializer_class=VerifyEmailSerializer,
+        permission_classes=[IsAnonymous],
+        url_path="verify-email",
+    )
+    def verify_email(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(status=204)

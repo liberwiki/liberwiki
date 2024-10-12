@@ -16,6 +16,9 @@ CONFIG = config(
         "SECRET_KEY": str,
         "HOST": str,
         "ALLOWED_HOSTS": comma_separated_list,
+        "AUTH": {
+            "VERIFY_EMAIL_URL_TEMPLATE": str,
+        },
     },
     prefix="ACIKSOZLUK",
     sep="__",

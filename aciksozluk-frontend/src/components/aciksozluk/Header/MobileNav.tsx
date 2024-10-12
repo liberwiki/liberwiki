@@ -5,13 +5,12 @@ import { useEffect, useState } from 'react'
 import * as Icons from 'lucide-react'
 
 import NavTitle from '@/components/aciksozluk/NavTitle'
+import Paginator from '@/components/aciksozluk/Paginator'
 import { Button } from '@/components/shadcn/button'
 import { ScrollArea, ScrollBar } from '@/components/shadcn/scroll-area'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/shadcn/sheet'
 
 import { useAcikSozlukAPI } from '@/lib/serverHooks'
-
-import { Paginator } from '../Paginator/Paginator'
 
 export function MobileNav() {
   const aciksozluk = useAcikSozlukAPI()

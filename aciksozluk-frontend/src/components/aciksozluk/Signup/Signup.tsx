@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 import React from 'react'
 
@@ -8,12 +9,13 @@ import { Input } from '@/components/shadcn/input'
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '@/components/shadcn/input-otp'
 import { Label } from '@/components/shadcn/label'
 
-import config from '@/config/config'
+import config from '@/config'
 import { useFormState } from '@/lib/hooks'
 import { useAcikSozlukAPI } from '@/lib/serverHooks'
 
 export function Signup() {
   const aciksozluk = useAcikSozlukAPI()
+  const router = useRouter()
   const { mutateAsync: signup } = aciksozluk.signup()
 
   const {
@@ -45,13 +47,14 @@ export function Signup() {
     const data = await signup(signupState)
     if (data.response.ok) {
       setSignupErrors({})
+      router.push('/auth/login')
     } else {
       setSignupErrors(data.error)
     }
   }
 
   return (
-    <Card className="mx-auto max-w-md">
+    <Card className="mx-auto max-w-md flex-1">
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl font-bold">Signup</CardTitle>
         <CardDescription>Signup below by using your invitation code</CardDescription>
@@ -113,29 +116,31 @@ export function Signup() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Invitation Code</Label>
-              <InputOTP
-                pattern="[a-z0-9]+$"
-                id="invitation_code"
-                required
-                maxLength={8}
-                onChange={handleSignupStateValue('invitation_code')}
-                value={signupState.invitation_code}
-                inputMode="text"
-              >
-                <InputOTPGroup>
-                  <InputOTPSlot index={0} />
-                  <InputOTPSlot index={1} />
-                  <InputOTPSlot index={2} />
-                  <InputOTPSlot index={3} />
-                </InputOTPGroup>
-                <InputOTPSeparator />
-                <InputOTPGroup>
-                  <InputOTPSlot index={4} />
-                  <InputOTPSlot index={5} />
-                  <InputOTPSlot index={6} />
-                  <InputOTPSlot index={7} />
-                </InputOTPGroup>
-              </InputOTP>
+              <div className="flex justify-center items-center">
+                <InputOTP
+                  pattern="[a-z0-9]+$"
+                  id="invitation_code"
+                  required
+                  maxLength={8}
+                  onChange={handleSignupStateValue('invitation_code')}
+                  value={signupState.invitation_code}
+                  inputMode="text"
+                >
+                  <InputOTPGroup>
+                    <InputOTPSlot index={0} />
+                    <InputOTPSlot index={1} />
+                    <InputOTPSlot index={2} />
+                    <InputOTPSlot index={3} />
+                  </InputOTPGroup>
+                  <InputOTPSeparator />
+                  <InputOTPGroup>
+                    <InputOTPSlot index={4} />
+                    <InputOTPSlot index={5} />
+                    <InputOTPSlot index={6} />
+                    <InputOTPSlot index={7} />
+                  </InputOTPGroup>
+                </InputOTP>
+              </div>
             </div>
             {signupErrors?.non_field_errors && (
               <div className="text-red-600 text-sm mt-2">{signupErrors.non_field_errors.join(' ')}</div>

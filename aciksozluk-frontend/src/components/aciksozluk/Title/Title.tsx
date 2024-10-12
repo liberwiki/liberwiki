@@ -19,7 +19,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/pop
 import { Separator } from '@/components/shadcn/separator'
 
 import { APIType, includesType } from '@/api'
-import config from '@/config/config'
+import config from '@/config'
 import { useFormState } from '@/lib/hooks'
 import { useAcikSozlukAPI } from '@/lib/serverHooks'
 
@@ -86,7 +86,7 @@ export function Title({ title }: { title: APIType<'Title'> }) {
   return (
     <>
       <div>
-        <Link className="h-1 p-6 text-xl font-bold" href={{ pathname: '/' }}>
+        <Link className="h-1 p-6 text-xl font-bold" href={{ pathname: `/titles/${title.name}` }}>
           {title?.name}
         </Link>
         <div className="text-sm px-6 py-2 text-gray-500 flex justify-between items-center max-lg:flex-wrap">

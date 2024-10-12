@@ -1,5 +1,5 @@
 import { AcikSozlukApi } from '@/api'
-import config from '@/config/config'
+import config from '@/config'
 import { getCookie } from '@/lib/serverActions'
 
 export function useAcikSozlukAPI() {

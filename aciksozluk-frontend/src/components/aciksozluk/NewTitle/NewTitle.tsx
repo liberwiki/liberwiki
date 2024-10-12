@@ -37,7 +37,7 @@ export function NewTitle({ newTitle }: { newTitle: string }) {
   return (
     <>
       <div>
-        <Link className="h-1 p-6 text-xl font-bold" href={{ pathname: '/' }}>
+        <Link className="h-1 p-6 text-xl font-bold" href={{ pathname: `/titles/${newTitle}` }}>
           {newTitle}
         </Link>
         <div className="mt-2 px-4">

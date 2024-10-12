@@ -6,7 +6,7 @@ import { Button } from '@/components/shadcn/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/shadcn/card'
 import { SeparatorWithText } from '@/components/shadcn/separator-with-text'
 
-import config from '@/config/config'
+import config from '@/config'
 
 export function LockDown() {
   return (
@@ -20,27 +20,27 @@ export function LockDown() {
       <CardContent className="space-y-4">
         <div className="space-y-2">
           <Button asChild className="w-full" size="lg">
-            <Link href={{ pathname: '/auth/signup' }}>
+            <Link href={{ pathname: '/auth/signup' }} className="gap-2">
               Sign up with invitation code
-              <Icons.ArrowRight className="ml-2 h-4 w-4" />
+              <Icons.ArrowRight className="h-4 w-4" />
             </Link>
           </Button>
         </div>
         <SeparatorWithText text="or" />
         <div className="space-y-2">
           <Button variant="outline" asChild className="w-full" size="lg">
-            <Link href={{ pathname: '/auth/login' }}>
+            <Link href={{ pathname: '/auth/login' }} className="gap-2">
               Already have an account? Log in
-              <Icons.LogIn className="ml-2 h-4 w-4" />
+              <Icons.LogIn className="h-4 w-4" />
             </Link>
           </Button>
         </div>
         <SeparatorWithText text="or" />
         <div className="space-y-2">
           <Button variant="secondary" asChild className="w-full" size="lg">
-            <Link href={{ pathname: '/auth/waitlist' }}>
+            <Link href={{ pathname: '/auth/waitlist' }} className="gap-2">
               Join the waitlist
-              <Icons.Mail className="ml-2 h-4 w-4" />
+              <Icons.Mail className="h-4 w-4" />
             </Link>
           </Button>
           <p className="text-sm text-center text-muted-foreground">No code? Get notified when we open to the public.</p>

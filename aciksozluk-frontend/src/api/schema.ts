@@ -48,6 +48,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/v0/auth/verify-email/': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Verify Email
+     * @description Verify email address
+     */
+    post: operations['auth_verify_email_create']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/api/v0/entries/': {
     parameters: {
       query?: never
@@ -743,6 +763,14 @@ export interface components {
       readonly title_count: string[]
       readonly entry_count: string[]
     }
+    VerifyEmailRequest: {
+      token: string
+      uidb64: string
+    }
+    VerifyEmailSerializerError: {
+      readonly token: string[]
+      readonly uidb64: string[]
+    }
   }
   responses: never
   parameters: never
@@ -840,6 +868,38 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+    }
+  }
+  auth_verify_email_create: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['VerifyEmailRequest']
+        'application/x-www-form-urlencoded': components['schemas']['VerifyEmailRequest']
+        'multipart/form-data': components['schemas']['VerifyEmailRequest']
+      }
+    }
+    responses: {
+      /** @description No response body */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['VerifyEmailSerializerError']
+        }
       }
     }
   }

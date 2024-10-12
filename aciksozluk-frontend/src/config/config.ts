@@ -1,4 +1,4 @@
-const config = {
+export const config = {
   exampleLink: 'http://example.com',
   name: process.env.NEXT_PUBLIC__ACIKSOZLUK__NAME,
   api: {
@@ -13,5 +13,3 @@ const config = {
   },
   membersOnly: true,
 }
-
-export default config

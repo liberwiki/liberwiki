@@ -91,6 +91,38 @@ paths:
       responses:
         '204':
           description: No response body
+  /api/v0/auth/verify-email/:
+    post:
+      operationId: auth_verify_email_create
+      description: Verify email address
+      summary: Verify Email
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyEmailRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VerifyEmailRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VerifyEmailRequest'
+        required: true
+      security:
+      - tokenAuth: []
+      - basicAuth: []
+      - cookieAuth: []
+      responses:
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifyEmailSerializerError'
+          description: ''
+        '204':
+          description: No response body
   /api/v0/entries/:
     get:
       operationId: entries_list
@@ -1699,6 +1731,36 @@ components:
       - title_count
       - updated_at
       - username
+    VerifyEmailRequest:
+      type: object
+      properties:
+        token:
+          type: string
+          writeOnly: true
+          minLength: 1
+        uidb64:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - token
+      - uidb64
+    VerifyEmailSerializerError:
+      type: object
+      properties:
+        token:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        uidb64:
+          type: array
+          items:
+            type: string
+          readOnly: true
+      required:
+      - token
+      - uidb64
   securitySchemes:
     basicAuth:
       type: http

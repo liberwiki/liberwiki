@@ -1,10 +1,13 @@
 from core.models import Invitation, User
 from django.contrib.auth import authenticate
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.db import transaction
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
+from rest_framework.settings import settings
 
 
 class AuthTokenSerializer(serializers.Serializer):
@@ -65,9 +68,20 @@ class SignupSerializer(serializers.ModelSerializer):
             password=validated_data["password"],
             first_name=validated_data["first_name"],
             last_name=validated_data["last_name"],
+            is_active=False,
+        )
+        self.invitation.update(used_by=user)
+        self.send_verification_email(
+            user,
+            urlsafe_base64_encode(str(user.pk).encode()),
+            PasswordResetTokenGenerator().make_token(user),
         )
         self.invitation.update(used_by=user)
         return user
+
+    def send_verification_email(self, user, uidb64, token):
+        url = settings.AUTH_VERIFY_EMAIL_URL_TEMPLATE.format(uidb64=uidb64, token=token)
+        print(url)
 
     class Meta:
         model = User
@@ -81,3 +95,34 @@ class SignupSerializer(serializers.ModelSerializer):
             "invitation_code",
         ]
         write_only_fields = ["password", "password_confirmation", "invitation_code"]
+
+
+class VerifyEmailSerializer(serializers.Serializer):
+    token = serializers.CharField(write_only=True, required=True)
+    uidb64 = serializers.CharField(write_only=True, required=True)
+
+    def validate(self, attrs):
+        token = attrs.get("token")
+        uidb64 = attrs.get("uidb64")
+
+        try:
+            uid = urlsafe_base64_decode(uidb64).decode()
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            raise ValidationError(_("Invalid user or token"))
+
+        if not PasswordResetTokenGenerator().check_token(user, token):
+            raise ValidationError(_("Invalid user or token"))
+
+        self.user = user  # NOQA
+        return attrs
+
+    def save(self):
+        user = self.user.update(is_active=True)
+        return user
+
+    class Meta:
+        fields = [
+            "token",
+            "uidb64",
+        ]

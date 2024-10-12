@@ -8,7 +8,7 @@ import React from 'react'
 import { Toaster } from '@/components/shadcn/sonner'
 
 import Providers from '@/app/providers'
-import config from '@/config/config'
+import config from '@/config'
 import { cn } from '@/lib/utils'
 
 const inter = Inter({ subsets: ['latin'] })

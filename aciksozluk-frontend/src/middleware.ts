@@ -4,8 +4,9 @@ import { NextResponse } from 'next/server'
 import * as AuthMiddlewares from '@/middlewares/authMiddlewares'
 
 const middlewares: ((request: NextRequest) => Promise<NextResponse | void>)[] = [
-  AuthMiddlewares.redirectAuthenticatedBackToTitles,
-  AuthMiddlewares.redirectAnonymousToIndex,
+  AuthMiddlewares.redirectAuthenticatedBackTo('/titles'),
+  AuthMiddlewares.membersOnlyMode(),
+  AuthMiddlewares.anonymousNotAllowed(/^\/account\//, '/'),
 ]
 
 export async function middleware(request: NextRequest) {

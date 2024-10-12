@@ -1,28 +1,35 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
-import config from '@/config/config'
+import config from '@/config'
 import { getCookie } from '@/lib/serverActions'
 import { runMiddlewareIfPathMatches } from '@/lib/utils'
 
 const membersOnly = config.membersOnly
 
-export const redirectAuthenticatedBackToTitles = runMiddlewareIfPathMatches(/^\/auth\//)(async function (
-  request: NextRequest
-) {
-  const isAuthenticated = !!(await getCookie(config.api.bearerTokenCookieName))
-  if (isAuthenticated) {
-    return NextResponse.redirect(new URL('/titles', request.url))
-  }
-  return NextResponse.next()
-})
+export function redirectAuthenticatedBackTo(redirectTo: string) {
+  return runMiddlewareIfPathMatches(/^\/auth\//)(async function (request: NextRequest) {
+    const isAuthenticated = !!(await getCookie(config.api.bearerTokenCookieName))
+    if (isAuthenticated) {
+      return NextResponse.redirect(new URL(redirectTo, request.url))
+    }
+  })
+}
 
-export const redirectAnonymousToIndex = runMiddlewareIfPathMatches(/^(?!\/$|\/auth\/).*$/)(async function (
-  request: NextRequest
-) {
-  const isAuthenticated = !!(await getCookie(config.api.bearerTokenCookieName))
-  if (membersOnly && !isAuthenticated) {
-    return NextResponse.redirect(new URL('/', request.url))
-  }
-  return NextResponse.next()
-})
+export function membersOnlyMode() {
+  return runMiddlewareIfPathMatches(/^(?!\/$|\/auth\/).*$/)(async function (request: NextRequest) {
+    const isAuthenticated = !!(await getCookie(config.api.bearerTokenCookieName))
+    if (membersOnly && !isAuthenticated) {
+      return NextResponse.redirect(new URL('/', request.url))
+    }
+  })
+}
+
+export function anonymousNotAllowed(path: RegExp, redirectTo: string) {
+  return runMiddlewareIfPathMatches(path)(async function (request: NextRequest) {
+    const isAuthenticated = !!(await getCookie(config.api.bearerTokenCookieName))
+    if (!isAuthenticated) {
+      return NextResponse.redirect(new URL(redirectTo, request.url))
+    }
+  })
+}

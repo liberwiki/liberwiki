@@ -6,23 +6,21 @@ import * as Icons from 'lucide-react'
 
 import { Toggle } from '@/components/shadcn/toggle'
 
-interface EditorButtonProps {
-  pressed?: boolean
-  onPressedChange?: () => void
-  ariaLabel?: string
-  className?: string
-  style?: React.CSSProperties
-  icon?: Icons.LucideIcon
-}
-
-const EditorButton = ({
+export default function EditorButton({
   pressed,
   onPressedChange,
   ariaLabel,
   className = '',
   style = {},
   icon: Icon,
-}: EditorButtonProps) => {
+}: {
+  pressed?: boolean
+  onPressedChange?: () => void
+  ariaLabel?: string
+  className?: string
+  style?: React.CSSProperties
+  icon?: Icons.LucideIcon
+}) {
   return (
     <Toggle
       size="sm"
@@ -36,5 +34,3 @@ const EditorButton = ({
     </Toggle>
   )
 }
-
-export default EditorButton

@@ -11,7 +11,7 @@ from django.utils.translation import gettext as _
 @track_model_history
 class User(AbstractUser, BaseModel):
     REPR_STRING = "{self.username}"
-
+    email = models.EmailField(_("email address"), unique=True)
     username = models.CharField(
         verbose_name=_("username"),
         max_length=150,

@@ -2,7 +2,7 @@ import _ from 'lodash'
 
 import { paths } from '@/api/schema'
 import type { APIQuery, APIType, RemainingUseQueryOptions } from '@/api/typeHelpers'
-import config from '@/config/config'
+import config from '@/config'
 import { getLazyValueAsync } from '@/lib/utils'
 
 import { UseQueryResult, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -98,6 +98,14 @@ export class AcikSozlukApi {
     return useMutation({
       mutationKey: ['signup'],
       mutationFn: (data: APIType<'SignupRequest'>) => this.client.POST('/api/v0/auth/signup/', { body: data }),
+    })
+  }
+
+  public verifyEmail = () => {
+    return useMutation({
+      mutationKey: ['verifyEmail'],
+      mutationFn: (data: APIType<'VerifyEmailRequest'>) =>
+        this.client.POST('/api/v0/auth/verify-email/', { body: data }),
     })
   }
 

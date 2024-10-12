@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/shadcn/input'
 import { Label } from '@/components/shadcn/label'
 
-import config from '@/config/config'
+import config from '@/config'
 import { useFormState } from '@/lib/hooks'
 import { setCookie } from '@/lib/serverActions'
 import { useAcikSozlukAPI } from '@/lib/serverHooks'
@@ -41,7 +41,7 @@ export function Login() {
   }
 
   return (
-    <Card className="mx-auto max-w-md">
+    <Card className="mx-auto max-w-md flex-1">
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl font-bold">Login</CardTitle>
         <CardDescription>Enter your email and password to login to your account</CardDescription>
