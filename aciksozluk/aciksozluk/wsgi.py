@@ -11,6 +11,10 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
+from aciksozluk.monkeypatches import monkeypatch_drf_spectacular
+
+monkeypatch_drf_spectacular()
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "aciksozluk.settings")
 
 application = get_wsgi_application()

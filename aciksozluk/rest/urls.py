@@ -1,4 +1,6 @@
+from django.conf import settings
 from django.urls import include, path
+from django_hosts.resolvers import reverse_lazy
 from drf_spectacular.utils import extend_schema
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView
 from rest.views import AuthViewSet, EntryViewSet, TitleViewSet, UserViewSet
@@ -23,7 +25,7 @@ v0_urlpatterns = [
     ),
     path(
         "redoc/",
-        SpectacularRedocView.as_view(url_name=f"rest:v0:{SCHEMA_URL_NAME}"),
+        SpectacularRedocView.as_view(url=reverse_lazy(f"rest:v0:{SCHEMA_URL_NAME}", host=settings.API_SUBDOMAIN)),
         name="redoc",
     ),
     *router.urls,

@@ -19,6 +19,11 @@ CONFIG = config(
         "AUTH": {
             "VERIFY_EMAIL_URL_TEMPLATE": str,
         },
+        "HOSTS": {
+            "DOMAIN": str,
+            "API_SUBDOMAIN": str,
+            "ADMIN_SUBDOMAIN": str,
+        },
     },
     prefix="ACIKSOZLUK",
     sep="__",

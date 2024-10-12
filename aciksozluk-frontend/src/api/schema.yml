@@ -4,7 +4,7 @@ info:
   version: 0.1.0
   description: Aciksozluk API
 paths:
-  /api/v0/auth/signup/:
+  /v0/auth/signup/:
     post:
       operationId: auth_signup_create
       description: Signup with an invitation code
@@ -36,7 +36,7 @@ paths:
           description: ''
         '201':
           description: No response body
-  /api/v0/auth/tokens/:
+  /v0/auth/tokens/:
     post:
       operationId: auth_tokens_create
       description: Get your active auth token
@@ -91,7 +91,7 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/v0/auth/verify-email/:
+  /v0/auth/verify-email/:
     post:
       operationId: auth_verify_email_create
       description: Verify email address
@@ -123,7 +123,7 @@ paths:
           description: ''
         '204':
           description: No response body
-  /api/v0/entries/:
+  /v0/entries/:
     get:
       operationId: entries_list
       description: List entries with optional filters
@@ -257,7 +257,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/EntrySerializerError'
           description: ''
-  /api/v0/entries/{id}/:
+  /v0/entries/{id}/:
     get:
       operationId: entries_retrieve
       description: Retrieve entry by id
@@ -405,7 +405,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/EntryDestroyError'
           description: ''
-  /api/v0/titles/:
+  /v0/titles/:
     get:
       operationId: titles_list
       description: List titles with optional filters
@@ -561,7 +561,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TitleSerializerError'
           description: ''
-  /api/v0/titles/{id}/:
+  /v0/titles/{id}/:
     get:
       operationId: titles_retrieve
       description: Retrieve title by id
@@ -622,7 +622,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TitleDestroyError'
           description: ''
-  /api/v0/users/:
+  /v0/users/:
     get:
       operationId: users_list
       description: List users with optional filters
@@ -745,7 +745,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedPublicUserList'
           description: ''
-  /api/v0/users/{id}/:
+  /v0/users/{id}/:
     get:
       operationId: users_retrieve
       description: Retrieve user by id
@@ -777,7 +777,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/PublicUser'
           description: ''
-  /api/v0/users/me/:
+  /v0/users/me/:
     get:
       operationId: users_me_retrieve
       description: Retrieve the current user
@@ -1318,6 +1318,7 @@ components:
         email:
           type: string
           format: email
+          minLength: 1
           title: Email address
           maxLength: 254
         username:
@@ -1346,6 +1347,7 @@ components:
           minLength: 8
           maxLength: 8
       required:
+      - email
       - invitation_code
       - password
       - password_confirmation

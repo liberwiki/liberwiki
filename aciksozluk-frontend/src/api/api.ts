@@ -83,57 +83,53 @@ export class AcikSozlukApi {
   public obtainAuthToken = () => {
     return useMutation({
       mutationKey: ['obtainAuthToken'],
-      mutationFn: (data: APIType<'AuthTokenRequest'>) => this.client.POST('/api/v0/auth/tokens/', { body: data }),
+      mutationFn: (data: APIType<'AuthTokenRequest'>) => this.client.POST('/v0/auth/tokens/', { body: data }),
     })
   }
 
   public deleteAuthToken = () => {
     return useMutation({
       mutationKey: ['deleteAuthToken'],
-      mutationFn: () => this.client.DELETE('/api/v0/auth/tokens/'),
+      mutationFn: () => this.client.DELETE('/v0/auth/tokens/'),
     })
   }
 
   public signup = () => {
     return useMutation({
       mutationKey: ['signup'],
-      mutationFn: (data: APIType<'SignupRequest'>) => this.client.POST('/api/v0/auth/signup/', { body: data }),
+      mutationFn: (data: APIType<'SignupRequest'>) => this.client.POST('/v0/auth/signup/', { body: data }),
     })
   }
 
   public verifyEmail = () => {
     return useMutation({
       mutationKey: ['verifyEmail'],
-      mutationFn: (data: APIType<'VerifyEmailRequest'>) =>
-        this.client.POST('/api/v0/auth/verify-email/', { body: data }),
+      mutationFn: (data: APIType<'VerifyEmailRequest'>) => this.client.POST('/v0/auth/verify-email/', { body: data }),
     })
   }
 
-  public users = (
-    filters?: APIQuery<'/api/v0/users/'>,
-    useQueryOptions?: RemainingUseQueryOptions<'/api/v0/users/'>
-  ) => {
+  public users = (filters?: APIQuery<'/v0/users/'>, useQueryOptions?: RemainingUseQueryOptions<'/v0/users/'>) => {
     const queryResult = useQuery({
       queryKey: ['users', filters],
-      queryFn: () => this.client.GET('/api/v0/users/', { params: { query: filters } }),
+      queryFn: () => this.client.GET('/v0/users/', { params: { query: filters } }),
       ...useQueryOptions,
     })
     return this.processQueryResult(queryResult)
   }
 
-  public user = (id: string, useQueryOptions?: RemainingUseQueryOptions<'/api/v0/users/{id}/'>) => {
+  public user = (id: string, useQueryOptions?: RemainingUseQueryOptions<'/v0/users/{id}/'>) => {
     const queryResult = useQuery({
       queryKey: ['user', id],
-      queryFn: () => this.client.GET(`/api/v0/users/{id}/`, { params: { path: { id } } }),
+      queryFn: () => this.client.GET(`/v0/users/{id}/`, { params: { path: { id } } }),
       ...useQueryOptions,
     })
     return this.processQueryResult(queryResult)
   }
 
-  public me = (useQueryOptions?: RemainingUseQueryOptions<'/api/v0/users/me/'>) => {
+  public me = (useQueryOptions?: RemainingUseQueryOptions<'/v0/users/me/'>) => {
     const queryResult = useQuery({
       queryKey: ['me'],
-      queryFn: () => this.client.GET('/api/v0/users/me/'),
+      queryFn: () => this.client.GET('/v0/users/me/'),
       ...useQueryOptions,
     })
     return this.processQueryResult(queryResult)
@@ -142,33 +138,30 @@ export class AcikSozlukApi {
   public putMe = () => {
     return useMutation({
       mutationKey: ['putMe'],
-      mutationFn: (data: APIType<'UserRequest'>) => this.client.PUT('/api/v0/users/me/', { body: data }),
+      mutationFn: (data: APIType<'UserRequest'>) => this.client.PUT('/v0/users/me/', { body: data }),
     })
   }
 
   public patchMe = () => {
     return useMutation({
       mutationKey: ['patchMe'],
-      mutationFn: (data: APIType<'PatchedUserRequest'>) => this.client.PATCH('/api/v0/users/me/', { body: data }),
+      mutationFn: (data: APIType<'PatchedUserRequest'>) => this.client.PATCH('/v0/users/me/', { body: data }),
     })
   }
 
-  public titles = (
-    filters?: APIQuery<'/api/v0/titles/'>,
-    useQueryOptions?: RemainingUseQueryOptions<'/api/v0/titles/'>
-  ) => {
+  public titles = (filters?: APIQuery<'/v0/titles/'>, useQueryOptions?: RemainingUseQueryOptions<'/v0/titles/'>) => {
     const queryResult = useQuery({
       queryKey: ['titles', filters],
-      queryFn: () => this.client.GET('/api/v0/titles/', { params: { query: filters } }),
+      queryFn: () => this.client.GET('/v0/titles/', { params: { query: filters } }),
       ...useQueryOptions,
     })
     return this.processQueryResult(queryResult)
   }
 
-  public title = (id: string, useQueryOptions?: RemainingUseQueryOptions<'/api/v0/titles/{id}/'>) => {
+  public title = (id: string, useQueryOptions?: RemainingUseQueryOptions<'/v0/titles/{id}/'>) => {
     const queryResult = useQuery({
       queryKey: ['title', id],
-      queryFn: () => this.client.GET(`/api/v0/titles/{id}/`, { params: { path: { id } } }),
+      queryFn: () => this.client.GET(`/v0/titles/{id}/`, { params: { path: { id } } }),
       ...useQueryOptions,
     })
     return this.processQueryResult(queryResult)
@@ -177,33 +170,30 @@ export class AcikSozlukApi {
   public createTitle = () => {
     return useMutation({
       mutationKey: ['createTitle'],
-      mutationFn: (data: APIType<'TitleRequest'>) => this.client.POST('/api/v0/titles/', { body: data }),
+      mutationFn: (data: APIType<'TitleRequest'>) => this.client.POST('/v0/titles/', { body: data }),
     })
   }
 
   public deleteTitle = (id: string) => {
     return useMutation({
       mutationKey: ['deleteTitle', id],
-      mutationFn: () => this.client.DELETE(`/api/v0/titles/{id}/`, { params: { path: { id } } }),
+      mutationFn: () => this.client.DELETE(`/v0/titles/{id}/`, { params: { path: { id } } }),
     })
   }
 
-  public entries = (
-    filters?: APIQuery<'/api/v0/entries/'>,
-    useQueryOptions?: RemainingUseQueryOptions<'/api/v0/entries/'>
-  ) => {
+  public entries = (filters?: APIQuery<'/v0/entries/'>, useQueryOptions?: RemainingUseQueryOptions<'/v0/entries/'>) => {
     const queryResult = useQuery({
       queryKey: ['entries', filters],
-      queryFn: () => this.client.GET('/api/v0/entries/', { params: { query: filters } }),
+      queryFn: () => this.client.GET('/v0/entries/', { params: { query: filters } }),
       ...useQueryOptions,
     })
     return this.processQueryResult(queryResult)
   }
 
-  public entry = (id: string, useQueryOptions?: RemainingUseQueryOptions<'/api/v0/entries/{id}/'>) => {
+  public entry = (id: string, useQueryOptions?: RemainingUseQueryOptions<'/v0/entries/{id}/'>) => {
     const queryResult = useQuery({
       queryKey: ['entry', id],
-      queryFn: () => this.client.GET(`/api/v0/entries/{id}/`, { params: { path: { id } } }),
+      queryFn: () => this.client.GET(`/v0/entries/{id}/`, { params: { path: { id } } }),
       ...useQueryOptions,
     })
     return this.processQueryResult(queryResult)
@@ -212,7 +202,7 @@ export class AcikSozlukApi {
   public createEntry = () => {
     return useMutation({
       mutationKey: ['createEntry'],
-      mutationFn: (data: APIType<'EntryRequest'>) => this.client.POST('/api/v0/entries/', { body: data }),
+      mutationFn: (data: APIType<'EntryRequest'>) => this.client.POST('/v0/entries/', { body: data }),
     })
   }
 
@@ -220,7 +210,7 @@ export class AcikSozlukApi {
     return useMutation({
       mutationKey: ['putEntry', id],
       mutationFn: (data: APIType<'EntryRequest'>) =>
-        this.client.PUT(`/api/v0/entries/{id}/`, { params: { path: { id } }, body: data }),
+        this.client.PUT(`/v0/entries/{id}/`, { params: { path: { id } }, body: data }),
     })
   }
 
@@ -228,14 +218,14 @@ export class AcikSozlukApi {
     return useMutation({
       mutationKey: ['patchEntry', id],
       mutationFn: (data: APIType<'PatchedEntryUpdateRequest'>) =>
-        this.client.PATCH(`/api/v0/entries/{id}/`, { params: { path: { id } }, body: data }),
+        this.client.PATCH(`/v0/entries/{id}/`, { params: { path: { id } }, body: data }),
     })
   }
 
   public deleteEntry = (id: string) => {
     return useMutation({
       mutationKey: ['deleteEntry', id],
-      mutationFn: () => this.client.DELETE(`/api/v0/entries/{id}/`, { params: { path: { id } } }),
+      mutationFn: () => this.client.DELETE(`/v0/entries/{id}/`, { params: { path: { id } } }),
     })
   }
 }

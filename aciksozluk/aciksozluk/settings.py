@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "administration.apps.AdministrationConfig",  # Needs to be after admin_interface + rest_framework.authtoken
     "django_filters",
     "drf_spectacular",
+    "django_hosts",
     "django_extensions",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "django_hosts.middleware.HostsRequestMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "pghistory.middleware.HistoryMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -47,9 +49,16 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_hosts.middleware.HostsResponseMiddleware",
 ]
 
-ROOT_URLCONF = "aciksozluk.urls"
+ADMIN_SUBDOMAIN = config.HOSTS.ADMIN_SUBDOMAIN
+API_SUBDOMAIN = config.HOSTS.API_SUBDOMAIN
+
+ROOT_URLCONF = "aciksozluk.urls.root"
+ROOT_HOSTCONF = "aciksozluk.hosts"
+DEFAULT_HOST = API_SUBDOMAIN
+PARENT_HOST = config.HOSTS.DOMAIN
 
 TEMPLATES = [
     {

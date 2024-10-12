@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-  '/api/v0/auth/signup/': {
+  '/v0/auth/signup/': {
     parameters: {
       query?: never
       header?: never
@@ -24,7 +24,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/api/v0/auth/tokens/': {
+  '/v0/auth/tokens/': {
     parameters: {
       query?: never
       header?: never
@@ -48,7 +48,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/api/v0/auth/verify-email/': {
+  '/v0/auth/verify-email/': {
     parameters: {
       query?: never
       header?: never
@@ -68,7 +68,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/api/v0/entries/': {
+  '/v0/entries/': {
     parameters: {
       query?: never
       header?: never
@@ -92,7 +92,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/api/v0/entries/{id}/': {
+  '/v0/entries/{id}/': {
     parameters: {
       query?: never
       header?: never
@@ -124,7 +124,7 @@ export interface paths {
     patch: operations['entries_partial_update']
     trace?: never
   }
-  '/api/v0/titles/': {
+  '/v0/titles/': {
     parameters: {
       query?: never
       header?: never
@@ -148,7 +148,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/api/v0/titles/{id}/': {
+  '/v0/titles/{id}/': {
     parameters: {
       query?: never
       header?: never
@@ -172,7 +172,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/api/v0/users/': {
+  '/v0/users/': {
     parameters: {
       query?: never
       header?: never
@@ -192,7 +192,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/api/v0/users/{id}/': {
+  '/v0/users/{id}/': {
     parameters: {
       query?: never
       header?: never
@@ -212,7 +212,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/api/v0/users/me/': {
+  '/v0/users/me/': {
     parameters: {
       query?: never
       header?: never
@@ -555,7 +555,7 @@ export interface components {
        * Email address
        * Format: email
        */
-      email?: string
+      email: string
       /** @description Required. 150 characters or fewer. Letters (lowercase), digits or hyphens only, can't start with letters or hyphens. */
       username: string
       first_name?: string
