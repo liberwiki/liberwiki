@@ -3,6 +3,12 @@ import { NextResponse } from 'next/server'
 
 import * as AuthMiddlewares from '@/middlewares/authMiddlewares'
 
+// https://github.com/lodash/lodash/issues/5525#issuecomment-2039091058
+export const config = {
+  runtime: 'experimental-edge',
+  unstable_allowDynamic: ['**/node_modules/lodash*/**/*.js'],
+}
+
 const middlewares: ((request: NextRequest) => Promise<NextResponse | void>)[] = [
   AuthMiddlewares.redirectAuthenticatedBackTo('/titles'),
   AuthMiddlewares.membersOnlyMode(),

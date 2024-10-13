@@ -6,6 +6,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView
 from rest.views import AuthViewSet, EntryViewSet, TitleViewSet, UserViewSet
 from rest_framework.routers import DefaultRouter
 
+DefaultRouter.include_root_view = False
 router = DefaultRouter()
 
 viewsets = [EntryViewSet, TitleViewSet, UserViewSet, AuthViewSet]

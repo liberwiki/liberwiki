@@ -22,6 +22,8 @@ build
 # IDE
 .idea
 
+# Docker - Docker Compose
+/server/nginx.conf
 
 # ETC
 *.log

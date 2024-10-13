@@ -54,7 +54,7 @@ export class AcikSozlukApi {
 
   // Create the client using the wrapped fetch function
   client = createClient<paths>({
-    baseUrl: this.config.baseUrl,
+    baseUrl: `//${this.config.baseUrl}`,
     headers: {
       'Content-Type': 'application/json',
     },
