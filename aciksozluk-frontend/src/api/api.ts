@@ -228,4 +228,39 @@ export class AcikSozlukApi {
       mutationFn: () => this.client.DELETE(`/v0/entries/{id}/`, { params: { path: { id } } }),
     })
   }
+
+  public upvoteEntry = (id: string) => {
+    return useMutation({
+      mutationKey: ['upvoteEntry', id],
+      mutationFn: () => this.client.POST(`/v0/entries/{id}/upvote/`, { params: { path: { id } } }),
+    })
+  }
+
+  public downvoteEntry = (id: string) => {
+    return useMutation({
+      mutationKey: ['downvoteEntry', id],
+      mutationFn: () => this.client.POST(`/v0/entries/{id}/downvote/`, { params: { path: { id } } }),
+    })
+  }
+
+  public unvoteEntry = (id: string) => {
+    return useMutation({
+      mutationKey: ['removeVoteEntry', id],
+      mutationFn: () => this.client.POST(`/v0/entries/{id}/unvote/`, { params: { path: { id } } }),
+    })
+  }
+
+  public bookmark = (id: string) => {
+    return useMutation({
+      mutationKey: ['bookmarkEntry', id],
+      mutationFn: () => this.client.POST(`/v0/entries/{id}/bookmark/`, { params: { path: { id } } }),
+    })
+  }
+
+  public unBookmark = (id: string) => {
+    return useMutation({
+      mutationKey: ['unBookmarkEntry', id],
+      mutationFn: () => this.client.POST(`/v0/entries/{id}/unbookmark/`, { params: { path: { id } } }),
+    })
+  }
 }

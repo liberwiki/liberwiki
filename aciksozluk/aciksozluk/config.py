@@ -14,7 +14,6 @@ CONFIG = config(
             "PORT": str,
         },
         "SECRET_KEY": str,
-        "HOST": str,
         "ALLOWED_HOSTS": comma_separated_list,
         "AUTH": {
             "VERIFY_EMAIL_URL_TEMPLATE": str,
@@ -23,6 +22,13 @@ CONFIG = config(
             "DOMAIN": str,
             "API_SUBDOMAIN": str,
             "ADMIN_SUBDOMAIN": str,
+        },
+        "SETUP": {
+            "SUPERUSER": {
+                "USERNAME": str,
+                "EMAIL": str,
+                "PASSWORD": str,
+            },
         },
     },
     prefix="ACIKSOZLUK",

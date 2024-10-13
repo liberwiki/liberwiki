@@ -160,6 +160,10 @@ paths:
           - title
         explode: false
         style: form
+      - in: query
+        name: is_bookmarked
+        schema:
+          type: boolean
       - name: ordering
         required: false
         in: query
@@ -209,6 +213,20 @@ paths:
         schema:
           type: string
           format: date-time
+      - in: query
+        name: vote
+        schema:
+          type: string
+          enum:
+          - DOWNVOTE
+          - UPVOTE
+        description: |-
+          * `UPVOTE` - Upvote
+          * `DOWNVOTE` - Downvote
+      - in: query
+        name: vote__isnull
+        schema:
+          type: boolean
       tags:
       - entries
       security:
@@ -405,6 +423,116 @@ paths:
               schema:
                 $ref: '#/components/schemas/EntryDestroyError'
           description: ''
+  /v0/entries/{id}/bookmark/:
+    post:
+      operationId: entries_bookmark_create
+      description: Bookmark an entry by id
+      summary: Bookmark Entry
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          description: Unique identifier for this object
+        required: true
+      tags:
+      - entries
+      security:
+      - tokenAuth: []
+      - basicAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /v0/entries/{id}/downvote/:
+    post:
+      operationId: entries_downvote_create
+      description: Cast an up vote to an entry by id
+      summary: Downvote Entry
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          description: Unique identifier for this object
+        required: true
+      tags:
+      - entries
+      security:
+      - tokenAuth: []
+      - basicAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /v0/entries/{id}/unbookmark/:
+    post:
+      operationId: entries_unbookmark_create
+      description: Remove bookmark from entry by id
+      summary: Remove Bookmark
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          description: Unique identifier for this object
+        required: true
+      tags:
+      - entries
+      security:
+      - tokenAuth: []
+      - basicAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /v0/entries/{id}/unvote/:
+    post:
+      operationId: entries_unvote_create
+      description: Remove vote from entry by id
+      summary: Remove Vote
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          description: Unique identifier for this object
+        required: true
+      tags:
+      - entries
+      security:
+      - tokenAuth: []
+      - basicAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /v0/entries/{id}/upvote/:
+    post:
+      operationId: entries_upvote_create
+      description: Cast an down vote to an entry by id
+      summary: Upvote Entry
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          description: Unique identifier for this object
+        required: true
+      tags:
+      - entries
+      security:
+      - tokenAuth: []
+      - basicAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
   /v0/titles/:
     get:
       operationId: titles_list
@@ -962,13 +1090,24 @@ components:
           format: date-time
           readOnly: true
           description: Date and time this object was last updated
+        vote:
+          readOnly: true
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/VoteEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        is_bookmarked:
+          type: boolean
+          readOnly: true
       required:
       - author
       - content
       - created_at
       - id
+      - is_bookmarked
       - title
       - updated_at
+      - vote
     EntryDestroyError:
       type: object
       properties:
@@ -1047,13 +1186,25 @@ components:
           items:
             type: string
           readOnly: true
+        vote:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        is_bookmarked:
+          type: array
+          items:
+            type: string
+          readOnly: true
       required:
       - author
       - content
       - created_at
       - id
+      - is_bookmarked
       - title
       - updated_at
+      - vote
     EntryUpdateRequest:
       type: object
       description: |-
@@ -1085,6 +1236,9 @@ components:
           description: Content of the entry. In tiptap format.
       required:
       - content
+    NullEnum:
+      enum:
+      - null
     PaginatedEntryList:
       type: object
       properties:
@@ -1763,6 +1917,14 @@ components:
       required:
       - token
       - uidb64
+    VoteEnum:
+      enum:
+      - UPVOTE
+      - DOWNVOTE
+      type: string
+      description: |-
+        * `UPVOTE` - Upvote
+        * `DOWNVOTE` - Downvote
   securitySchemes:
     basicAuth:
       type: http

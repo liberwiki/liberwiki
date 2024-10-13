@@ -4,6 +4,8 @@ import { useState } from 'react'
 
 import * as Icons from 'lucide-react'
 
+import _ from 'lodash'
+
 import Editor from '@/components/aciksozluk/Editor'
 import { Button } from '@/components/shadcn/button'
 import { Card, CardContent } from '@/components/shadcn/card'
@@ -26,22 +28,30 @@ export function Entry({
   const aciksozluk = useAcikSozlukAPI()
   const queryClient = aciksozluk.useQueryClient()
   const { mutateAsync: deleteEntry } = aciksozluk.deleteEntry(entry.id)
-  const [isUpvoted, setIsUpvoted] = useState<boolean>(false)
-  const [isDownvoted, setIsDownvoted] = useState<boolean>(false)
-  const [isBookmarked, setIsBookmarked] = useState<boolean>(false)
+  const { mutateAsync: upvoteEntry } = aciksozluk.upvoteEntry(entry.id)
+  const { mutateAsync: downvoteEntry } = aciksozluk.downvoteEntry(entry.id)
+  const { mutateAsync: unvoteEntry } = aciksozluk.unvoteEntry(entry.id)
+  const { mutateAsync: bookmarkEntry } = aciksozluk.bookmark(entry.id)
+  const { mutateAsync: unBookmarkEntry } = aciksozluk.unBookmark(entry.id)
 
-  async function handleUpvote() {
-    setIsUpvoted(!isUpvoted)
-    if (isDownvoted) setIsDownvoted(false)
-  }
-
-  async function handleDownvote() {
-    setIsDownvoted(!isDownvoted)
-    if (isUpvoted) setIsUpvoted(false)
-  }
+  const [feedback, setFeedback] = useState<APIType<'VoteEnum'> | null>(entry.vote)
+  const [isBookmarked, setIsBookmarked] = useState<boolean>(entry.is_bookmarked)
 
   async function handleBookmark() {
     setIsBookmarked(!isBookmarked)
+    await (isBookmarked ? unBookmarkEntry() : bookmarkEntry())
+  }
+
+  function handleVote(vote: APIType<'VoteEnum'>) {
+    return async function () {
+      if (feedback === vote) {
+        setFeedback(null)
+        await unvoteEntry()
+      } else {
+        setFeedback(vote)
+        await _.get({ UPVOTE: upvoteEntry, DOWNVOTE: downvoteEntry }, vote)()
+      }
+    }
   }
 
   async function handleDelete() {
@@ -60,10 +70,20 @@ export function Entry({
         </div>
         <div className="flex justify-between items-center -mx-4">
           <div className="flex space-x-2">
-            <Button variant="ghost" size="icon" onClick={handleUpvote} className={isUpvoted ? 'text-green-500' : ''}>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleVote('UPVOTE')}
+              className={feedback === 'UPVOTE' ? 'text-green-500' : ''}
+            >
               <Icons.ArrowUp className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="icon" onClick={handleDownvote} className={isDownvoted ? 'text-red-500' : ''}>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleVote('DOWNVOTE')}
+              className={feedback === 'DOWNVOTE' ? 'text-red-500' : ''}
+            >
               <Icons.ArrowDown className="h-4 w-4" />
             </Button>
             <Button variant="ghost" size="icon" onClick={handleBookmark}>

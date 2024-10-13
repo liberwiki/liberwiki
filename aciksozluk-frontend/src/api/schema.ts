@@ -124,6 +124,106 @@ export interface paths {
     patch: operations['entries_partial_update']
     trace?: never
   }
+  '/v0/entries/{id}/bookmark/': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Bookmark Entry
+     * @description Bookmark an entry by id
+     */
+    post: operations['entries_bookmark_create']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v0/entries/{id}/downvote/': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Downvote Entry
+     * @description Cast an up vote to an entry by id
+     */
+    post: operations['entries_downvote_create']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v0/entries/{id}/unbookmark/': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Remove Bookmark
+     * @description Remove bookmark from entry by id
+     */
+    post: operations['entries_unbookmark_create']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v0/entries/{id}/unvote/': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Remove Vote
+     * @description Remove vote from entry by id
+     */
+    post: operations['entries_unvote_create']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v0/entries/{id}/upvote/': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Upvote Entry
+     * @description Cast an down vote to an entry by id
+     */
+    post: operations['entries_upvote_create']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/v0/titles/': {
     parameters: {
       query?: never
@@ -307,6 +407,8 @@ export interface components {
        * @description Date and time this object was last updated
        */
       readonly updated_at: string
+      readonly vote: (components['schemas']['VoteEnum'] | components['schemas']['NullEnum']) | null
+      readonly is_bookmarked: boolean
     }
     EntryDestroyError: {
       protected_elements: components['schemas']['ProtectedElement'][]
@@ -350,6 +452,8 @@ export interface components {
       readonly content: string[]
       readonly created_at: string[]
       readonly updated_at: string[]
+      readonly vote: string[]
+      readonly is_bookmarked: string[]
     }
     /** @description Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
      *     read only.
@@ -378,6 +482,8 @@ export interface components {
       /** @description Content of the entry. In tiptap format. */
       content: unknown
     }
+    /** @enum {unknown} */
+    NullEnum: null
     PaginatedEntryList: {
       /**
        * @description Total number of items available.
@@ -771,6 +877,12 @@ export interface components {
       readonly token: string[]
       readonly uidb64: string[]
     }
+    /**
+     * @description * `UPVOTE` - Upvote
+     *     * `DOWNVOTE` - Downvote
+     * @enum {string}
+     */
+    VoteEnum: 'UPVOTE' | 'DOWNVOTE'
   }
   responses: never
   parameters: never
@@ -912,6 +1024,7 @@ export interface operations {
         created_at__gte?: string
         created_at__lte?: string
         include?: 'author' | 'author,title' | 'title'
+        is_bookmarked?: boolean
         /** @description Which field to use when ordering the results. */
         ordering?: string
         /** @description A page number within the paginated result set. */
@@ -926,6 +1039,10 @@ export interface operations {
         updated_at?: string
         updated_at__gte?: string
         updated_at__lte?: string
+        /** @description * `UPVOTE` - Upvote
+         *     * `DOWNVOTE` - Downvote */
+        vote?: 'DOWNVOTE' | 'UPVOTE'
+        vote__isnull?: boolean
       }
       header?: never
       path?: never
@@ -1094,6 +1211,106 @@ export interface operations {
         content: {
           'application/json': components['schemas']['EntrySerializerError']
         }
+      }
+    }
+  }
+  entries_bookmark_create: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description No response body */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  entries_downvote_create: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description No response body */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  entries_unbookmark_create: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description No response body */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  entries_unvote_create: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description No response body */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  entries_upvote_create: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description No response body */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
     }
   }

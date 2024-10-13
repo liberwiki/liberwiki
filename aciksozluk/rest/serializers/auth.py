@@ -80,7 +80,7 @@ class SignupSerializer(serializers.ModelSerializer):
         return user
 
     def send_verification_email(self, user, uidb64, token):
-        url = settings.AUTH_VERIFY_EMAIL_URL_TEMPLATE.format(uidb64=uidb64, token=token)
+        url = settings.AUTH_VERIFY_EMAIL_URL_TEMPLATE.format(domain=settings.PARENT_HOST, uidb64=uidb64, token=token)
         print(url)
 
     class Meta:
