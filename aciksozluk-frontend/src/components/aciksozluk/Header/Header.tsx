@@ -5,7 +5,7 @@ import * as Icons from 'lucide-react'
 import { AdvancedSearch } from '@/components/aciksozluk/Header/AdvancedSearch'
 import { MobileNav } from '@/components/aciksozluk/Header/MobileNav'
 import { Button } from '@/components/shadcn/button'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/shadcn/sheet'
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/shadcn/sheet'
 
 import config from '@/config'
 import { useAcikSozlukAPI } from '@/lib/serverHooks'
@@ -23,7 +23,7 @@ export async function Header() {
           </Link>
           <MobileNav />
         </div>
-        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-center lg:mr-[calc(theme(space.12)-64px)] lg:w-4/6">
+        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-center lg:w-4/6">
           <div className="w-full md:flex-none">
             <AdvancedSearch />
           </div>
@@ -59,6 +59,10 @@ export async function Header() {
                       <Icons.User className="h-6 w-6" />
                     </Button>
                   </SheetTrigger>
+                  <SheetHeader className="hidden">
+                    <SheetDescription className="hidden">Account</SheetDescription>
+                  </SheetHeader>
+                  <SheetTitle className="hidden">Account</SheetTitle>
                   <SheetContent side="bottom" className="px-2 flex flex-col">
                     <Link href={{ pathname: '/auth/login' }}>
                       <Button variant="ghost">Login</Button>

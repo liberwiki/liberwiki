@@ -20,7 +20,7 @@ export default function TitleLayout({ children }: { children: React.ReactNode })
                     <LeftColumn />
                   </ScrollArea>
                 </aside>
-                {children}
+                <main className="flex min-h-screen flex-col items-center p-1 pt-6">{children}</main>
                 <aside className="fixed top-14 z-30 -mr-2 hidden h-[calc(100vh-3.5rem)] w-full shrink-0 xl:sticky xl:block">
                   <ScrollArea className="h-full py-6 pl-6 lg:py-8">
                     <RightColumn />

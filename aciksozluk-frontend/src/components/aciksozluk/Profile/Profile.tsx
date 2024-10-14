@@ -1,5 +1,3 @@
-'use client'
-
 import { useRouter } from 'next/navigation'
 
 import * as Icons from 'lucide-react'
@@ -8,6 +6,8 @@ import { InfoItem } from '@/components/aciksozluk/Profile/InfoItem'
 import { Button } from '@/components/shadcn/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/shadcn/card'
 
+import config from '@/config'
+import { removeCookie } from '@/lib/serverActions'
 import { useAcikSozlukAPI } from '@/lib/serverHooks'
 
 import { format } from 'date-fns'
@@ -19,7 +19,8 @@ export function Profile() {
 
   const { data: userData, isSuccess } = aciksozluk.me()
 
-  const handleLogout = () => {
+  async function handleLogout() {
+    await removeCookie(config.api.bearerTokenCookieName)
     toast('Logged out.', { description: format(new Date(), "EEEE, MMMM dd, yyyy 'at' hh:mm a") })
     router.push('/')
   }

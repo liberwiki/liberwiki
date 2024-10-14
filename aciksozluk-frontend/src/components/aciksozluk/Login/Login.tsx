@@ -34,10 +34,10 @@ export function Login() {
     if (data.response.ok) {
       await setCookie('BearerToken', data?.data?.token as string)
       setLoginErrors({})
+      router.push('/titles/')
     } else {
       setLoginErrors(data.error)
     }
-    router.push('/titles/')
   }
 
   return (
@@ -87,7 +87,7 @@ export function Login() {
             {!config.membersOnly && (
               <div className="w-100 flex justify-center">
                 <Link href={{ pathname: '/titles' }} className="hover:underline">
-                  Back to webiste?
+                  Back to website?
                 </Link>
               </div>
             )}

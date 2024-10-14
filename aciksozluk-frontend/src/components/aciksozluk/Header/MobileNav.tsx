@@ -8,7 +8,7 @@ import NavTitle from '@/components/aciksozluk/NavTitle'
 import Paginator from '@/components/aciksozluk/Paginator'
 import { Button } from '@/components/shadcn/button'
 import { ScrollArea, ScrollBar } from '@/components/shadcn/scroll-area'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/shadcn/sheet'
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/shadcn/sheet'
 
 import { useAcikSozlukAPI } from '@/lib/serverHooks'
 
@@ -31,6 +31,10 @@ export function MobileNav() {
           <Icons.Menu />
         </Button>
       </SheetTrigger>
+      <SheetHeader className="hidden">
+        <SheetDescription className="hidden">Navigation</SheetDescription>
+      </SheetHeader>
+      <SheetTitle className="hidden">Navigation</SheetTitle>
       <SheetContent side="left" className="px-2">
         <ScrollArea className="my-4 h-[calc(100vh-4rem)] pr-0">
           <div className="flex flex-col">

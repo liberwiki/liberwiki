@@ -51,6 +51,7 @@ export function Entry({
         setFeedback(vote)
         await _.get({ UPVOTE: upvoteEntry, DOWNVOTE: downvoteEntry }, vote)()
       }
+      await queryClient.invalidateQueries({ queryKey: ['entries'] })
     }
   }
 

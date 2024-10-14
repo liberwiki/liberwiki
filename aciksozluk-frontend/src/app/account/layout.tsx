@@ -10,5 +10,5 @@ export const metadata: Metadata = {
 }
 
 export default function AccountLayout({ children }: { children: React.ReactNode }) {
-  return <div className="flex items-center justify-center min-h-screen">{children}</div>
+  return <main className="flex items-center justify-center min-h-screen">{children}</main>
 }

@@ -21,9 +21,5 @@ export default function TitlePage() {
     return <hr />
   }
 
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-1 pt-6">
-      <div className="w-full">{entry && <Title title={entry.title} />}</div>
-    </main>
-  )
+  return entry && <Title title={entry.title} />
 }

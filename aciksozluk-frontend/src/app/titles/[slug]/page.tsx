@@ -12,12 +12,14 @@ export default function TitlePage({ params }: { params: { slug: string } }) {
   const title = data?.results?.[0]
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-1 pt-6">
+    <>
       {isLoading ? (
         <Skeleton className="w-full h-48" />
+      ) : title ? (
+        <Title title={title} />
       ) : (
-        <div className="w-full">{title ? <Title title={title} /> : <NewTitle newTitle={params.slug} />}</div>
+        <NewTitle newTitle={params.slug} />
       )}
-    </main>
+    </>
   )
 }

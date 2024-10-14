@@ -3,6 +3,7 @@ import _ from 'lodash'
 import { paths } from '@/api/schema'
 import type { APIQuery, APIType, RemainingUseQueryOptions } from '@/api/typeHelpers'
 import config from '@/config'
+import { removeCookie } from '@/lib/serverActions'
 import { getLazyValueAsync } from '@/lib/utils'
 
 import { UseQueryResult, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -35,7 +36,13 @@ export class AcikSozlukApi {
     init.headers['Content-Type'] = 'application/json'
 
     try {
-      return await fetch(input, init)
+      const response = await fetch(input, init)
+      if (_.isEqual(await response.clone().json(), { detail: 'Invalid token.' })) {
+        // I do not like how this check looks, maybe the server should respond with something other than 401
+        // Specifically for invalid token error?
+        await removeCookie(config.api.bearerTokenCookieName)
+      }
+      return response
     } catch (error) {
       return new Response(
         JSON.stringify({

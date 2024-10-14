@@ -6,6 +6,8 @@ import * as Icons from 'lucide-react'
 
 import { Toggle } from '@/components/shadcn/toggle'
 
+import { cn } from '@/lib/utils'
+
 export default function EditorButton({
   pressed,
   onPressedChange,
@@ -27,7 +29,7 @@ export default function EditorButton({
       aria-label={ariaLabel}
       pressed={pressed}
       onPressedChange={onPressedChange}
-      className={`bg-background data-[state=on]:brightness-[110%] hover:bg-background ${className}`}
+      className={cn('bg-background data-[state=on]:brightness-[110%] hover:bg-background text-primary', className)}
       style={style}
     >
       {Icon && <Icon className="h-3 w-3" />}
