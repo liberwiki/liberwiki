@@ -7,7 +7,7 @@ import React from 'react'
 
 import { Toaster } from '@/components/shadcn/sonner'
 
-import Providers from '@/app/providers'
+import { AuthProvider, QueryClientProvider } from '@/app/providers'
 import config from '@/config'
 import { cn } from '@/lib/utils'
 
@@ -20,16 +20,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <Providers>
-      <html lang="en" suppressHydrationWarning className="bg-black">
-        <head title="aciksozluk">
-          <title>{config.name}</title>
-        </head>
-        <body className={cn('min-h-screen bg-black font-sans antialiased dark', inter.className)}>
-          {children}
-          <Toaster />
-        </body>
-      </html>
-    </Providers>
+    <QueryClientProvider>
+      <AuthProvider>
+        <html lang="en" suppressHydrationWarning className="bg-black">
+          <head title="aciksozluk">
+            <title>{config.name}</title>
+          </head>
+          <body className={cn('min-h-screen bg-black font-sans antialiased dark', inter.className)}>
+            {children}
+            <Toaster />
+          </body>
+        </html>
+      </AuthProvider>
+    </QueryClientProvider>
   )
 }

@@ -12,6 +12,7 @@ import { Card, CardContent } from '@/components/shadcn/card'
 import { Overlay, OverlayContent, OverlayTrigger } from '@/components/shadcn/overlay'
 
 import { APIType, Includes } from '@/api/typeHelpers'
+import { useAuth } from '@/app/providers/authProvider'
 import { useAcikSozlukAPI } from '@/lib/serverHooks'
 import { cn } from '@/lib/utils'
 
@@ -25,6 +26,8 @@ export function Entry({
   entry: Includes<APIType<'Entry'>, 'author', APIType<'User'>>
   onDelete?: () => void
 }) {
+  const userContext = useAuth()
+
   const aciksozluk = useAcikSozlukAPI()
   const queryClient = aciksozluk.useQueryClient()
   const { mutateAsync: deleteEntry } = aciksozluk.deleteEntry(entry.id)
@@ -40,6 +43,7 @@ export function Entry({
   async function handleBookmark() {
     setIsBookmarked(!isBookmarked)
     await (isBookmarked ? unBookmarkEntry() : bookmarkEntry())
+    await queryClient.invalidateQueries({ queryKey: ['entries'] })
   }
 
   function handleVote(vote: APIType<'VoteEnum'>) {
@@ -113,9 +117,11 @@ export function Entry({
                   <Button variant="ghost" className="w-full justify-start" disabled>
                     Edit
                   </Button>
-                  <Button variant="ghost" className="w-full justify-start" onClick={handleDelete}>
-                    Delete
-                  </Button>
+                  {(userContext?.user?.id === entry.author.id || userContext?.user?.is_superuser) && (
+                    <Button variant="ghost" className="w-full justify-start" onClick={handleDelete}>
+                      Delete
+                    </Button>
+                  )}
                   <Button variant="ghost" className="w-full justify-start" disabled>
                     Report
                   </Button>
