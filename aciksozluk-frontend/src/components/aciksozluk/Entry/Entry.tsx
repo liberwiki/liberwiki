@@ -75,21 +75,11 @@ export function Entry({
         </div>
         <div className="flex justify-between items-center -mx-4">
           <div className="flex space-x-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleVote('UPVOTE')}
-              className={feedback === 'UPVOTE' ? 'text-green-500' : ''}
-            >
-              <Icons.ArrowUp className="h-4 w-4" />
+            <Button variant="ghost" size="icon" onClick={handleVote('UPVOTE')}>
+              <Icons.ArrowBigUp className={cn('h-5 w-5', feedback === 'UPVOTE' && 'fill-green-500 text-green-500')} />
             </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleVote('DOWNVOTE')}
-              className={feedback === 'DOWNVOTE' ? 'text-red-500' : ''}
-            >
-              <Icons.ArrowDown className="h-4 w-4" />
+            <Button variant="ghost" size="icon" onClick={handleVote('DOWNVOTE')}>
+              <Icons.ArrowBigDown className={cn('h-5 w-5', feedback === 'DOWNVOTE' && 'fill-red-500 text-red-500')} />
             </Button>
             <Button variant="ghost" size="icon" onClick={handleBookmark}>
               <Icons.Heart className={cn('h-4 w-4', isBookmarked && 'fill-white')} />
@@ -114,17 +104,11 @@ export function Entry({
               </OverlayTrigger>
               <OverlayContent side="bottom" align="end">
                 <div className="space-y-2">
-                  <Button variant="ghost" className="w-full justify-start" disabled>
-                    Edit
-                  </Button>
                   {(userContext?.user?.id === entry.author.id || userContext?.user?.is_superuser) && (
                     <Button variant="ghost" className="w-full justify-start" onClick={handleDelete}>
                       Delete
                     </Button>
                   )}
-                  <Button variant="ghost" className="w-full justify-start" disabled>
-                    Report
-                  </Button>
                 </div>
               </OverlayContent>
             </Overlay>

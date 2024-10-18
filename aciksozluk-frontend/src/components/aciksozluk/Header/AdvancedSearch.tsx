@@ -6,6 +6,8 @@ import React from 'react'
 
 import * as Icons from 'lucide-react'
 
+import _ from 'lodash'
+
 import { CheckedState } from '@radix-ui/react-checkbox'
 
 import { Button } from '@/components/shadcn/button'
@@ -61,7 +63,7 @@ export function AdvancedSearch() {
     event.preventDefault()
     await refetch()
     if (titles && titles.results.length !== 0) {
-      router.push(`/titles/${titles?.results?.[0]?.slug}`)
+      router.push(`/titles/${_.first(titles?.results)?.slug}`)
     } else {
       router.push(`/titles/${searchState.search}`)
     }

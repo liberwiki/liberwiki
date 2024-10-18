@@ -28,7 +28,7 @@ export function Profile() {
   return (
     isSuccess &&
     userData && (
-      <Card className="mx-auto max-w-md flex-1">
+      <Card className="max-w-md w-full">
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold">User Profile</CardTitle>
           <CardDescription>Your account information and statistics</CardDescription>

@@ -54,7 +54,7 @@ export function Signup() {
   }
 
   return (
-    <Card className="mx-auto max-w-md flex-1">
+    <Card className="max-w-md w-full">
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl font-bold">Signup</CardTitle>
         <CardDescription>Signup below by using your invitation code</CardDescription>

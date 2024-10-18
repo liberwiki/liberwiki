@@ -10,7 +10,7 @@ import config from '@/config'
 
 export function LockDown() {
   return (
-    <Card className="w-full max-w-md">
+    <Card className="max-w-md w-full">
       <CardHeader className="space-y-1 gap-2">
         <CardTitle className="text-2xl font-bold">Closed Beta</CardTitle>
         <CardDescription className="text-base">

@@ -41,7 +41,7 @@ export function VerifyEmail({ uidb64, token }: { uidb64: string; token: string }
 
   return (
     isSuccess && (
-      <Card className="mx-auto max-w-md flex-1">
+      <Card className="max-w-md w-full">
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold">Email Verification</CardTitle>
           <CardDescription>Please confirm your identity to complete the sign-up process</CardDescription>

@@ -100,19 +100,13 @@ export function Title({ title }: { title: APIType<'Title'> }) {
               <OverlayContent align="start" side="bottom">
                 <div className="space-y-2">
                   <Button variant="ghost" className="w-full justify-start">
-                    Best
-                  </Button>
-                  <Button variant="ghost" className="w-full justify-start">
                     Chronological
                   </Button>
                   <Button variant="ghost" className="w-full justify-start">
-                    Most Liked
+                    Likes
                   </Button>
                   <Button variant="ghost" className="w-full justify-start">
-                    Most Disliked
-                  </Button>
-                  <Button variant="ghost" className="w-full justify-start">
-                    Most Commented
+                    Bookmarks
                   </Button>
                 </div>
               </OverlayContent>
