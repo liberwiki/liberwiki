@@ -1,0 +1,8 @@
+{
+  "lockdownTitle": "Closed Beta",
+  "lockdownDescription": "{{name}} is currently in closed beta. You need an invitation code to sign up.",
+  "signupWithInvitationCode": "Sign up with invitation code",
+  "haveAnAccountLogIn": "Already have an account? Log in",
+  "joinWaitlist": "Join the waitlist",
+  "getNotified": "No code? Get notified when we open to the public."
+}

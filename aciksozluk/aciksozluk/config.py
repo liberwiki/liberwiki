@@ -30,6 +30,7 @@ CONFIG = config(
                 "PASSWORD": str,
             },
         },
+        "LANGUAGE": str,
     },
     prefix="ACIKSOZLUK",
     sep="__",

@@ -20,6 +20,7 @@ import { Separator } from '@/components/shadcn/separator'
 
 import { APIType, includesType } from '@/api'
 import config from '@/config'
+import { useClientTranslation } from '@/i18n'
 import { useFormState } from '@/lib/hooks'
 import { useAcikSozlukAPI } from '@/lib/serverHooks'
 
@@ -29,8 +30,9 @@ import { toast } from 'sonner'
 export function Title({ title }: { title: APIType<'Title'> }) {
   const entryPerPage = config.ux.defaultEntryPageSize
   const aciksozluk = useAcikSozlukAPI()
-
   const [currentPage, setCurrentPage] = useState<number>(1)
+
+  const { t } = useClientTranslation(['common', 'title', 'entry', 'advancedEntrySearch'])
 
   const queryClient = aciksozluk.useQueryClient()
   const { mutateAsync: createEntry } = aciksozluk.createEntry()
@@ -61,7 +63,7 @@ export function Title({ title }: { title: APIType<'Title'> }) {
   async function handleEditorSubmit(content: object) {
     const { response: createEntryResponse } = await createEntry({ title: title?.id as string, content })
     if (createEntryResponse.ok) {
-      toast('Your entry has been created.', { description: format(new Date(), "EEEE, MMMM dd, yyyy 'at' hh:mm a") })
+      toast(t('entry:yourEntryHasBeenCreated'))
       await queryClient.invalidateQueries({ queryKey: ['titles'] })
       await queryClient.invalidateQueries({ queryKey: ['entries'] })
       if (entries) {
@@ -69,9 +71,7 @@ export function Title({ title }: { title: APIType<'Title'> }) {
         setCurrentPage(entries.count % entryPerPage === 0 ? entries.total_pages + 1 : entries.total_pages)
       }
     } else {
-      toast('An error occurred while creating your entry. Please try again later.', {
-        description: format(new Date(), "EEEE, MMMM dd, yyyy 'at' hh:mm a"),
-      })
+      toast(t('entry:entryCreationError'))
     }
   }
 
@@ -94,19 +94,19 @@ export function Title({ title }: { title: APIType<'Title'> }) {
             <Overlay breakpoint="md">
               <OverlayTrigger>
                 <Button variant="ghost" className="px-0 hover:bg-transparent">
-                  <p className="font-medium text-primary hover:underline">Order By: Best</p>
+                  <p className="font-medium text-primary hover:underline">{t('advancedEntrySearch:currentOrdering')}</p>
                 </Button>
               </OverlayTrigger>
               <OverlayContent align="start" side="bottom">
                 <div className="space-y-2">
                   <Button variant="ghost" className="w-full justify-start">
-                    Chronological
+                    {t('advancedEntrySearch:orderByChronological')}
                   </Button>
                   <Button variant="ghost" className="w-full justify-start">
-                    Likes
+                    {t('advancedEntrySearch:orderByLikes')}
                   </Button>
                   <Button variant="ghost" className="w-full justify-start">
-                    Bookmarks
+                    {t('advancedEntrySearch:orderByBookmarks')}
                   </Button>
                 </div>
               </OverlayContent>
@@ -114,27 +114,33 @@ export function Title({ title }: { title: APIType<'Title'> }) {
             <Overlay breakpoint="md">
               <OverlayTrigger>
                 <Button variant="ghost" className="px-0 hover:bg-transparent">
-                  <p className="font-medium text-primary hover:underline">Search</p>
+                  <p className="font-medium text-primary hover:underline">{t('common:search')}</p>
                 </Button>
               </OverlayTrigger>
               <OverlayContent align="start" side="bottom" className="w-full">
                 <div className="grid gap-6">
                   <div className="space-y-2">
-                    <h4 className="font-semibold text-lg leading-none">Advanced Entry Search</h4>
-                    <p className="text-sm text-muted-foreground">Refine your search with additional filters.</p>
+                    <h4 className="font-semibold text-lg leading-none">
+                      {t('advancedEntrySearch:advancedEntrySearch')}
+                    </h4>
+                    <p className="text-sm text-muted-foreground">{t('advancedEntrySearch:refineYourSearch')}</p>
                   </div>
                   <div className="space-y-4">
                     <div className="space-y-2">
                       <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                          <Label htmlFor="fromDate">Start Date</Label>
+                          <Label htmlFor="fromDate">{t('advancedEntrySearch:fromDate')}</Label>
                           <Popover>
                             <PopoverTrigger asChild>
                               <Button
                                 variant={'outline'}
                                 className={`w-full justify-start text-left font-normal ${!searchState.fromDate && 'text-muted-foreground'}`}
                               >
-                                {searchState.fromDate ? format(searchState.fromDate, 'PPP') : <span>Pick a date</span>}
+                                {searchState.fromDate ? (
+                                  format(searchState.fromDate, 'PPP')
+                                ) : (
+                                  <span>{t('advancedEntrySearch:pickADate')}</span>
+                                )}
                               </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-auto p-0" align="start">
@@ -148,14 +154,18 @@ export function Title({ title }: { title: APIType<'Title'> }) {
                           </Popover>
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="toDate">End Date</Label>
+                          <Label htmlFor="toDate">{t('advancedEntrySearch:toDate')}</Label>
                           <Popover>
                             <PopoverTrigger asChild>
                               <Button
                                 variant={'outline'}
                                 className={`w-full justify-start text-left font-normal ${!searchState.toDate && 'text-muted-foreground'}`}
                               >
-                                {searchState.toDate ? format(searchState.toDate, 'PPP') : <span>Pick a date</span>}
+                                {searchState.toDate ? (
+                                  format(searchState.toDate, 'PPP')
+                                ) : (
+                                  <span>{t('advancedEntrySearch:pickADate')}</span>
+                                )}
                               </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-auto p-0" align="start">
@@ -171,12 +181,12 @@ export function Title({ title }: { title: APIType<'Title'> }) {
                       </div>
                     </div>
                     <div className="space-y-2 flex flex-col gap-2">
-                      <Label htmlFor="ketextSearch">Keywords</Label>
+                      <Label htmlFor="ketextSearch">{t('advancedEntrySearch:keywords')}</Label>
                       <Input
                         id="textSearch"
                         type="text"
                         name="textSearch"
-                        placeholder="Enter keywords..."
+                        placeholder={t('advancedEntrySearch:enterKeywords')}
                         value={searchState.textSearch}
                         onChange={handleSearchStateEvent('textSearch')}
                       />
@@ -188,18 +198,18 @@ export function Title({ title }: { title: APIType<'Title'> }) {
                         checked={searchState.mine}
                         onCheckedChange={handleSearchStateValue('mine')}
                       />
-                      <Label htmlFor="mine">Mine</Label>
+                      <Label htmlFor="mine">{t('advancedEntrySearch:mine')}</Label>
                     </div>
                     <Button type="submit" className="w-full">
                       <Icons.Search className="mr-2 h-4 w-4" />
-                      Search
+                      {t('common:search')}
                     </Button>
                   </div>
                 </div>
               </OverlayContent>
             </Overlay>
             <Button variant="ghost" className="px-0 hover:bg-transparent">
-              <p className="font-medium text-primary hover:underline">Follow</p>
+              <p className="font-medium text-primary hover:underline">{t('title:follow')}</p>
             </Button>
           </div>
           <Paginator
@@ -220,9 +230,7 @@ export function Title({ title }: { title: APIType<'Title'> }) {
             <Entry key={entry.id} entry={includesType(entry, 'author', 'User')} onDelete={handleEntryDelete} />
           ))
         ) : (
-          <div className="text-center text-gray-500 p-10">
-            No entries found. Be the first one to share your information.
-          </div>
+          <div className="text-center text-gray-500 p-10">{t('title:noEntryFound')}</div>
         ))}
       <Editor readonly={false} onSubmit={handleEditorSubmit} />
     </>

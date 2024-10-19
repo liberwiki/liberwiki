@@ -10,11 +10,15 @@ import { Button } from '@/components/shadcn/button'
 import { ScrollArea, ScrollBar } from '@/components/shadcn/scroll-area'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/shadcn/sheet'
 
+import { useClientTranslation } from '@/i18n'
 import { useAcikSozlukAPI } from '@/lib/serverHooks'
 
 export function MobileNav() {
   const aciksozluk = useAcikSozlukAPI()
   const [currentPage, setCurrentPage] = useState<number>(1)
+
+  const { t } = useClientTranslation(['common'])
+
   const { isSuccess, data: titles, refetch } = aciksozluk.titles({ page: currentPage, entry_count__gt: 0 })
 
   useEffect(() => {
@@ -32,9 +36,9 @@ export function MobileNav() {
         </Button>
       </SheetTrigger>
       <SheetHeader className="hidden">
-        <SheetDescription className="hidden">Navigation</SheetDescription>
+        <SheetDescription className="hidden">{t('common:navigation')}</SheetDescription>
       </SheetHeader>
-      <SheetTitle className="hidden">Navigation</SheetTitle>
+      <SheetTitle className="hidden">{t('common:navigation')}</SheetTitle>
       <SheetContent side="left" className="px-2">
         <ScrollArea className="my-4 h-[calc(100vh-4rem)] pr-0">
           <div className="flex flex-col">

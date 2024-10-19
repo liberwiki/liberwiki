@@ -19,6 +19,7 @@ import { Overlay, OverlayContent, OverlayTrigger } from '@/components/shadcn/ove
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
 
+import { useClientTranslation } from '@/i18n'
 import { useElementAttribute, useFormState } from '@/lib/hooks'
 import { useAcikSozlukAPI } from '@/lib/serverHooks'
 import { cn } from '@/lib/utils'
@@ -28,12 +29,14 @@ import { format } from 'date-fns'
 export function AdvancedSearch() {
   const aciksozluk = useAcikSozlukAPI()
   const router = useRouter()
+
   const {
     // We are trying to keep the width of the popover the same as the search box
     // Proven too hard to do with only css/tailwind
     ref: searchBoxRef,
     attributeValue: popoverWidth,
   } = useElementAttribute<HTMLDivElement, keyof HTMLDivElement>('offsetWidth')
+  const { t } = useClientTranslation(['common', 'advancedTitleSearch'])
 
   const {
     formState: searchState,
@@ -79,7 +82,7 @@ export function AdvancedSearch() {
           <Input
             type="text"
             name="search"
-            placeholder="Search..."
+            placeholder={t('common:search')}
             className="pr-20 h-10"
             value={searchState.search}
             onChange={handleSearchStateEvent('search')}
@@ -104,26 +107,28 @@ export function AdvancedSearch() {
                 >
                   <div className="grid gap-6">
                     <div className="space-y-2">
-                      <h4 className="font-semibold text-lg leading-none">Advanced Title Search</h4>
-                      <p className="text-sm text-muted-foreground">Refine your search with additional filters.</p>
+                      <h4 className="font-semibold text-lg leading-none">
+                        {t('advancedTitleSearch:advancedTitleSearch')}
+                      </h4>
+                      <p className="text-sm text-muted-foreground">{t('advancedTitleSearch:refineYourSearch')}</p>
                     </div>
                     <div className="space-y-4">
                       <div className="space-y-2">
-                        <Label htmlFor="freeText">Free Text Search</Label>
+                        <Label htmlFor="freeText">{t('advancedTitleSearch:freeTextSearch')}</Label>
                         <Input
                           id="freeText"
                           type="text"
                           name="freeText"
-                          placeholder="Enter keywords..."
+                          placeholder={t('advancedTitleSearch:enterKeywords')}
                           value={searchState.textSearch}
                           onChange={handleSearchStateEvent('textSearch')}
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="fromAuthor">Author</Label>
+                        <Label htmlFor="fromAuthor">{t('advancedTitleSearch:author')}</Label>
                         <Select value={searchState.fromAuthor} onValueChange={handleSearchStateValue('fromAuthor')}>
                           <SelectTrigger id="fromAuthor">
-                            <SelectValue placeholder="All Authors" />
+                            <SelectValue placeholder={t('advancedTitleSearch:allAuthors')} />
                           </SelectTrigger>
                           <SelectContent>
                             {/* @ts-expect-error TS2322 SelectItem doesn't accept null as a value */}
@@ -137,7 +142,7 @@ export function AdvancedSearch() {
                       <div className="space-y-2">
                         <div className="grid grid-cols-2 gap-4">
                           <div className="space-y-2">
-                            <Label htmlFor="fromDate">From Date</Label>
+                            <Label htmlFor="fromDate">{t('advancedTitleSearch:fromDate')}</Label>
                             <Popover>
                               <PopoverTrigger asChild>
                                 <Button
@@ -147,7 +152,7 @@ export function AdvancedSearch() {
                                   {searchState.fromDate ? (
                                     format(searchState.fromDate, 'PPP')
                                   ) : (
-                                    <span>Pick a date</span>
+                                    <span>{t('advancedTitleSearch:pickADate')}</span>
                                   )}
                                 </Button>
                               </PopoverTrigger>
@@ -162,7 +167,7 @@ export function AdvancedSearch() {
                             </Popover>
                           </div>
                           <div className="space-y-2">
-                            <Label htmlFor="toDate">To Date</Label>
+                            <Label htmlFor="toDate">{t('advancedTitleSearch:toDate')}</Label>
                             <Popover>
                               <PopoverTrigger asChild>
                                 <Button
@@ -172,7 +177,11 @@ export function AdvancedSearch() {
                                     searchState.toDate && 'text-muted-foreground'
                                   )}
                                 >
-                                  {searchState.toDate ? format(searchState.toDate, 'PPP') : <span>Pick a date</span>}
+                                  {searchState.toDate ? (
+                                    format(searchState.toDate, 'PPP')
+                                  ) : (
+                                    <span>{t('advancedTitleSearch:pickADate')}</span>
+                                  )}
                                 </Button>
                               </PopoverTrigger>
                               <PopoverContent className="w-auto p-0" align="start">
@@ -196,7 +205,7 @@ export function AdvancedSearch() {
                               checked={searchState.mine}
                               onCheckedChange={handleSearchStateValue('mine')}
                             />
-                            <Label htmlFor="mine">Mine</Label>
+                            <Label htmlFor="mine">{t('advancedTitleSearch:mine')}</Label>
                           </div>
                           <div className="flex items-center space-x-2">
                             <Checkbox
@@ -205,14 +214,14 @@ export function AdvancedSearch() {
                               checked={searchState.fav}
                               onCheckedChange={handleSearchStateValue('fav')}
                             />
-                            <Label htmlFor="fav">From My Favorites</Label>
+                            <Label htmlFor="fav">{t('advancedTitleSearch:fromMyFavorites')}</Label>
                           </div>
                         </div>
                       </div>
                     </div>
                     <Button type="submit" className="w-full">
                       <Icons.Search className="mr-2 h-4 w-4" />
-                      Search
+                      {t('common:search')}
                     </Button>
                   </div>
                 </OverlayContent>

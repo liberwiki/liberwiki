@@ -5,7 +5,7 @@ from common.utils.db import track_model_history
 from common.validators import AllowedCharactersValidator
 from django.db import models
 from django.template.defaultfilters import slugify
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 from django_lifecycle import AFTER_UPDATE, BEFORE_CREATE, hook
 
 

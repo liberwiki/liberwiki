@@ -33,6 +33,7 @@ services:
     environment:
       - NEXT_PUBLIC__ACIKSOZLUK__NAME
       - NEXT_PUBLIC__ACIKSOZLUK__API__BASE_URL
+      - NEXT_PUBLIC__ACIKSOZLUK__LANGUAGE
     ports:
       - "3000:3000"
     volumes:

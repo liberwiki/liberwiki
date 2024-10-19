@@ -1,0 +1,220 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-10-19 13:49+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+#: aciksozluk/settings.py:119
+msgid "English"
+msgstr ""
+
+#: aciksozluk/settings.py:120
+msgid "Turkish"
+msgstr ""
+
+#: administration/admin/group.py:20
+msgid "Permission Count"
+msgstr ""
+
+#: administration/admin/title.py:19
+msgid "Entry Count"
+msgstr ""
+
+#: administration/admin/user.py:25
+msgid "Personal info"
+msgstr ""
+
+#: administration/admin/user.py:26
+msgid "Permissions"
+msgstr ""
+
+#: administration/admin/user.py:27
+msgid "Important dates"
+msgstr ""
+
+#: common/validators/allowed_characters.py:12
+#, python-brace-format
+msgid ""
+"Enter a valid value containing only the allowed characters. "
+"{allowed_characters}"
+msgstr ""
+
+#: core/models/entry.py:16
+msgid "Title of the entry."
+msgstr ""
+
+#: core/models/entry.py:22
+msgid "Author of the entry."
+msgstr ""
+
+#: core/models/entry.py:30
+msgid "Content"
+msgstr ""
+
+#: core/models/entry.py:31
+msgid "Content of the entry. In tiptap format."
+msgstr ""
+
+#: core/models/entry.py:35
+msgid "Entry"
+msgstr ""
+
+#: core/models/entry.py:36
+msgid "Entries"
+msgstr ""
+
+#: core/models/entry_bookmark.py:15
+msgid "User who bookmarked."
+msgstr ""
+
+#: core/models/entry_bookmark.py:21
+msgid "Entry that was bookmarked."
+msgstr ""
+
+#: core/models/entry_bookmark.py:33
+msgid "Entry Bookmark"
+msgstr ""
+
+#: core/models/entry_bookmark.py:34
+msgid "Entry Bookmarks"
+msgstr ""
+
+#: core/models/invitation.py:22
+msgid "Owner of the invitation."
+msgstr ""
+
+#: core/models/invitation.py:29
+msgid "Invitation code."
+msgstr ""
+
+#: core/models/invitation.py:39
+msgid "User who used the invitation."
+msgstr ""
+
+#: core/models/invitation.py:57
+#, python-brace-format
+msgid "Unable to generate a unique code after {tries} tries."
+msgstr ""
+
+#: core/models/invitation.py:60
+msgid "Invitation"
+msgstr ""
+
+#: core/models/invitation.py:61
+msgid "Invitations"
+msgstr ""
+
+#: core/models/title.py:17 core/models/title.py:42
+msgid "Title"
+msgstr ""
+
+#: core/models/title.py:25
+msgid "Name of the title."
+msgstr ""
+
+#: core/models/title.py:28
+msgid "Slug"
+msgstr ""
+
+#: core/models/title.py:31
+msgid "Slug of the title to display in urls."
+msgstr ""
+
+#: core/models/title.py:37
+msgid "Creator of the title."
+msgstr ""
+
+#: core/models/title.py:43
+msgid "Titles"
+msgstr ""
+
+#: core/models/user.py:15
+msgid "email address"
+msgstr ""
+
+#: core/models/user.py:17
+msgid "username"
+msgstr ""
+
+#: core/models/user.py:21
+msgid ""
+"Required. 150 characters or fewer. Letters (lowercase), digits or hyphens "
+"only, can't start with letters or hyphens."
+msgstr ""
+
+#: core/models/user.py:32
+msgid "A user with that username already exists."
+msgstr ""
+
+#: core/models/user.py:37
+msgid "User"
+msgstr ""
+
+#: core/models/user.py:38
+msgid "Users"
+msgstr ""
+
+#: core/models/vote.py:12
+msgid "Upvote"
+msgstr ""
+
+#: core/models/vote.py:13
+msgid "Downvote"
+msgstr ""
+
+#: core/models/vote.py:19
+msgid "User who voted."
+msgstr ""
+
+#: core/models/vote.py:25
+msgid "Entry that was voted."
+msgstr ""
+
+#: core/models/vote.py:30 core/models/vote.py:41
+msgid "Vote"
+msgstr ""
+
+#: core/models/vote.py:42
+msgid "Votes"
+msgstr ""
+
+#: rest/serializers/auth.py:14
+msgid "Email"
+msgstr ""
+
+#: rest/serializers/auth.py:16
+msgid "Token"
+msgstr ""
+
+#: rest/serializers/auth.py:25
+msgid "Invalid email or password"
+msgstr ""
+
+#: rest/serializers/auth.py:28
+msgid "User account is disabled"
+msgstr ""
+
+#: rest/serializers/auth.py:55
+msgid "Passwords do not match"
+msgstr ""
+
+#: rest/serializers/auth.py:58
+msgid "Invalid or previously used invitation code"
+msgstr ""
+
+#: rest/serializers/auth.py:112 rest/serializers/auth.py:115
+msgid "Invalid user or token"
+msgstr ""

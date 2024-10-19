@@ -10,12 +10,16 @@ import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '@/comp
 import { Label } from '@/components/shadcn/label'
 
 import config from '@/config'
+import { useClientTranslation } from '@/i18n'
 import { useFormState } from '@/lib/hooks'
 import { useAcikSozlukAPI } from '@/lib/serverHooks'
 
 export function Signup() {
   const aciksozluk = useAcikSozlukAPI()
   const router = useRouter()
+
+  const { t } = useClientTranslation(['common', 'signup'])
+
   const { mutateAsync: signup } = aciksozluk.signup()
 
   const {
@@ -56,18 +60,18 @@ export function Signup() {
   return (
     <Card className="max-w-md w-full">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold">Signup</CardTitle>
-        <CardDescription>Signup below by using your invitation code</CardDescription>
+        <CardTitle className="text-2xl font-bold">{t('common:signup')}</CardTitle>
+        <CardDescription>{t('signup:signupWithInvitationCode')}</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSignup}>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t('common:email')}</Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="Enter your email"
+                placeholder={t('signup:enterYourEmail')}
                 required
                 value={signupState.email}
                 onChange={handleSignupStateEvent('email')}
@@ -76,11 +80,11 @@ export function Signup() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
+              <Label htmlFor="username">{t('common:username')}</Label>
               <Input
                 id="username"
                 type="text"
-                placeholder="Enter your username"
+                placeholder={t('signup:enterYourUsername')}
                 required
                 value={signupState.username}
                 onChange={handleSignupStateEvent('username')}
@@ -89,11 +93,11 @@ export function Signup() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{t('signup:password')}</Label>
               <Input
                 id="password"
                 type="password"
-                placeholder="Enter your password"
+                placeholder={t('signup:enterYourPassword')}
                 required
                 value={signupState.password}
                 onChange={handleSignupStateEvent('password')}
@@ -102,11 +106,11 @@ export function Signup() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password_confirmation">Password Confirmation</Label>
+              <Label htmlFor="password_confirmation">{t('signup:passwordConfirmation')}</Label>
               <Input
                 id="password_confirmation"
                 type="password"
-                placeholder="Confirm your password"
+                placeholder={t('signup:enterYourPasswordConfirmation')}
                 required
                 value={signupState.password_confirmation}
                 onChange={handleSignupStateEvent('password_confirmation')}
@@ -115,7 +119,7 @@ export function Signup() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Invitation Code</Label>
+              <Label htmlFor="password">{t('signup:invitationCode')}</Label>
               <div className="flex justify-center items-center">
                 <InputOTP
                   pattern="[a-z0-9]+$"
@@ -146,17 +150,17 @@ export function Signup() {
               <div className="text-red-600 text-sm mt-2">{signupErrors.non_field_errors.join(' ')}</div>
             )}
             <Button type="submit" className="w-full">
-              Signup
+              {t('common:signup')}
             </Button>
             <div className="w-100 flex justify-center">
               <Link href={{ pathname: '/auth/login' }} className="hover:underline">
-                Login instead?
+                {t('signup:loginInstead')}
               </Link>
             </div>
             {!config.membersOnly && (
               <div className="w-100 flex justify-center">
                 <Link href={{ pathname: '/titles' }} className="hover:underline">
-                  Back to webiste?
+                  {t('common:backToWebsite')}
                 </Link>
               </div>
             )}

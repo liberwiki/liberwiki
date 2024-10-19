@@ -9,6 +9,7 @@ import { Input } from '@/components/shadcn/input'
 import { Label } from '@/components/shadcn/label'
 
 import config from '@/config'
+import { useClientTranslation } from '@/i18n'
 import { useFormState } from '@/lib/hooks'
 import { setCookie } from '@/lib/serverActions'
 import { useAcikSozlukAPI } from '@/lib/serverHooks'
@@ -16,6 +17,9 @@ import { useAcikSozlukAPI } from '@/lib/serverHooks'
 export function Login() {
   const aciksozluk = useAcikSozlukAPI()
   const router = useRouter()
+
+  const { t } = useClientTranslation(['common', 'login'])
+
   const { mutateAsync: obtainAuthToken } = aciksozluk.obtainAuthToken()
 
   const {
@@ -43,18 +47,18 @@ export function Login() {
   return (
     <Card className="max-w-md w-full">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold">Login</CardTitle>
-        <CardDescription>Enter your email and password to login to your account</CardDescription>
+        <CardTitle className="text-2xl font-bold">{t('common:login')}</CardTitle>
+        <CardDescription>{t('login:loginDescription')}</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleLogin}>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t('common:email')}</Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="Enter your email"
+                placeholder={t('login:enterYourEmail')}
                 required
                 value={loginState.email}
                 onChange={handleLoginStateEvent('email')}
@@ -62,11 +66,11 @@ export function Login() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{t('login:password')}</Label>
               <Input
                 id="password"
                 type="password"
-                placeholder="Enter your password"
+                placeholder={t('login:enterYourPassword')}
                 required
                 value={loginState.password}
                 onChange={handleLoginStateEvent('password')}
@@ -77,17 +81,17 @@ export function Login() {
               <div className="text-red-600 text-sm mt-2">{loginErrors.non_field_errors.join(' ')}</div>
             )}
             <Button type="submit" className="w-full">
-              Login
+              {t('common:login')}
             </Button>
             <div className="w-100 flex justify-center">
               <Link href={{ pathname: '/auth/signup' }} className="hover:underline">
-                Signup instead?
+                {t('login:signUpInstead')}
               </Link>
             </div>
             {!config.membersOnly && (
               <div className="w-100 flex justify-center">
                 <Link href={{ pathname: '/titles' }} className="hover:underline">
-                  Back to website?
+                  {t('common:backToWebsite')}
                 </Link>
               </div>
             )}

@@ -2,6 +2,7 @@ from common.admin import BaseModelAdmin
 from core.models import Title
 from django.contrib import admin
 from django.db.models import Count
+from django.utils.translation import gettext_lazy as _
 
 
 @admin.register(Title)
@@ -16,6 +17,6 @@ class TitleAdmin(BaseModelAdmin):
         queryset = super().get_queryset(request)
         return queryset.annotate(entry_count=Count("entries")).select_related("created_by")
 
-    @admin.display(description="Entry Count")
+    @admin.display(description=_("Entry Count"))
     def entry_count(self, obj):
         return obj.entry_count

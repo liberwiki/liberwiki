@@ -6,9 +6,9 @@ import { useRouter } from 'next/navigation'
 import Editor from '@/components/aciksozluk/Editor'
 import { Separator } from '@/components/shadcn/separator'
 
+import { useClientTranslation } from '@/i18n'
 import { useAcikSozlukAPI } from '@/lib/serverHooks'
 
-import { format } from 'date-fns'
 import { toast } from 'sonner'
 
 export function NewTitle({ newTitle }: { newTitle: string }) {
@@ -17,6 +17,8 @@ export function NewTitle({ newTitle }: { newTitle: string }) {
   const queryClient = aciksozluk.useQueryClient()
   const router = useRouter()
 
+  const { t } = useClientTranslation(['title', 'entry'])
+
   const { mutateAsync: createTitle } = aciksozluk.createTitle()
   const { mutateAsync: createEntry } = aciksozluk.createEntry()
 
@@ -24,11 +26,9 @@ export function NewTitle({ newTitle }: { newTitle: string }) {
     const { data: title, response: createTitleResponse } = await createTitle({ name: newTitle })
     const { response: createEntryResponse } = await createEntry({ title: title?.id as string, content })
     if (createTitleResponse.ok && createEntryResponse.ok) {
-      toast('Your entry has been created.', { description: format(new Date(), "EEEE, MMMM dd, yyyy 'at' hh:mm a") })
+      toast(t('entry:yourEntryHasBeenCreated'))
     } else {
-      toast('An error occurred while creating your entry. Please try again later.', {
-        description: format(new Date(), "EEEE, MMMM dd, yyyy 'at' hh:mm a"),
-      })
+      toast(t('entry:entryCreationError'))
     }
     router.push(`/titles/${title?.slug}`)
     await queryClient.invalidateQueries()
@@ -44,9 +44,7 @@ export function NewTitle({ newTitle }: { newTitle: string }) {
           <Separator />
         </div>
       </div>
-      <div className="text-center text-gray-500 p-10">
-        No entries found. Be the first one to share your information.
-      </div>
+      <div className="text-center text-gray-500 p-10">{t('title:noEntryFound')}</div>
       <Editor readonly={false} onSubmit={handleEditorSubmit} />
     </>
   )

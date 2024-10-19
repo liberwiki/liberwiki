@@ -1,0 +1,17 @@
+{
+  "setLink": "Bağlantının URL'sini girin:",
+  "formattingOptions": "Biçimlendirme seçenekleri",
+  "toggleBold": "Kalın yap",
+  "toggleItalic": "İtalik yap",
+  "toggleUnderline": "Altını çiz",
+  "toggleStrikeThrough": "Üstünü çiz",
+  "toggleLatex": "Latex'i aç/kapat",
+  "toggleBulletList": "Madde işaretli listeyi aç/kapat",
+  "toggleOrderedList": "Sıralı listeyi aç/kapat",
+  "toggleInlineCode": "Satır içi kodu aç/kapat",
+  "toggleCodeBlock": "Kod bloğu ekle",
+  "characterCount_one": "Karakter sayısı: {{count}}",
+  "characterCount_other": "Karakter sayısı: {{count}}",
+  "wordCount_one": "Kelime sayısı: {{count}}",
+  "wordCount_other": "Kelime sayısı: {{count}}"
+}

@@ -2,6 +2,7 @@ from common.admin import BaseModelAdmin
 from django.contrib import admin
 from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
 from django.contrib.auth.models import Group
+from django.utils.translation import gettext_lazy as _
 
 admin.site.unregister(Group)
 
@@ -16,6 +17,6 @@ class GroupAdmin(BaseModelAdmin, BaseGroupAdmin):
     readonly_fields = ["permission_count"]
 
     @staticmethod
-    @admin.display(description="Permission Count")
+    @admin.display(description=_("Permission Count"))
     def permission_count(obj):
         return obj.permissions.count()

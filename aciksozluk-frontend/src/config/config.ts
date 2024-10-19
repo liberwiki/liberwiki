@@ -12,4 +12,5 @@ export const config = {
     defaultEntryPageSize: 25,
   },
   membersOnly: true,
+  language: process.env.NEXT_PUBLIC__ACIKSOZLUK__LANGUAGE || 'en',
 }

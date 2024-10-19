@@ -1,0 +1,10 @@
+{
+  "loggedOut": "Logged out",
+  "userProfile": "User Profile",
+  "userProfileDescription": "Your account information and statistics",
+  "fullName": "Full Name",
+  "memberSince": "Member Since",
+  "titleCount": "Title Count",
+  "entryCount": "Entry Count",
+  "logout": "Logout"
+}

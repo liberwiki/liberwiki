@@ -8,10 +8,13 @@ import { Button } from '@/components/shadcn/button'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/shadcn/sheet'
 
 import config from '@/config'
+import { useServerTranslation } from '@/i18n'
 import { useAcikSozlukAPI } from '@/lib/serverHooks'
 
 export async function Header() {
   const aciksozluk = useAcikSozlukAPI()
+
+  const { t } = await useServerTranslation(['common'])
 
   return (
     <header className="sticky top-0 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-white">
@@ -36,17 +39,17 @@ export async function Header() {
                 className="px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 gap-2"
               >
                 <Icons.User className="h-6 w-6" />
-                <span className="max-xl:hidden">Profile</span>
+                <span className="max-xl:hidden">{t('common:profile')}</span>
               </Button>
             </Link>
           ) : (
             <>
               <div className="hidden lg:contents">
                 <Link href={{ pathname: '/auth/login' }}>
-                  <Button variant="ghost">Login</Button>
+                  <Button variant="ghost">{t('common:login')}</Button>
                 </Link>
                 <Link href={{ pathname: '/auth/signup' }}>
-                  <Button variant="ghost">Sign Up</Button>
+                  <Button variant="ghost">{t('common:signup')}</Button>
                 </Link>
               </div>
               <div className="lg:hidden">
@@ -60,15 +63,15 @@ export async function Header() {
                     </Button>
                   </SheetTrigger>
                   <SheetHeader className="hidden">
-                    <SheetDescription className="hidden">Account</SheetDescription>
+                    <SheetDescription className="hidden">{t('common:account')}</SheetDescription>
                   </SheetHeader>
-                  <SheetTitle className="hidden">Account</SheetTitle>
+                  <SheetTitle className="hidden">{t('common:account')}</SheetTitle>
                   <SheetContent side="bottom" className="px-2 flex flex-col">
                     <Link href={{ pathname: '/auth/login' }}>
-                      <Button variant="ghost">Login</Button>
+                      <Button variant="ghost">{t('common:login')}</Button>
                     </Link>
                     <Link href={{ pathname: '/auth/signup' }}>
-                      <Button variant="ghost">Sign Up</Button>
+                      <Button variant="ghost">{t('common:signup')}</Button>
                     </Link>
                   </SheetContent>
                 </Sheet>

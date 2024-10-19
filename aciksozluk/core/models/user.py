@@ -5,7 +5,7 @@ from common.utils.db import track_model_history
 from common.validators import AllowedCharactersValidator
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 
 @track_model_history

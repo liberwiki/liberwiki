@@ -1,0 +1,10 @@
+{
+  "loggedOut": "Çıkış yapıldı",
+  "userProfile": "Kullanıcı Profili",
+  "userProfileDescription": "Hesap bilgilerinizi ve istatistiklerinizi",
+  "fullName": "Tam Ad",
+  "memberSince": "Üye Olunan Tarih",
+  "titleCount": "Başlık Sayısı",
+  "entryCount": "Girdi Sayısı",
+  "logout": "Çıkış Yap"
+}

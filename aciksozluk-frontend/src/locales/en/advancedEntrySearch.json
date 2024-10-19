@@ -1,0 +1,14 @@
+{
+  "currentOrdering": "Ordering",
+  "orderByChronological": "Chronological",
+  "orderByLikes": "Likes",
+  "orderByBookmarks": "Bookmarks",
+  "advancedEntrySearch": "Advanced Entry Search",
+  "refineYourSearch": "Refine your search with additional filters.",
+  "fromDate": "From Date",
+  "pickADate": "Pick A Date",
+  "toDate": "To Date",
+  "keywords": "Keywords",
+  "enterKeywords": "Enter keywords",
+  "mine": "Mine"
+}

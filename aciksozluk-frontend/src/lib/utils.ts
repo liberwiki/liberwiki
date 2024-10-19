@@ -4,7 +4,10 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import _ from 'lodash'
 
+import { LONG_DATE_FORMAT, SHORT_DATE_FORMAT } from '@/lib/constants'
+
 import { type ClassValue, clsx } from 'clsx'
+import { format } from 'date-fns'
 import { twMerge } from 'tailwind-merge'
 import resolveConfig from 'tailwindcss/resolveConfig'
 
@@ -133,4 +136,16 @@ export function runMiddlewareIfPathMatches(path: RegExp, exemptNextPaths: boolea
       }
     }
   }
+}
+
+export function formattedDate(dateFormat: string, date?: Date) {
+  return format(date || new Date(), dateFormat)
+}
+
+export function longFormattedDate(date?: Date) {
+  return formattedDate(LONG_DATE_FORMAT, date || new Date())
+}
+
+export function shortFormattedDate(date?: Date) {
+  return formattedDate(SHORT_DATE_FORMAT, date || new Date())
 }

@@ -1,0 +1,6 @@
+{
+  "entryHasBenDeleted": "Entry {{entryId}} has been deleted.",
+  "delete": "Delete",
+  "yourEntryHasBeenCreated": "Your entry has been created.",
+  "entryCreationError": "An error occurred while creating your entry. Please try again later."
+}

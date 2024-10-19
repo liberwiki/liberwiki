@@ -7,6 +7,7 @@ import { Button } from '@/components/shadcn/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/shadcn/card'
 
 import config from '@/config'
+import { useClientTranslation } from '@/i18n'
 import { removeCookie } from '@/lib/serverActions'
 import { useAcikSozlukAPI } from '@/lib/serverHooks'
 
@@ -17,11 +18,13 @@ export function Profile() {
   const aciksozluk = useAcikSozlukAPI()
   const router = useRouter()
 
+  const { t } = useClientTranslation(['common', 'profile'])
+
   const { data: userData, isSuccess } = aciksozluk.me()
 
   async function handleLogout() {
     await removeCookie(config.api.bearerTokenCookieName)
-    toast('Logged out.', { description: format(new Date(), "EEEE, MMMM dd, yyyy 'at' hh:mm a") })
+    toast(t('profile:loggedOut'), { description: format(new Date(), "EEEE, MMMM dd, yyyy 'at' hh:mm a") })
     router.push('/')
   }
 
@@ -30,22 +33,22 @@ export function Profile() {
     userData && (
       <Card className="max-w-md w-full">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-2xl font-bold">User Profile</CardTitle>
-          <CardDescription>Your account information and statistics</CardDescription>
+          <CardTitle className="text-2xl font-bold">{t('profile:userProfile')}</CardTitle>
+          <CardDescription>{t('profile:userProfileDescription')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-4">
-            <InfoItem label="Username" value={userData.username} />
-            <InfoItem label="Full Name" value={`${userData.first_name} ${userData.last_name}`} />
-            <InfoItem label="Email" value={userData.email} />
-            <InfoItem label="Member since" value={format(new Date(userData.created_at), 'MMMM d, yyyy')} />
-            <InfoItem label="Titles" value={userData.title_count} />
-            <InfoItem label="Entries" value={userData.entry_count} />
+            <InfoItem label={t('common:username')} value={userData.username} />
+            <InfoItem label={t('profile:fullName')} value={`${userData.first_name} ${userData.last_name}`} />
+            <InfoItem label={t('common:email')} value={userData.email} />
+            <InfoItem label={t('profile:memberSince')} value={format(new Date(userData.created_at), 'MMMM d, yyyy')} />
+            <InfoItem label={t('profile:titleCount')} value={userData.title_count} />
+            <InfoItem label={t('profile:entryCount')} value={userData.entry_count} />
           </div>
         </CardContent>
         <CardFooter>
           <Button className="w-full gap-2" variant="default" onClick={handleLogout}>
-            Logout
+            {t('profile:logout')}
             <Icons.LogOut className="h-4 w-4" />
           </Button>
         </CardFooter>

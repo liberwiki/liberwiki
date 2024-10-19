@@ -1,7 +1,7 @@
 from common.models import BaseModel
 from common.utils.db import get_longest_choice_length, track_model_history
 from django.db import models
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 
 @track_model_history

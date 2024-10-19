@@ -7,21 +7,23 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { SeparatorWithText } from '@/components/shadcn/separator-with-text'
 
 import config from '@/config'
+import { useClientTranslation } from '@/i18n'
 
 export function LockDown() {
+  const { t } = useClientTranslation(['lockdown'])
   return (
     <Card className="max-w-md w-full">
       <CardHeader className="space-y-1 gap-2">
-        <CardTitle className="text-2xl font-bold">Closed Beta</CardTitle>
+        <CardTitle className="text-2xl font-bold">{t('lockdown:lockdownTitle')}</CardTitle>
         <CardDescription className="text-base">
-          {config.name} is currently in closed beta. You need an invitation code to sign up.
+          {t('lockdown:lockdownDescription', { name: config.name })}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
           <Button asChild className="w-full" size="lg">
             <Link href={{ pathname: '/auth/signup' }} className="gap-2">
-              Sign up with invitation code
+              {t('lockdown:signupWithInvitationCode')}
               <Icons.ArrowRight className="h-4 w-4" />
             </Link>
           </Button>
@@ -30,7 +32,7 @@ export function LockDown() {
         <div className="space-y-2">
           <Button variant="outline" asChild className="w-full" size="lg">
             <Link href={{ pathname: '/auth/login' }} className="gap-2">
-              Already have an account? Log in
+              {t('lockdown:haveAnAccountLogIn')}
               <Icons.LogIn className="h-4 w-4" />
             </Link>
           </Button>
@@ -39,11 +41,11 @@ export function LockDown() {
         <div className="space-y-2">
           <Button variant="secondary" asChild className="w-full" size="lg">
             <Link href={{ pathname: '/auth/waitlist' }} className="gap-2">
-              Join the waitlist
+              {t('lockdown:joinWaitlist')}
               <Icons.Mail className="h-4 w-4" />
             </Link>
           </Button>
-          <p className="text-sm text-center text-muted-foreground">No code? Get notified when we open to the public.</p>
+          <p className="text-sm text-center text-muted-foreground">{t('lockdown:getNotified')}</p>
         </div>
       </CardContent>
     </Card>

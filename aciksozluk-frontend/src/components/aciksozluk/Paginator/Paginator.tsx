@@ -3,13 +3,14 @@ import * as Icons from 'lucide-react'
 import { Button } from '@/components/shadcn/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
 
+import { useClientTranslation } from '@/i18n'
 import { cn } from '@/lib/utils'
 
 export function Paginator({
   currentPage,
   totalPages,
   onPageChange,
-  className = '',
+  className,
   force = false,
 }: {
   currentPage: number
@@ -18,6 +19,8 @@ export function Paginator({
   className?: string
   force?: boolean
 }) {
+  const { t } = useClientTranslation(['paginator'])
+
   if (!force && totalPages <= 1) {
     return null
   }
@@ -27,7 +30,7 @@ export function Paginator({
         variant="outline"
         size="sm"
         disabled={currentPage === 1}
-        aria-label="Previous page"
+        aria-label={t('paginator:previousPage')}
         onClick={() => onPageChange(currentPage - 1)}
       >
         <Icons.ChevronLeft className="h-3 w-3" />
@@ -50,7 +53,7 @@ export function Paginator({
           variant="outline"
           size="sm"
           disabled={currentPage === totalPages}
-          aria-label="Max Page"
+          aria-label={t('paginator:maxPage')}
           onClick={() => onPageChange(totalPages)}
         >
           {totalPages}
@@ -60,7 +63,7 @@ export function Paginator({
         variant="outline"
         size="sm"
         disabled={currentPage === totalPages}
-        aria-label="Next page"
+        aria-label={t('paginator:nextPage')}
         className="!ml-0"
         onClick={() => onPageChange(currentPage + 1)}
       >

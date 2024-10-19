@@ -1,0 +1,11 @@
+{
+  "signupWithInvitationCode": "Davet kodununuzla kayıt olun",
+  "enterYourEmail": "E-posta adresinizi girin",
+  "enterYourUsername": "Kullanıcı adınızı girin",
+  "password": "Şifre",
+  "enterYourPassword": "Şifrenizi girin",
+  "passwordConfirmation": "Şifre Onayı",
+  "enterYourPasswordConfirmation": "Şifrenizi onaylayın",
+  "invitationCode": "Davet Kodu",
+  "loginInstead": "Bunun yerine giriş yap?"
+}

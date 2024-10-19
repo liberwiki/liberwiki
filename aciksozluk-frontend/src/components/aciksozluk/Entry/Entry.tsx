@@ -12,9 +12,10 @@ import { Card, CardContent } from '@/components/shadcn/card'
 import { Overlay, OverlayContent, OverlayTrigger } from '@/components/shadcn/overlay'
 
 import { APIType, Includes } from '@/api/typeHelpers'
-import { useAuth } from '@/app/providers/authProvider'
+import { useClientTranslation } from '@/i18n'
 import { useAcikSozlukAPI } from '@/lib/serverHooks'
 import { cn } from '@/lib/utils'
+import { useAuth } from '@/providers/authProvider'
 
 import { format } from 'date-fns'
 import { toast } from 'sonner'
@@ -27,9 +28,11 @@ export function Entry({
   onDelete?: () => void
 }) {
   const userContext = useAuth()
-
   const aciksozluk = useAcikSozlukAPI()
   const queryClient = aciksozluk.useQueryClient()
+
+  const { t } = useClientTranslation(['common', 'entry'])
+
   const { mutateAsync: deleteEntry } = aciksozluk.deleteEntry(entry.id)
   const { mutateAsync: upvoteEntry } = aciksozluk.upvoteEntry(entry.id)
   const { mutateAsync: downvoteEntry } = aciksozluk.downvoteEntry(entry.id)
@@ -64,7 +67,7 @@ export function Entry({
     await queryClient.invalidateQueries({ queryKey: ['titles'] })
     await queryClient.invalidateQueries({ queryKey: ['entries'] })
     onDelete()
-    toast('Your entry has been deleted.', { description: format(new Date(), "EEEE, MMMM dd, yyyy 'at' hh:mm a") })
+    toast(t('entry:entryHasBenDeleted', { entryId: entry.id }))
   }
 
   return (
@@ -106,7 +109,7 @@ export function Entry({
                 <div className="space-y-2">
                   {(userContext?.user?.id === entry.author.id || userContext?.user?.is_superuser) && (
                     <Button variant="ghost" className="w-full justify-start" onClick={handleDelete}>
-                      Delete
+                      {t('entry:delete')}
                     </Button>
                   )}
                 </div>

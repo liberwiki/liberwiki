@@ -1,0 +1,13 @@
+{
+  "emailVerifiedSuccessfully": "E-posta başarıyla doğrulandı!",
+  "youWillBeRedirectedToLogin": "Giriş sayfasına yönlendirileceksiniz",
+  "verificationFailed": "Doğrulama başarısız oldu. Lütfen tekrar deneyin",
+  "verificationRejected": "Bu olay kaydedilmiştir.",
+  "emailWillBeDeleted": "Bu e-posta adresi veritabanımızdan silinecektir.",
+  "emailVerification": "E-posta Doğrulama",
+  "confirmYourIdentity": "Kayıt işlemini tamamlamak için kimliğinizi lütfen doğrulayın",
+  "areYou": "Siz {{username}} misiniz?",
+  "confirmAccount": "Lütfen bu hesabın sizin olup olmadığını onaylayın",
+  "yesItsMe": "Evet, benim",
+  "noItsNotMe": "Hayır, ben değilim."
+}

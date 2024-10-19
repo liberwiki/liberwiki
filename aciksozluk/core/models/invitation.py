@@ -6,7 +6,7 @@ from common.utils.db import track_model_history
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db import models
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 from django_lifecycle import BEFORE_CREATE, hook
 
 
@@ -50,11 +50,11 @@ class Invitation(BaseModel):
         return "".join(secrets.choice(alphabet) for i in range(self.INVITATION_TOKEN_LENGTH))
 
     def get_unique_code(self, tries=1):
-        for _ in range(tries):
+        for __ in range(tries):
             code = self.generate_code()
             if not Invitation.objects.filter(code=code).exists():
                 return code
-        raise ValidationError("Unable to generate a unique code after {} tries.".format(tries))
+        raise ValidationError(_(f"Unable to generate a unique code after {tries} tries."))
 
     class Meta:
         verbose_name = _("Invitation")

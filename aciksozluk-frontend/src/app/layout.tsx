@@ -7,9 +7,9 @@ import React from 'react'
 
 import { Toaster } from '@/components/shadcn/sonner'
 
-import { AuthProvider, QueryClientProvider } from '@/app/providers'
 import config from '@/config'
 import { cn } from '@/lib/utils'
+import { AuthProvider, QueryClientProvider } from '@/providers'
 
 const inter = Inter({ subsets: ['latin'] })
 
