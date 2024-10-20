@@ -8,6 +8,8 @@ import { Card, CardContent } from '@/components/shadcn/card'
 import { useClientTranslation } from '@/i18n'
 
 import { EditorContent, Editor as TipTapEditor } from '@tiptap/react'
+import 'highlight.js/styles/github-dark.css'
+import 'katex/dist/katex.min.css'
 
 export function Editor({
   content,
@@ -88,8 +90,8 @@ export function Editor({
           <div className="w-px h-6 bg-gray-700" aria-hidden="true" />
           <div className="flex gap-2 items-center">
             <EditorButton
-              pressed={false}
-              onPressedChange={() => {}}
+              pressed={editor.isActive('latexBlock')}
+              onPressedChange={() => editor.chain().focus().toggleLatexBlock().run()}
               ariaLabel={t('editor:toggleLatex')}
               icon={Icons.Sigma}
             />

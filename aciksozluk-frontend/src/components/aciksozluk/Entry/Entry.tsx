@@ -73,7 +73,7 @@ export function Entry({
   return (
     <Card className="w-full mx-auto border-0 my-2">
       <CardContent className="pt-6">
-        <div className="text-lg mb-4">
+        <div className="text-lg mb-4 overflow-x-auto">
           <Editor readonly={true} content={entry.content as object} />
         </div>
         <div className="flex justify-between items-center -mx-4">

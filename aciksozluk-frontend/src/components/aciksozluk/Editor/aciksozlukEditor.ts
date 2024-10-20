@@ -1,3 +1,5 @@
+import LatexBlock from '@/components/aciksozluk/Editor/TipTapLatexExtension'
+
 import CharacterCount from '@tiptap/extension-character-count'
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
 import Color from '@tiptap/extension-color'
@@ -14,7 +16,7 @@ import StarterKit from '@tiptap/starter-kit'
 import { all, createLowlight } from 'lowlight'
 import { Markdown } from 'tiptap-markdown'
 
-function useAcikSozlukEditor({ content }: { content?: object }) {
+export default function useAcikSozlukEditor({ content }: { content?: object }) {
   const lowlight = createLowlight(all)
 
   return useEditor({
@@ -42,6 +44,7 @@ function useAcikSozlukEditor({ content }: { content?: object }) {
       Typography,
       Underline,
       Markdown,
+      LatexBlock,
     ],
     editorProps: {
       attributes: {
@@ -51,5 +54,3 @@ function useAcikSozlukEditor({ content }: { content?: object }) {
     content,
   })
 }
-
-export default useAcikSozlukEditor
