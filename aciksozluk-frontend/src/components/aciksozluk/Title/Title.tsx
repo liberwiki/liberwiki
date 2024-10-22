@@ -98,7 +98,7 @@ export function Title({ title }: { title: APIType<'Title'> }) {
                 </Button>
               </OverlayTrigger>
               <OverlayContent align="start" side="bottom">
-                <div className="space-y-2">
+                <div className="flex flex-col">
                   <Button variant="ghost" className="w-full justify-start">
                     {t('advancedEntrySearch:orderByChronological')}
                   </Button>
@@ -118,17 +118,17 @@ export function Title({ title }: { title: APIType<'Title'> }) {
                 </Button>
               </OverlayTrigger>
               <OverlayContent align="start" side="bottom" className="w-full">
-                <div className="grid gap-6">
-                  <div className="space-y-2">
+                <div className="grid gap-6 md:w-96">
+                  <div className="flex flex-col gap-2">
                     <h4 className="font-semibold text-lg leading-none">
                       {t('advancedEntrySearch:advancedEntrySearch')}
                     </h4>
                     <p className="text-sm text-muted-foreground">{t('advancedEntrySearch:refineYourSearch')}</p>
                   </div>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
+                  <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-2">
                       <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
+                        <div className="flex flex-col gap-2">
                           <Label htmlFor="fromDate">{t('advancedEntrySearch:fromDate')}</Label>
                           <Popover>
                             <PopoverTrigger asChild>
@@ -153,7 +153,7 @@ export function Title({ title }: { title: APIType<'Title'> }) {
                             </PopoverContent>
                           </Popover>
                         </div>
-                        <div className="space-y-2">
+                        <div className="flex flex-col gap-2">
                           <Label htmlFor="toDate">{t('advancedEntrySearch:toDate')}</Label>
                           <Popover>
                             <PopoverTrigger asChild>
@@ -180,7 +180,7 @@ export function Title({ title }: { title: APIType<'Title'> }) {
                         </div>
                       </div>
                     </div>
-                    <div className="space-y-2 flex flex-col gap-2">
+                    <div className="flex flex-col gap-4">
                       <Label htmlFor="ketextSearch">{t('advancedEntrySearch:keywords')}</Label>
                       <Input
                         id="textSearch"
@@ -191,7 +191,7 @@ export function Title({ title }: { title: APIType<'Title'> }) {
                         onChange={handleSearchStateEvent('textSearch')}
                       />
                     </div>
-                    <div className="flex items-center space-x-2 py-2">
+                    <div className="flex items-center gap-2 py-2">
                       <Checkbox
                         id="mine"
                         name="mine"
@@ -232,7 +232,9 @@ export function Title({ title }: { title: APIType<'Title'> }) {
         ) : (
           <div className="text-center text-gray-500 p-10">{t('title:noEntryFound')}</div>
         ))}
-      <Editor readonly={false} onSubmit={handleEditorSubmit} />
+      <div className="p-2 w-full">
+        <Editor readonly={false} onSubmit={handleEditorSubmit} />
+      </div>
     </>
   )
 }

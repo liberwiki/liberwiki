@@ -46,14 +46,14 @@ export function Login() {
 
   return (
     <Card className="max-w-md w-full">
-      <CardHeader className="space-y-1">
+      <CardHeader className="flex flex-col gap-1">
         <CardTitle className="text-2xl font-bold">{t('common:login')}</CardTitle>
         <CardDescription>{t('login:loginDescription')}</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleLogin}>
-          <div className="space-y-4">
-            <div className="space-y-2">
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="email">{t('common:email')}</Label>
               <Input
                 id="email"
@@ -65,7 +65,7 @@ export function Login() {
                 autoComplete="username"
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="password">{t('login:password')}</Label>
               <Input
                 id="password"
@@ -78,7 +78,7 @@ export function Login() {
               />
             </div>
             {loginErrors?.non_field_errors && (
-              <div className="text-red-600 text-sm mt-2">{loginErrors.non_field_errors.join(' ')}</div>
+              <div className="text-destructive text-sm mt-2">{loginErrors.non_field_errors.join(' ')}</div>
             )}
             <Button type="submit" className="w-full">
               {t('common:login')}

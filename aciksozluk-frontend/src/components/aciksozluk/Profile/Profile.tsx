@@ -31,13 +31,13 @@ export function Profile() {
   return (
     isSuccess &&
     userData && (
-      <Card className="max-w-md w-full">
-        <CardHeader className="space-y-1 text-center">
+      <Card className="max-w-md w-full max-md:bg-background">
+        <CardHeader className="flex flex-col gap-1 text-center">
           <CardTitle className="text-2xl font-bold">{t('profile:userProfile')}</CardTitle>
           <CardDescription>{t('profile:userProfileDescription')}</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="space-y-4">
+        <CardContent className="flex flex-col gap-6">
+          <div className="flex flex-col gap-4">
             <InfoItem label={t('common:username')} value={userData.username} />
             <InfoItem label={t('profile:fullName')} value={`${userData.first_name} ${userData.last_name}`} />
             <InfoItem label={t('common:email')} value={userData.email} />

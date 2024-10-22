@@ -25,7 +25,7 @@ export function Paginator({
     return null
   }
   return (
-    <div className={cn('flex w-full items-center justify-end space-x-6 gap-2', className)}>
+    <div className={cn('flex w-full items-center justify-end gap-2', className)}>
       <Button
         variant="outline"
         size="sm"
@@ -35,7 +35,7 @@ export function Paginator({
       >
         <Icons.ChevronLeft className="h-3 w-3" />
       </Button>
-      <div className="flex items-center space-x-2 !ml-0">
+      <div className="flex items-center gap-2 !ml-0">
         <Select value={currentPage.toString()} onValueChange={(value) => onPageChange(parseInt(value))}>
           <SelectTrigger className="w-16 h-9">
             <SelectValue />

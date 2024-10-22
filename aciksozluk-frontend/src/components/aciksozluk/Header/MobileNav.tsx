@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import * as Icons from 'lucide-react'
 
@@ -19,18 +19,14 @@ export function MobileNav() {
 
   const { t } = useClientTranslation(['common'])
 
-  const { isSuccess, data: titles, refetch } = aciksozluk.titles({ page: currentPage, entry_count__gt: 0 })
-
-  useEffect(() => {
-    refetch()
-  }, [currentPage, refetch])
+  const { isSuccess, data: titles } = aciksozluk.titles({ page: currentPage, entry_count__gt: 0 })
 
   return (
     <Sheet>
       <SheetTrigger asChild>
         <Button
           variant="ghost"
-          className="px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 lg:hidden"
+          className="px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 xl:hidden"
         >
           <Icons.Menu />
         </Button>

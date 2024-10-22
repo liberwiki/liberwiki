@@ -6,7 +6,7 @@ import config from '@/config'
 import { removeCookie } from '@/lib/serverActions'
 import { getLazyValueAsync } from '@/lib/utils'
 
-import { UseQueryResult, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { RefetchOptions, UseQueryResult, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import createClient, { FetchResponse } from 'openapi-fetch'
 import type { MediaType } from 'openapi-typescript-helpers'
 
@@ -72,7 +72,8 @@ export class AcikSozlukApi {
     return {
       data: queryResult?.data?.data,
       response: queryResult?.data?.response,
-      ..._.omit(queryResult, 'data'),
+      refetch: async (options?: RefetchOptions) => this.processQueryResult(await queryResult.refetch(options)),
+      ..._.omit(queryResult, 'data', 'refetch'),
     }
   }
 

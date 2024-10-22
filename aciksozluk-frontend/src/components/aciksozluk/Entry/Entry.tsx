@@ -69,29 +69,31 @@ export function Entry({
     onDelete()
     toast(t('entry:entryHasBenDeleted', { entryId: entry.id }))
   }
-
+  console.log(userContext)
   return (
-    <Card className="w-full mx-auto border-0 my-2">
+    <Card className="w-full border-0">
       <CardContent className="pt-6">
         <div className="text-lg mb-4 overflow-x-auto">
           <Editor readonly={true} content={entry.content as object} />
         </div>
         <div className="flex justify-between items-center -mx-4">
-          <div className="flex space-x-2">
+          <div className="flex gap-2">
             <Button variant="ghost" size="icon" onClick={handleVote('UPVOTE')}>
               <Icons.ArrowBigUp className={cn('h-5 w-5', feedback === 'UPVOTE' && 'fill-green-500 text-green-500')} />
             </Button>
             <Button variant="ghost" size="icon" onClick={handleVote('DOWNVOTE')}>
-              <Icons.ArrowBigDown className={cn('h-5 w-5', feedback === 'DOWNVOTE' && 'fill-red-500 text-red-500')} />
+              <Icons.ArrowBigDown
+                className={cn('h-5 w-5', feedback === 'DOWNVOTE' && 'fill-destructive text-destructive')}
+              />
             </Button>
             <Button variant="ghost" size="icon" onClick={handleBookmark}>
-              <Icons.Heart className={cn('h-4 w-4', isBookmarked && 'fill-white')} />
+              <Icons.Heart className={cn('h-4 w-4', isBookmarked && 'fill-primary')} />
             </Button>
             <Button variant="ghost" size="icon">
               <Icons.Share2 className="h-4 w-4" />
             </Button>
           </div>
-          <div className="flex space-x-2 items-center">
+          <div className="flex gap-2 items-center">
             <div className="text-sm text-gray-500">
               <Link href={{ pathname: '/' }} className="font-medium text-primary hover:underline">
                 {entry.author.username}
@@ -106,7 +108,7 @@ export function Entry({
                 </Button>
               </OverlayTrigger>
               <OverlayContent side="bottom" align="end">
-                <div className="space-y-2">
+                <div className="flex flex-col gap-2">
                   {(userContext?.user?.id === entry.author.id || userContext?.user?.is_superuser) && (
                     <Button variant="ghost" className="w-full justify-start" onClick={handleDelete}>
                       {t('entry:delete')}

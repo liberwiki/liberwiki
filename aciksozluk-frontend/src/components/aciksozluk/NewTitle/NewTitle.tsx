@@ -45,7 +45,9 @@ export function NewTitle({ newTitle }: { newTitle: string }) {
         </div>
       </div>
       <div className="text-center text-gray-500 p-10">{t('title:noEntryFound')}</div>
-      <Editor readonly={false} onSubmit={handleEditorSubmit} />
+      <div className="p-2 w-full">
+        <Editor readonly={false} onSubmit={handleEditorSubmit} />
+      </div>
     </>
   )
 }

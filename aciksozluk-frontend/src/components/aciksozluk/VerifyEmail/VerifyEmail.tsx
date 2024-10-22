@@ -40,17 +40,17 @@ export function VerifyEmail({ uidb64, token }: { uidb64: string; token: string }
     isSuccess &&
     userData && (
       <Card className="max-w-md w-full">
-        <CardHeader className="space-y-1 text-center">
+        <CardHeader className="flex flex-col gap-1 text-center">
           <CardTitle className="text-2xl font-bold">{t('verifyEmail:emailVerification')}</CardTitle>
           <CardDescription>{t('verifyEmail:confirmYourIdentity')}</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="text-center">
+        <CardContent className="flex flex-col gap-4">
+          <div className="text-center flex flex-col gap-1">
             <p className="text-lg font-medium">{t('verifyEmail:areYou', { username: userData.username })}</p>
-            <p className="text-sm text-muted-foreground mt-1">{t('verifyEmail:confirmAccount')}</p>
+            <p className="text-sm text-muted-foreground ">{t('verifyEmail:confirmAccount')}</p>
           </div>
         </CardContent>
-        <CardFooter className="flex justify-between space-x-4">
+        <CardFooter className="flex justify-between gap-4">
           <Button onClick={handleVerify} className="flex-1 gap-2" variant="default">
             <Icons.CheckCircle className="h-4 w-4" />
             {t('verifyEmail:yesItsMe')}

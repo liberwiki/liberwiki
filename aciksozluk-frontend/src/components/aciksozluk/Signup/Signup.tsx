@@ -59,14 +59,14 @@ export function Signup() {
 
   return (
     <Card className="max-w-md w-full">
-      <CardHeader className="space-y-1">
+      <CardHeader className="flex flex-col gap-1">
         <CardTitle className="text-2xl font-bold">{t('common:signup')}</CardTitle>
         <CardDescription>{t('signup:signupWithInvitationCode')}</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSignup}>
-          <div className="space-y-4">
-            <div className="space-y-2">
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="email">{t('common:email')}</Label>
               <Input
                 id="email"
@@ -79,7 +79,7 @@ export function Signup() {
                 autoComplete="username"
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="username">{t('common:username')}</Label>
               <Input
                 id="username"
@@ -92,7 +92,7 @@ export function Signup() {
                 autoComplete="username"
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="password">{t('signup:password')}</Label>
               <Input
                 id="password"
@@ -105,7 +105,7 @@ export function Signup() {
                 autoComplete="new-password"
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="password_confirmation">{t('signup:passwordConfirmation')}</Label>
               <Input
                 id="password_confirmation"
@@ -118,7 +118,7 @@ export function Signup() {
                 autoComplete="new-password"
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="password">{t('signup:invitationCode')}</Label>
               <div className="flex justify-center items-center">
                 <InputOTP
@@ -147,7 +147,7 @@ export function Signup() {
               </div>
             </div>
             {signupErrors?.non_field_errors && (
-              <div className="text-red-600 text-sm mt-2">{signupErrors.non_field_errors.join(' ')}</div>
+              <div className="text-destructive text-sm mt-2">{signupErrors.non_field_errors.join(' ')}</div>
             )}
             <Button type="submit" className="w-full">
               {t('common:signup')}

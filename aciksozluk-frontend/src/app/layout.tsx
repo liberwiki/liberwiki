@@ -22,11 +22,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <QueryClientProvider>
       <AuthProvider>
-        <html lang="en" suppressHydrationWarning className="bg-black">
+        <html lang="en" suppressHydrationWarning>
           <head title="aciksozluk">
             <title>{config.name}</title>
           </head>
-          <body className={cn('min-h-screen bg-black font-sans antialiased dark', inter.className)}>
+          <body className={cn('min-h-screen font-sans antialiased dark', inter.className)}>
             {children}
             <Toaster />
           </body>

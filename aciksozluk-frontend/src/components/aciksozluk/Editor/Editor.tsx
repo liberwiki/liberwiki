@@ -1,3 +1,5 @@
+import '@/components/aciksozluk/Editor/editor.css'
+
 import * as Icons from 'lucide-react'
 
 import EditorButton from '@/components/aciksozluk/Editor/EditorButton'
@@ -8,8 +10,6 @@ import { Card, CardContent } from '@/components/shadcn/card'
 import { useClientTranslation } from '@/i18n'
 
 import { EditorContent, Editor as TipTapEditor } from '@tiptap/react'
-import 'highlight.js/styles/github-dark.css'
-import 'katex/dist/katex.min.css'
 
 export function Editor({
   content,
@@ -54,13 +54,9 @@ export function Editor({
   }
 
   return (
-    <Card className="w-full max-w-4xl mx-auto bg-black text-gray-100">
-      <CardContent>
-        <div
-          className="flex flex-wrap gap-2 mb-2 items-center mt-6"
-          role="toolbar"
-          aria-label={t('editor:formattingOptions')}
-        >
+    <Card className="w-full text-gray-100">
+      <CardContent className="p-6 pt-6">
+        <div className="flex flex-wrap gap-2 items-center" role="toolbar" aria-label={t('editor:formattingOptions')}>
           <div className="flex gap-2 items-center">
             <EditorButton
               pressed={editor.isActive('bold')}
@@ -136,9 +132,7 @@ export function Editor({
             />
           </div>
         </div>
-        <div className="border border-border rounded-md p-4 bg-background min-h-[200px]">
-          <EditorContent editor={editor} className="tiptap-editor" />
-        </div>
+        <EditorContent editor={editor} className="tiptap-editor" />
         <div className="mt-4 text-sm text-gray-400 flex items-center justify-between">
           <div className="flex gap-2">
             <span>{t('editor:characterCount', { count: editor.storage.characterCount.characters() })}</span>

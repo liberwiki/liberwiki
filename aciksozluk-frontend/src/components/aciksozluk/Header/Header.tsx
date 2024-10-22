@@ -17,21 +17,21 @@ export async function Header() {
   const { t } = await useServerTranslation(['common'])
 
   return (
-    <header className="sticky top-0 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-white">
+    <header className="sticky top-0 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-primary">
       <div className="container flex h-14 items-center max-md:px-4 gap-2">
-        <div className="lg:w-1/6">
-          <Link href={{ pathname: '/' }} className="items-center space-x-2 hidden lg:flex">
+        <div className="xl:w-1/6">
+          <Link href={{ pathname: '/' }} className="items-center gap-2 hidden xl:flex">
             <Icons.Triangle className="h-6 w-6" />
             <span className="hidden font-bold lg:inline-block">{config.name}</span>
           </Link>
           <MobileNav />
         </div>
-        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-center lg:w-4/6">
+        <div className="flex flex-1 items-center justify-between gap-2 md:justify-center lg:w-4/6">
           <div className="w-full md:flex-none">
             <AdvancedSearch />
           </div>
         </div>
-        <div className="lg:w-1/6 flex justify-end">
+        <div className="xl:w-1/6 flex justify-end">
           {(await aciksozluk.isAuthenticated()) ? (
             <Link href={{ pathname: '/account/profile' }}>
               <Button

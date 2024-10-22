@@ -1,0 +1,60 @@
+@import 'katex/dist/katex.min.css';
+@import 'highlight.js/styles/github-dark.css';
+
+.tiptap-editor .ProseMirror {
+  @apply min-h-24 h-full text-primary;
+}
+
+.ProseMirror {
+  > * {
+    @apply my-2;
+  }
+
+  pre {
+    @apply bg-secondary rounded p-4 my-4 border border-secondary;
+    code {
+      @apply text-primary;
+    }
+  }
+
+  p code {
+    @apply bg-secondary rounded py-0.5 px-1 border border-secondary;
+  }
+
+  a {
+    @apply text-primary underline;
+  }
+
+  ul,
+  ol {
+    @apply px-4;
+
+    li p {
+      @apply my-2;
+    }
+  }
+
+  ul {
+    list-style-type: disc;
+  }
+
+  ol {
+    list-style-type: decimal;
+  }
+
+  ul ul {
+    list-style-type: circle;
+  }
+
+  ol ol {
+    list-style-type: lower-alpha;
+  }
+
+  ul ul ul {
+    list-style-type: square;
+  }
+
+  ol ol ol {
+    list-style-type: lower-roman;
+  }
+}

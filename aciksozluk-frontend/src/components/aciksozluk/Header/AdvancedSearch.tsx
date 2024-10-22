@@ -60,11 +60,11 @@ export function AdvancedSearch() {
     fav: false,
   })
 
-  const { data: titles, refetch } = aciksozluk.titles({ page_size: 1, page: 1, name__iexact: searchState.search })
+  const { refetch } = aciksozluk.titles({ page_size: 1, name__iexact: searchState.search }, { enabled: false })
 
   async function handleSearch(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    await refetch()
+    const { data: titles } = await refetch()
     if (titles && titles.results.length !== 0) {
       router.push(`/titles/${_.first(titles?.results)?.slug}`)
     } else {
@@ -77,7 +77,7 @@ export function AdvancedSearch() {
 
   return (
     <>
-      <form onSubmit={handleSearch} className="w-full max-w-3xl mx-auto">
+      <form onSubmit={handleSearch} className="w-full">
         <div className="relative" ref={searchBoxRef}>
           <Input
             type="text"
@@ -106,14 +106,14 @@ export function AdvancedSearch() {
                   side="bottom"
                 >
                   <div className="grid gap-6">
-                    <div className="space-y-2">
+                    <div className="flex flex-col gap-2">
                       <h4 className="font-semibold text-lg leading-none">
                         {t('advancedTitleSearch:advancedTitleSearch')}
                       </h4>
                       <p className="text-sm text-muted-foreground">{t('advancedTitleSearch:refineYourSearch')}</p>
                     </div>
-                    <div className="space-y-4">
-                      <div className="space-y-2">
+                    <div className="flex flex-col gap-4">
+                      <div className="flex flex-col gap-2">
                         <Label htmlFor="freeText">{t('advancedTitleSearch:freeTextSearch')}</Label>
                         <Input
                           id="freeText"
@@ -124,7 +124,7 @@ export function AdvancedSearch() {
                           onChange={handleSearchStateEvent('textSearch')}
                         />
                       </div>
-                      <div className="space-y-2">
+                      <div className="flex flex-col gap-2">
                         <Label htmlFor="fromAuthor">{t('advancedTitleSearch:author')}</Label>
                         <Select value={searchState.fromAuthor} onValueChange={handleSearchStateValue('fromAuthor')}>
                           <SelectTrigger id="fromAuthor">
@@ -139,9 +139,9 @@ export function AdvancedSearch() {
                           </SelectContent>
                         </Select>
                       </div>
-                      <div className="space-y-2">
+                      <div className="flex flex-col gap-2">
                         <div className="grid grid-cols-2 gap-4">
-                          <div className="space-y-2">
+                          <div className="flex flex-col gap-2">
                             <Label htmlFor="fromDate">{t('advancedTitleSearch:fromDate')}</Label>
                             <Popover>
                               <PopoverTrigger asChild>
@@ -166,7 +166,7 @@ export function AdvancedSearch() {
                               </PopoverContent>
                             </Popover>
                           </div>
-                          <div className="space-y-2">
+                          <div className="flex flex-col gap-2">
                             <Label htmlFor="toDate">{t('advancedTitleSearch:toDate')}</Label>
                             <Popover>
                               <PopoverTrigger asChild>
@@ -196,9 +196,9 @@ export function AdvancedSearch() {
                           </div>
                         </div>
                       </div>
-                      <div className="space-y-2">
+                      <div className="flex flex-col gap-2">
                         <div className="flex flex-col justify-center gap-4">
-                          <div className="flex items-center space-x-2">
+                          <div className="flex items-center gap-2">
                             <Checkbox
                               id="mine"
                               name="mine"
@@ -207,7 +207,7 @@ export function AdvancedSearch() {
                             />
                             <Label htmlFor="mine">{t('advancedTitleSearch:mine')}</Label>
                           </div>
-                          <div className="flex items-center space-x-2">
+                          <div className="flex items-center gap-2">
                             <Checkbox
                               id="fav"
                               name="fav"
