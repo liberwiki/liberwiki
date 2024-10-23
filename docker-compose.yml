@@ -23,8 +23,6 @@ services:
       - DJANGO_SETTINGS_MODULE=aciksozluk.settings
     ports:
       - "8000:8000"
-    volumes:
-      - ./aciksozluk:/aciksozluk
 
   frontend:
     build:
@@ -36,13 +34,9 @@ services:
       - NEXT_PUBLIC__ACIKSOZLUK__LANGUAGE
     ports:
       - "3000:3000"
-    volumes:
-      - ./aciksozluk-frontend:/aciksozluk-frontend
 
   nginx:
     image: nginx:1.27.2-alpine
-    volumes:
-      - ./server:/server
     environment:
       - ACIKSOZLUK__HOSTS__DOMAIN
       - ACIKSOZLUK__HOSTS__API_SUBDOMAIN
