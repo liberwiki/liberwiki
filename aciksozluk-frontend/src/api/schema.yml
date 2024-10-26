@@ -136,7 +136,32 @@ paths:
           format: uuid
         description: Unique identifier for this object
       - in: query
+        name: bookmark_count
+        schema:
+          type: number
+      - in: query
+        name: bookmark_count__gt
+        schema:
+          type: number
+      - in: query
+        name: bookmark_count__gte
+        schema:
+          type: number
+      - in: query
+        name: bookmark_count__lt
+        schema:
+          type: number
+      - in: query
+        name: bookmark_count__lte
+        schema:
+          type: number
+      - in: query
         name: created_at
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: created_at__gt
         schema:
           type: string
           format: date-time
@@ -146,10 +171,35 @@ paths:
           type: string
           format: date-time
       - in: query
+        name: created_at__lt
+        schema:
+          type: string
+          format: date-time
+      - in: query
         name: created_at__lte
         schema:
           type: string
           format: date-time
+      - in: query
+        name: dislike_count
+        schema:
+          type: number
+      - in: query
+        name: dislike_count__gt
+        schema:
+          type: number
+      - in: query
+        name: dislike_count__gte
+        schema:
+          type: number
+      - in: query
+        name: dislike_count__lt
+        schema:
+          type: number
+      - in: query
+        name: dislike_count__lte
+        schema:
+          type: number
       - in: query
         name: include
         schema:
@@ -164,12 +214,43 @@ paths:
         name: is_bookmarked
         schema:
           type: boolean
-      - name: ordering
-        required: false
-        in: query
-        description: Which field to use when ordering the results.
+      - in: query
+        name: like_count
+        schema:
+          type: number
+      - in: query
+        name: like_count__gt
+        schema:
+          type: number
+      - in: query
+        name: like_count__gte
+        schema:
+          type: number
+      - in: query
+        name: like_count__lt
+        schema:
+          type: number
+      - in: query
+        name: like_count__lte
+        schema:
+          type: number
+      - in: query
+        name: ordering
         schema:
           type: string
+          enum:
+          - -bookmark_count
+          - -created_at
+          - -dislike_count
+          - -like_count
+          - -updated_at
+          - bookmark_count
+          - created_at
+          - dislike_count
+          - like_count
+          - updated_at
+        explode: false
+        style: form
       - name: page
         required: false
         in: query
@@ -204,7 +285,17 @@ paths:
           type: string
           format: date-time
       - in: query
+        name: updated_at__gt
+        schema:
+          type: string
+          format: date-time
+      - in: query
         name: updated_at__gte
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: updated_at__lt
         schema:
           type: string
           format: date-time
@@ -545,7 +636,17 @@ paths:
           type: string
           format: date-time
       - in: query
+        name: created_at__gt
+        schema:
+          type: string
+          format: date-time
+      - in: query
         name: created_at__gte
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: created_at__lt
         schema:
           type: string
           format: date-time
@@ -598,12 +699,12 @@ paths:
         name: name__iexact
         schema:
           type: string
-      - name: ordering
-        required: false
-        in: query
-        description: Which field to use when ordering the results.
+      - in: query
+        name: ordering
         schema:
           type: string
+        explode: false
+        style: form
       - name: page
         required: false
         in: query
@@ -632,7 +733,17 @@ paths:
           type: string
           format: date-time
       - in: query
+        name: updated_at__gt
+        schema:
+          type: string
+          format: date-time
+      - in: query
         name: updated_at__gte
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: updated_at__lt
         schema:
           type: string
           format: date-time
@@ -750,6 +861,46 @@ paths:
               schema:
                 $ref: '#/components/schemas/TitleDestroyError'
           description: ''
+  /v0/titles/{id}/bookmark/:
+    post:
+      operationId: titles_bookmark_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          description: Unique identifier for this object
+        required: true
+      tags:
+      - titles
+      security:
+      - tokenAuth: []
+      - basicAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /v0/titles/{id}/unbookmark/:
+    post:
+      operationId: titles_unbookmark_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+          description: Unique identifier for this object
+        required: true
+      tags:
+      - titles
+      security:
+      - tokenAuth: []
+      - basicAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
   /v0/users/:
     get:
       operationId: users_list
@@ -762,7 +913,17 @@ paths:
           type: string
           format: date-time
       - in: query
+        name: created_at__gt
+        schema:
+          type: string
+          format: date-time
+      - in: query
         name: created_at__gte
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: created_at__lt
         schema:
           type: string
           format: date-time
@@ -776,7 +937,15 @@ paths:
         schema:
           type: number
       - in: query
+        name: entry_count__gt
+        schema:
+          type: number
+      - in: query
         name: entry_count__gte
+        schema:
+          type: number
+      - in: query
+        name: entry_count__lt
         schema:
           type: number
       - in: query
@@ -801,12 +970,12 @@ paths:
         name: is_superuser
         schema:
           type: boolean
-      - name: ordering
-        required: false
-        in: query
-        description: Which field to use when ordering the results.
+      - in: query
+        name: ordering
         schema:
           type: string
+        explode: false
+        style: form
       - name: page
         required: false
         in: query
@@ -830,7 +999,15 @@ paths:
         schema:
           type: number
       - in: query
+        name: title_count__gt
+        schema:
+          type: number
+      - in: query
         name: title_count__gte
+        schema:
+          type: number
+      - in: query
+        name: title_count__lt
         schema:
           type: number
       - in: query
@@ -843,7 +1020,17 @@ paths:
           type: string
           format: date-time
       - in: query
+        name: updated_at__gt
+        schema:
+          type: string
+          format: date-time
+      - in: query
         name: updated_at__gte
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: updated_at__lt
         schema:
           type: string
           format: date-time
@@ -1099,12 +1286,24 @@ components:
         is_bookmarked:
           type: boolean
           readOnly: true
+        like_count:
+          type: integer
+          readOnly: true
+        dislike_count:
+          type: integer
+          readOnly: true
+        bookmark_count:
+          type: integer
+          readOnly: true
       required:
       - author
+      - bookmark_count
       - content
       - created_at
+      - dislike_count
       - id
       - is_bookmarked
+      - like_count
       - title
       - updated_at
       - vote
@@ -1196,12 +1395,30 @@ components:
           items:
             type: string
           readOnly: true
+        like_count:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        dislike_count:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        bookmark_count:
+          type: array
+          items:
+            type: string
+          readOnly: true
       required:
       - author
+      - bookmark_count
       - content
       - created_at
+      - dislike_count
       - id
       - is_bookmarked
+      - like_count
       - title
       - updated_at
       - vote
@@ -1602,10 +1819,14 @@ components:
           format: uuid
           description: Creator of the title.
           readOnly: true
+        is_bookmarked:
+          type: boolean
+          readOnly: true
       required:
       - created_by
       - entry_count
       - id
+      - is_bookmarked
       - name
       - slug
     TitleDestroyError:
@@ -1680,10 +1901,16 @@ components:
           items:
             type: string
           readOnly: true
+        is_bookmarked:
+          type: array
+          items:
+            type: string
+          readOnly: true
       required:
       - created_by
       - entry_count
       - id
+      - is_bookmarked
       - name
       - slug
     User:

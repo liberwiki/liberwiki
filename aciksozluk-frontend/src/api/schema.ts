@@ -272,6 +272,38 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/v0/titles/{id}/bookmark/': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post: operations['titles_bookmark_create']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v0/titles/{id}/unbookmark/': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post: operations['titles_unbookmark_create']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/v0/users/': {
     parameters: {
       query?: never
@@ -409,6 +441,9 @@ export interface components {
       readonly updated_at: string
       readonly vote: (components['schemas']['VoteEnum'] | components['schemas']['NullEnum']) | null
       readonly is_bookmarked: boolean
+      readonly like_count: number
+      readonly dislike_count: number
+      readonly bookmark_count: number
     }
     EntryDestroyError: {
       protected_elements: components['schemas']['ProtectedElement'][]
@@ -454,6 +489,9 @@ export interface components {
       readonly updated_at: string[]
       readonly vote: string[]
       readonly is_bookmarked: string[]
+      readonly like_count: string[]
+      readonly dislike_count: string[]
+      readonly bookmark_count: string[]
     }
     /** @description Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
      *     read only.
@@ -721,6 +759,7 @@ export interface components {
        * @description Creator of the title.
        */
       readonly created_by: string
+      readonly is_bookmarked: boolean
     }
     TitleDestroyError: {
       protected_elements: components['schemas']['ProtectedElement'][]
@@ -761,6 +800,7 @@ export interface components {
       readonly slug: string[]
       readonly entry_count: string[]
       readonly created_by: string[]
+      readonly is_bookmarked: string[]
     }
     /** @description Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
      *     read only.
@@ -1020,13 +1060,39 @@ export interface operations {
       query?: {
         /** @description Unique identifier for this object */
         author?: string
+        bookmark_count?: number
+        bookmark_count__gt?: number
+        bookmark_count__gte?: number
+        bookmark_count__lt?: number
+        bookmark_count__lte?: number
         created_at?: string
+        created_at__gt?: string
         created_at__gte?: string
+        created_at__lt?: string
         created_at__lte?: string
+        dislike_count?: number
+        dislike_count__gt?: number
+        dislike_count__gte?: number
+        dislike_count__lt?: number
+        dislike_count__lte?: number
         include?: 'author' | 'author,title' | 'title'
         is_bookmarked?: boolean
-        /** @description Which field to use when ordering the results. */
-        ordering?: string
+        like_count?: number
+        like_count__gt?: number
+        like_count__gte?: number
+        like_count__lt?: number
+        like_count__lte?: number
+        ordering?:
+          | '-bookmark_count'
+          | '-created_at'
+          | '-dislike_count'
+          | '-like_count'
+          | '-updated_at'
+          | 'bookmark_count'
+          | 'created_at'
+          | 'dislike_count'
+          | 'like_count'
+          | 'updated_at'
         /** @description A page number within the paginated result set. */
         page?: number
         /** @description Number of results to return per page. */
@@ -1037,7 +1103,9 @@ export interface operations {
         title?: string
         title__slug?: string
         updated_at?: string
+        updated_at__gt?: string
         updated_at__gte?: string
+        updated_at__lt?: string
         updated_at__lte?: string
         /** @description * `UPVOTE` - Upvote
          *     * `DOWNVOTE` - Downvote */
@@ -1318,7 +1386,9 @@ export interface operations {
     parameters: {
       query?: {
         created_at?: string
+        created_at__gt?: string
         created_at__gte?: string
+        created_at__lt?: string
         created_at__lte?: string
         entry_count?: number
         entry_count__gt?: number
@@ -1330,7 +1400,6 @@ export interface operations {
         name__contains?: string
         name__icontains?: string
         name__iexact?: string
-        /** @description Which field to use when ordering the results. */
         ordering?: string
         /** @description A page number within the paginated result set. */
         page?: number
@@ -1340,7 +1409,9 @@ export interface operations {
         search?: string
         slug?: string
         updated_at?: string
+        updated_at__gt?: string
         updated_at__gte?: string
+        updated_at__lt?: string
         updated_at__lte?: string
       }
       header?: never
@@ -1443,20 +1514,63 @@ export interface operations {
       }
     }
   }
+  titles_bookmark_create: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description No response body */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  titles_unbookmark_create: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description No response body */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
   users_list: {
     parameters: {
       query?: {
         created_at?: string
+        created_at__gt?: string
         created_at__gte?: string
+        created_at__lt?: string
         created_at__lte?: string
         entry_count?: number
+        entry_count__gt?: number
         entry_count__gte?: number
+        entry_count__lt?: number
         entry_count__lte?: number
         include?: string
         is_active?: boolean
         is_staff?: boolean
         is_superuser?: boolean
-        /** @description Which field to use when ordering the results. */
         ordering?: string
         /** @description A page number within the paginated result set. */
         page?: number
@@ -1465,10 +1579,14 @@ export interface operations {
         /** @description A search term. */
         search?: string
         title_count?: number
+        title_count__gt?: number
         title_count__gte?: number
+        title_count__lt?: number
         title_count__lte?: number
         updated_at?: string
+        updated_at__gt?: string
         updated_at__gte?: string
+        updated_at__lt?: string
         updated_at__lte?: string
         username__icontains?: string
         username__iexact?: string

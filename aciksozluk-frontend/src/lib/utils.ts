@@ -149,3 +149,10 @@ export function longFormattedDate(date?: Date) {
 export function shortFormattedDate(date?: Date) {
   return formattedDate(SHORT_DATE_FORMAT, date || new Date())
 }
+
+export function preventDefault<T extends (event: Event) => unknown>(callable: T): T {
+  return async function (event: Event) {
+    event.preventDefault()
+    return await callable(event)
+  } as T
+}

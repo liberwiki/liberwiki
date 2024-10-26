@@ -27,7 +27,7 @@ export function Entry({
   entry: Includes<APIType<'Entry'>, 'author', APIType<'User'>>
   onDelete?: () => void
 }) {
-  const userContext = useAuth()
+  const { user } = useAuth()
   const aciksozluk = useAcikSozlukAPI()
   const queryClient = aciksozluk.useQueryClient()
 
@@ -37,15 +37,15 @@ export function Entry({
   const { mutateAsync: upvoteEntry } = aciksozluk.upvoteEntry(entry.id)
   const { mutateAsync: downvoteEntry } = aciksozluk.downvoteEntry(entry.id)
   const { mutateAsync: unvoteEntry } = aciksozluk.unvoteEntry(entry.id)
-  const { mutateAsync: bookmarkEntry } = aciksozluk.bookmark(entry.id)
-  const { mutateAsync: unBookmarkEntry } = aciksozluk.unBookmark(entry.id)
+  const { mutateAsync: bookmarkEntry } = aciksozluk.bookmarkEntry(entry.id)
+  const { mutateAsync: unbookmarkEntry } = aciksozluk.unbookmarkEntry(entry.id)
 
   const [feedback, setFeedback] = useState<APIType<'VoteEnum'> | null>(entry.vote)
   const [isBookmarked, setIsBookmarked] = useState<boolean>(entry.is_bookmarked)
 
   async function handleBookmark() {
     setIsBookmarked(!isBookmarked)
-    await (isBookmarked ? unBookmarkEntry() : bookmarkEntry())
+    await (isBookmarked ? unbookmarkEntry() : bookmarkEntry())
     await queryClient.invalidateQueries({ queryKey: ['entries'] })
   }
 
@@ -69,7 +69,6 @@ export function Entry({
     onDelete()
     toast(t('entry:entryHasBenDeleted', { entryId: entry.id }))
   }
-  console.log(userContext)
   return (
     <Card className="w-full border-0">
       <CardContent className="pt-6">
@@ -77,10 +76,12 @@ export function Entry({
           <Editor readonly={true} content={entry.content as object} />
         </div>
         <div className="flex justify-between items-center -mx-4">
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-center">
             <Button variant="ghost" size="icon" onClick={handleVote('UPVOTE')}>
               <Icons.ArrowBigUp className={cn('h-5 w-5', feedback === 'UPVOTE' && 'fill-green-500 text-green-500')} />
             </Button>
+            <small>{entry.like_count}</small>
+            <small>{entry.dislike_count}</small>
             <Button variant="ghost" size="icon" onClick={handleVote('DOWNVOTE')}>
               <Icons.ArrowBigDown
                 className={cn('h-5 w-5', feedback === 'DOWNVOTE' && 'fill-destructive text-destructive')}
@@ -109,7 +110,7 @@ export function Entry({
               </OverlayTrigger>
               <OverlayContent side="bottom" align="end">
                 <div className="flex flex-col gap-2">
-                  {(userContext?.user?.id === entry.author.id || userContext?.user?.is_superuser) && (
+                  {(user?.id === entry.author.id || user?.is_superuser) && (
                     <Button variant="ghost" className="w-full justify-start" onClick={handleDelete}>
                       {t('entry:delete')}
                     </Button>

@@ -2,6 +2,7 @@
   "currentOrdering": "Ordering",
   "orderByChronological": "Chronological",
   "orderByLikes": "Likes",
+  "orderByDislikes": "Dislikes",
   "orderByBookmarks": "Bookmarks",
   "advancedEntrySearch": "Advanced Entry Search",
   "refineYourSearch": "Refine your search with additional filters.",

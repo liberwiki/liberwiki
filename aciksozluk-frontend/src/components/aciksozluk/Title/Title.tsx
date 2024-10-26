@@ -12,7 +12,6 @@ import Paginator from '@/components/aciksozluk/Paginator'
 import { Button } from '@/components/shadcn/button'
 import { Calendar } from '@/components/shadcn/calendar'
 import { Checkbox } from '@/components/shadcn/checkbox'
-import { Input } from '@/components/shadcn/input'
 import { Label } from '@/components/shadcn/label'
 import { Overlay, OverlayContent, OverlayTrigger } from '@/components/shadcn/overlay'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover'
@@ -23,6 +22,8 @@ import config from '@/config'
 import { useClientTranslation } from '@/i18n'
 import { useFormState } from '@/lib/hooks'
 import { useAcikSozlukAPI } from '@/lib/serverHooks'
+import { preventDefault } from '@/lib/utils'
+import { useAuth } from '@/providers/authProvider'
 
 import { format } from 'date-fns'
 import { toast } from 'sonner'
@@ -30,27 +31,32 @@ import { toast } from 'sonner'
 export function Title({ title }: { title: APIType<'Title'> }) {
   const entryPerPage = config.ux.defaultEntryPageSize
   const aciksozluk = useAcikSozlukAPI()
+  const { user } = useAuth()
   const [currentPage, setCurrentPage] = useState<number>(1)
 
   const { t } = useClientTranslation(['common', 'title', 'entry', 'advancedEntrySearch'])
 
   const queryClient = aciksozluk.useQueryClient()
   const { mutateAsync: createEntry } = aciksozluk.createEntry()
+  const { mutateAsync: bookmarkTitle } = aciksozluk.bookmarkTitle(title.id)
+  const { mutateAsync: unbookmarkTitle } = aciksozluk.unbookmarkTitle(title.id)
+
+  const [isBookmarked, setIsBookmarked] = useState<boolean>(title.is_bookmarked)
 
   const {
     formState: searchState,
     handleFormStateValue: handleSearchStateValue,
-    handleFormStateEvent: handleSearchStateEvent,
+    handleFormStateOnClick: handleSearchStateOnClick,
   } = useFormState<{
-    textSearch: string
     mine: boolean
     fromDate: Date | undefined
     toDate: Date | undefined
+    orderBy: 'chronological' | 'likes' | 'dislikes' | 'bookmarks'
   }>({
-    textSearch: '',
     mine: false,
     fromDate: undefined,
     toDate: undefined,
+    orderBy: 'chronological',
   })
 
   const { isSuccess, data: entries } = aciksozluk.entries({
@@ -58,6 +64,16 @@ export function Title({ title }: { title: APIType<'Title'> }) {
     title__slug: title.slug,
     page_size: entryPerPage,
     include: 'author',
+    author: searchState.mine ? user?.id : undefined,
+    created_at__gte: searchState.fromDate ? format(searchState.fromDate, 'yyyy-MM-dd') : undefined,
+    created_at__lte: searchState.toDate ? format(searchState.toDate, 'yyyy-MM-dd') : undefined,
+    ordering: {
+      chronological: 'created_at',
+      likes: '-like_count',
+      dislikes: '-dislike_count',
+      bookmarks: '-bookmark_count',
+    }[searchState.orderBy] as 'created_at' | '-like_count' | '-dislike_count' | '-bookmark_count',
+    // TODO: figure out why we need this ^ as here as it seems like TS should be able to figure it out
   })
 
   async function handleEditorSubmit(content: object) {
@@ -83,29 +99,63 @@ export function Title({ title }: { title: APIType<'Title'> }) {
     }
   }
 
+  async function handleBookmark() {
+    setIsBookmarked(!isBookmarked)
+    await (isBookmarked ? unbookmarkTitle() : bookmarkTitle())
+    await queryClient.invalidateQueries({ queryKey: ['titles', { slug: title.slug, page_size: 1, page: 1 }] })
+  }
+
+  const orderingLabels = {
+    chronological: t('advancedEntrySearch:orderByChronological'),
+    likes: t('advancedEntrySearch:orderByLikes'),
+    dislikes: t('advancedEntrySearch:orderByDislikes'),
+    bookmarks: t('advancedEntrySearch:orderByBookmarks'),
+  }
+
   return (
     <>
       <div className="w-full">
-        <Link className="h-1 p-6 text-xl font-bold" href={{ pathname: `/titles/${title.name}` }}>
-          {title?.name}
+        <Link className="h-1 p-6 text-xl font-bold" href={{ pathname: `/titles/${title.slug}` }}>
+          {title.name}
         </Link>
         <div className="text-sm px-6 py-2 text-gray-500 flex justify-between items-center max-lg:flex-wrap">
           <div className="gap-6 flex w-full items-center">
             <Overlay breakpoint="md">
               <OverlayTrigger>
                 <Button variant="ghost" className="px-0 hover:bg-transparent">
-                  <p className="font-medium text-primary hover:underline">{t('advancedEntrySearch:currentOrdering')}</p>
+                  <p className="font-medium text-primary hover:underline">
+                    {`${t('advancedEntrySearch:currentOrdering')}: ${orderingLabels[searchState.orderBy]}`}
+                  </p>
                 </Button>
               </OverlayTrigger>
               <OverlayContent align="start" side="bottom">
                 <div className="flex flex-col">
-                  <Button variant="ghost" className="w-full justify-start">
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start"
+                    onClick={handleSearchStateOnClick('orderBy', 'chronological')}
+                  >
                     {t('advancedEntrySearch:orderByChronological')}
                   </Button>
-                  <Button variant="ghost" className="w-full justify-start">
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start"
+                    onClick={handleSearchStateOnClick('orderBy', 'likes')}
+                  >
                     {t('advancedEntrySearch:orderByLikes')}
                   </Button>
-                  <Button variant="ghost" className="w-full justify-start">
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start"
+                    onClick={handleSearchStateOnClick('orderBy', 'dislikes')}
+                  >
+                    {t('advancedEntrySearch:orderByDislikes')}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start"
+                    onClick={handleSearchStateOnClick('orderBy', 'bookmarks')}
+                  >
                     {t('advancedEntrySearch:orderByBookmarks')}
                   </Button>
                 </div>
@@ -134,12 +184,18 @@ export function Title({ title }: { title: APIType<'Title'> }) {
                             <PopoverTrigger asChild>
                               <Button
                                 variant={'outline'}
-                                className={`w-full justify-start text-left font-normal ${!searchState.fromDate && 'text-muted-foreground'}`}
+                                className={`w-full text-left font-normal justify-between ${!searchState.fromDate && 'text-muted-foreground'}`}
                               >
                                 {searchState.fromDate ? (
                                   format(searchState.fromDate, 'PPP')
                                 ) : (
                                   <span>{t('advancedEntrySearch:pickADate')}</span>
+                                )}
+                                {searchState.fromDate && (
+                                  <Icons.X
+                                    className="h-4 w-4"
+                                    onClick={preventDefault(handleSearchStateOnClick('fromDate', undefined))}
+                                  />
                                 )}
                               </Button>
                             </PopoverTrigger>
@@ -159,12 +215,18 @@ export function Title({ title }: { title: APIType<'Title'> }) {
                             <PopoverTrigger asChild>
                               <Button
                                 variant={'outline'}
-                                className={`w-full justify-start text-left font-normal ${!searchState.toDate && 'text-muted-foreground'}`}
+                                className={`w-full text-left font-normal justify-between ${!searchState.toDate && 'text-muted-foreground'}`}
                               >
                                 {searchState.toDate ? (
                                   format(searchState.toDate, 'PPP')
                                 ) : (
                                   <span>{t('advancedEntrySearch:pickADate')}</span>
+                                )}
+                                {searchState.toDate && (
+                                  <Icons.X
+                                    className="h-4 w-4"
+                                    onClick={preventDefault(handleSearchStateOnClick('toDate', undefined))}
+                                  />
                                 )}
                               </Button>
                             </PopoverTrigger>
@@ -180,36 +242,23 @@ export function Title({ title }: { title: APIType<'Title'> }) {
                         </div>
                       </div>
                     </div>
-                    <div className="flex flex-col gap-4">
-                      <Label htmlFor="ketextSearch">{t('advancedEntrySearch:keywords')}</Label>
-                      <Input
-                        id="textSearch"
-                        type="text"
-                        name="textSearch"
-                        placeholder={t('advancedEntrySearch:enterKeywords')}
-                        value={searchState.textSearch}
-                        onChange={handleSearchStateEvent('textSearch')}
-                      />
-                    </div>
                     <div className="flex items-center gap-2 py-2">
                       <Checkbox
                         id="mine"
                         name="mine"
                         checked={searchState.mine}
-                        onCheckedChange={handleSearchStateValue('mine')}
+                        onCheckedChange={(checked) => handleSearchStateValue('mine')(checked as boolean)}
                       />
                       <Label htmlFor="mine">{t('advancedEntrySearch:mine')}</Label>
                     </div>
-                    <Button type="submit" className="w-full">
-                      <Icons.Search className="mr-2 h-4 w-4" />
-                      {t('common:search')}
-                    </Button>
                   </div>
                 </div>
               </OverlayContent>
             </Overlay>
-            <Button variant="ghost" className="px-0 hover:bg-transparent">
-              <p className="font-medium text-primary hover:underline">{t('title:follow')}</p>
+            <Button variant="ghost" className="px-0 hover:bg-transparent" onClick={handleBookmark}>
+              <p className="font-medium text-primary hover:underline">
+                {title.is_bookmarked ? t('title:follow') : t('title:unfollow')}
+              </p>
             </Button>
           </div>
           <Paginator

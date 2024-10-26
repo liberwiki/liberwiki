@@ -6,10 +6,10 @@ import { APIType } from '@/api/typeHelpers'
 import { useAcikSozlukAPI } from '@/lib/serverHooks'
 
 interface AuthContextType {
-  user: APIType<'User'> | null
+  user?: APIType<'User'> | undefined
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
+const AuthContext = createContext<AuthContextType>({})
 
 export function useAuth() {
   return useContext(AuthContext)
@@ -19,5 +19,5 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const aciksozluk = useAcikSozlukAPI()
   const { data: me } = aciksozluk.me()
 
-  return <AuthContext.Provider value={{ user: me || null }}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={{ user: me || undefined }}>{children}</AuthContext.Provider>
 }

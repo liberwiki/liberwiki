@@ -1,8 +1,9 @@
-from core.models import Entry, EntryBookmark, Vote
-from django.db.models import BooleanField, CharField, Exists, OuterRef, Subquery, Value
-from django_filters import BooleanFilter, ChoiceFilter
+from core.models import Entry, EntryBookmark, EntryVote
+from django.db.models import BooleanField, CharField, Count, Exists, OuterRef, Q, Subquery, Value
+from django_filters import BooleanFilter, ChoiceFilter, NumberFilter
 from drf_spectacular.utils import extend_schema
 from rest.serializers import EntrySerializer
+from rest.utils.filters import make_filters
 from rest.utils.permissions import ReadOnly, is_owner, prevent_actions
 from rest.utils.schema_helpers import fake_serializer
 from rest_framework.decorators import action
@@ -24,18 +25,29 @@ class EntryViewSet(BaseModelViewSet):
     ]
 
     declared_filters = {
-        "vote": ChoiceFilter(choices=Vote.VoteType.choices),
+        "vote": ChoiceFilter(choices=EntryVote.VoteType.choices),
         "vote__isnull": BooleanFilter(field_name="vote", lookup_expr="isnull"),
         "is_bookmarked": BooleanFilter(field_name="is_bookmarked", lookup_expr="exact"),
+        **make_filters("like_count", NumberFilter, ["exact", "gt", "gte", "lt", "lte"]),
+        **make_filters("dislike_count", NumberFilter, ["exact", "gt", "gte", "lt", "lte"]),
+        **make_filters("bookmark_count", NumberFilter, ["exact", "gt", "gte", "lt", "lte"]),
     }
 
     filterset_fields = {
         "author": ["exact"],
         "title": ["exact"],
         "title__slug": ["exact"],
-        "created_at": ["exact", "gte", "lte"],
-        "updated_at": ["exact", "gte", "lte"],
+        "created_at": ["exact", "gt", "gte", "lt", "lte"],
+        "updated_at": ["exact", "gt", "gte", "lt", "lte"],
     }
+
+    ordering_fields = [
+        "created_at",
+        "updated_at",
+        "like_count",
+        "dislike_count",
+        "bookmark_count",
+    ]
 
     update_schema = fake_serializer(name="EntryUpdateSerializer", base=EntrySerializer, remove_fields=["title"])
     crud_extend_default_schema = dict(
@@ -47,17 +59,22 @@ class EntryViewSet(BaseModelViewSet):
         queryset = super().get_queryset()
         queryset = self.annotate_votes(queryset, self.request)
         queryset = self.annotate_bookmarks(queryset, self.request)
+        queryset = self.annotate_likes_dislikes_bookmarks(queryset)
         return queryset.select_related("title", "author")
 
-    @django_to_drf_validation_error
-    def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+    @staticmethod
+    def annotate_likes_dislikes_bookmarks(queryset):
+        dislike, like = EntryVote.VoteType.DOWNVOTE, EntryVote.VoteType.UPVOTE
+        queryset = queryset.annotate(like_count=Count("entry_votes", filter=Q(entry_votes__vote=like)))
+        queryset = queryset.annotate(dislike_count=Count("entry_votes", filter=Q(entry_votes__vote=dislike)))
+        queryset = queryset.annotate(bookmark_count=Count("entry_bookmarks"))
+        return queryset
 
     @staticmethod
     def annotate_votes(queryset, request):
         queryset = queryset.annotate(vote=Value(None, output_field=CharField(null=True)))
         if request and request.user and request.user.is_authenticated:
-            user_vote = Vote.objects.filter(entry=OuterRef("pk"), user=request.user).values("vote")[:1]
+            user_vote = EntryVote.objects.filter(entry=OuterRef("pk"), user=request.user).values("vote")[:1]
             queryset = queryset.annotate(vote=Subquery(user_vote, output_field=CharField(null=True)))
         return queryset
 
@@ -69,6 +86,10 @@ class EntryViewSet(BaseModelViewSet):
             queryset = queryset.annotate(is_bookmarked=Exists(user_bookmark))
         return queryset
 
+    @django_to_drf_validation_error
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
     @extend_schema(
         summary=f"Upvote Entry",
         description=f"Cast an down vote to an entry by id",
@@ -77,7 +98,7 @@ class EntryViewSet(BaseModelViewSet):
     @action(detail=True, methods=["POST"], url_path="upvote", serializer_class=None)
     @django_to_drf_validation_error
     def upvote(self, *args, **kwargs):
-        Vote.cast(self.request.user, self.get_object(), Vote.VoteType.UPVOTE)
+        EntryVote.cast(self.request.user, self.get_object(), EntryVote.VoteType.UPVOTE)
         return Response(status=204)
 
     @extend_schema(
@@ -88,7 +109,7 @@ class EntryViewSet(BaseModelViewSet):
     @action(detail=True, methods=["POST"], url_path="downvote", serializer_class=None)
     @django_to_drf_validation_error
     def downvote(self, *args, **kwargs):
-        Vote.cast(self.request.user, self.get_object(), Vote.VoteType.DOWNVOTE)
+        EntryVote.cast(self.request.user, self.get_object(), EntryVote.VoteType.DOWNVOTE)
         return Response(status=204)
 
     @extend_schema(
@@ -99,7 +120,7 @@ class EntryViewSet(BaseModelViewSet):
     @action(detail=True, methods=["POST"], url_path="unvote", serializer_class=None)
     @django_to_drf_validation_error
     def unvote(self, *args, **kwargs):
-        Vote.cast(self.request.user, self.get_object(), None)
+        EntryVote.cast(self.request.user, self.get_object(), None)
         return Response(status=204)
 
     @extend_schema(

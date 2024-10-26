@@ -189,6 +189,20 @@ export class AcikSozlukApi {
     })
   }
 
+  public bookmarkTitle = (id: string) => {
+    return useMutation({
+      mutationKey: ['bookmarkTitle', id],
+      mutationFn: () => this.client.POST(`/v0/titles/{id}/bookmark/`, { params: { path: { id } } }),
+    })
+  }
+
+  public unbookmarkTitle = (id: string) => {
+    return useMutation({
+      mutationKey: ['unbookmarkTitle', id],
+      mutationFn: () => this.client.POST(`/v0/titles/{id}/unbookmark/`, { params: { path: { id } } }),
+    })
+  }
+
   public entries = (filters?: APIQuery<'/v0/entries/'>, useQueryOptions?: RemainingUseQueryOptions<'/v0/entries/'>) => {
     const queryResult = useQuery({
       queryKey: ['entries', filters],
@@ -258,14 +272,14 @@ export class AcikSozlukApi {
     })
   }
 
-  public bookmark = (id: string) => {
+  public bookmarkEntry = (id: string) => {
     return useMutation({
       mutationKey: ['bookmarkEntry', id],
       mutationFn: () => this.client.POST(`/v0/entries/{id}/bookmark/`, { params: { path: { id } } }),
     })
   }
 
-  public unBookmark = (id: string) => {
+  public unbookmarkEntry = (id: string) => {
     return useMutation({
       mutationKey: ['unBookmarkEntry', id],
       mutationFn: () => this.client.POST(`/v0/entries/{id}/unbookmark/`, { params: { path: { id } } }),

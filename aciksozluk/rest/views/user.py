@@ -26,13 +26,13 @@ class UserViewSet(BaseModelViewSet):
         "is_active": ["exact"],
         "is_staff": ["exact"],
         "is_superuser": ["exact"],
-        "created_at": ["exact", "gte", "lte"],
-        "updated_at": ["exact", "gte", "lte"],
+        "created_at": ["exact", "gt", "gte", "lt", "lte"],
+        "updated_at": ["exact", "gt", "gte", "lt", "lte"],
     }
 
     declared_filters = {
-        **make_filters("entry_count", NumberFilter, ["exact", "gte", "lte"]),
-        **make_filters("title_count", NumberFilter, ["exact", "gte", "lte"]),
+        **make_filters("entry_count", NumberFilter, ["exact", "gt", "gte", "lt", "lte"]),
+        **make_filters("title_count", NumberFilter, ["exact", "gt", "gte", "lt", "lte"]),
     }
 
     disallowed_methods = ["create", "update", "partial_update", "destroy"]

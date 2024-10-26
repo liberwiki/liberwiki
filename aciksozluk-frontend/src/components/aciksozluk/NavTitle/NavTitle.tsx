@@ -13,7 +13,7 @@ export function NavTitle({ title, children }: { children: React.ReactNode; title
       href={{ pathname: `/titles/${title.slug}` }}
     >
       <span>{children}</span>
-      <small className="text-right">{title.entry_count}</small>
+      <small className="text-right break-normal">{title.entry_count}</small>
     </Link>
   )
 }

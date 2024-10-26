@@ -27,6 +27,7 @@ class BaseModelViewSet(ModelViewSet):
     model = REQUIRED_BASE_MODEL_VIEWSET_ATTRIBUTE
     serializer_class = REQUIRED_BASE_MODEL_VIEWSET_ATTRIBUTE
     permission_classes = [(IsAuthenticated & DjangoModelPermissions) | ReadOnly]
+    allow_reverse_ordering = True
     all_viewsets = {}
     filterset_fields = {}
     declared_filters = {}
@@ -35,6 +36,7 @@ class BaseModelViewSet(ModelViewSet):
     filterset_base = FilterSet
     crud_extend_default_schema = {}
     disallowed_methods = []
+    ordering_fields = []
 
     perform_create = django_to_drf_validation_error(ModelViewSet.perform_create)
     perform_update = django_to_drf_validation_error(ModelViewSet.perform_update)
@@ -42,10 +44,6 @@ class BaseModelViewSet(ModelViewSet):
 
     def get_serializer_class(self):
         return self.serializer_class_action_map.get(self.action) or self.serializer_class or None
-
-    @classproperty
-    def ordering_fields(cls):  # NOQA
-        return list(cls.filterset_fields.keys())
 
     @classproperty
     def search_fields(cls):  # NOQA
@@ -89,6 +87,7 @@ class BaseModelViewSet(ModelViewSet):
             return Response(data=response_data, status=status.HTTP_400_BAD_REQUEST)
 
     def __init_subclass__(cls, **kwargs):
+        cls._allow_reverse_ordering()
         cls._required_attribute("model")
         cls._required_attribute("endpoint")
         cls._required_attribute("serializer_class")
@@ -96,6 +95,12 @@ class BaseModelViewSet(ModelViewSet):
         cls._disallowed_methods()
         cls._register_viewset()
         return super().__init_subclass__(**kwargs)
+
+    @classmethod
+    def _allow_reverse_ordering(cls):
+        ordering_fields = getattr(cls, "ordering_fields", [])
+        if cls.allow_reverse_ordering:
+            cls.ordering_fields = ordering_fields + [f"-{field}" for field in ordering_fields]
 
     @classmethod
     def _register_viewset(cls):
@@ -138,6 +143,7 @@ class BaseModelViewSet(ModelViewSet):
     def _make_list(cls, **extend_schema_kwargs):
         meta = cls.model._meta  # NOQA
         include_fields = list(cls.serializer_class.Meta.relational_fields.keys())  # NOQA
+        ordering_fields = cls.ordering_fields  # NOQA
         extend_schema_kwargs = (
             dict(
                 summary=f"List {meta.verbose_name_plural}",
@@ -149,6 +155,13 @@ class BaseModelViewSet(ModelViewSet):
                         style="form",
                         explode=False,
                         enum=[",".join(c) for c in all_combinations(include_fields)],
+                    ),
+                    OpenApiParameter(
+                        "ordering",
+                        type=OpenApiTypes.STR,
+                        style="form",
+                        explode=False,
+                        enum=cls.ordering_fields,
                     ),
                 ],
                 responses={

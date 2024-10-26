@@ -59,21 +59,43 @@ export function useFormState<T>(initialState: T) {
   const [formState, setFormState] = useState<T>(initialState)
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof T, string[]>> & { non_field_errors?: string[] }>()
 
-  function handleFormState({ key, inputType }: { key: keyof T; inputType: 'event' | 'value' }) {
-    return (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> | T[keyof T]) => {
-      let value
+  type InputEventType = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+
+  function handleFormState<K extends keyof T, HandlerInputType>({
+    key,
+    inputType,
+  }: {
+    key: K
+    inputType: 'event' | 'value'
+  }) {
+    return (event: HandlerInputType) => {
+      let value: T[K]
       if (inputType === 'event') {
-        const target = (event as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>).target
-        value = target.type === 'checkbox' ? (target as HTMLInputElement).checked : target.value
+        const target = (event as InputEventType).target
+        value = (target.type === 'checkbox' ? (target as HTMLInputElement).checked : target.value) as T[K]
       } else {
-        value = event as T[keyof T]
+        value = event as T[K]
       }
       setFormState((prev) => ({ ...prev, [key]: value }))
     }
   }
 
-  const handleFormStateValue = (key: keyof T) => handleFormState({ key, inputType: 'value' })
-  const handleFormStateEvent = (key: keyof T) => handleFormState({ key, inputType: 'event' })
+  const handleFormStateValue = <K extends keyof T>(key: K) => handleFormState<K, T[K]>({ key, inputType: 'value' })
+  const handleFormStateEvent = <K extends keyof T>(key: K) =>
+    handleFormState<K, InputEventType>({ key, inputType: 'event' })
+  const handleFormStateOnClick =
+    <K extends keyof T>(key: K, value: T[K]) =>
+    () => {
+      setFormState((prev) => ({ ...prev, [key]: value }))
+    }
 
-  return { formState, setFormState, formErrors, setFormErrors, handleFormStateValue, handleFormStateEvent }
+  return {
+    formState,
+    setFormState,
+    formErrors,
+    setFormErrors,
+    handleFormStateValue,
+    handleFormStateEvent,
+    handleFormStateOnClick,
+  }
 }
