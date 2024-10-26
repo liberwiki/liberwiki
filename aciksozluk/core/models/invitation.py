@@ -12,7 +12,7 @@ from django_lifecycle import BEFORE_CREATE, hook
 
 @track_model_history
 class Invitation(BaseModel):
-    REPR_STRING = "{self.user}->{self.used_by}"
+    REPR_STRING = "{self.user}->{self.used_by}:{self.code}"
     INVITATION_TOKEN_LENGTH = 8
 
     user = models.ForeignKey(

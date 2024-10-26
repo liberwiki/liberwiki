@@ -34,29 +34,15 @@ export class AcikSozlukApi {
       init.headers[config.api.bearerTokenHeaderName] = `${config.api.bearerTokenPrefix} ${bearerToken}`
     }
     init.headers['Content-Type'] = 'application/json'
-
+    const response = await fetch(input, init)
     try {
-      const response = await fetch(input, init)
       if (_.isEqual(await response.clone().json(), { detail: 'Invalid token.' })) {
         // I do not like how this check looks, maybe the server should respond with something other than 401
         // Specifically for invalid token error?
         await removeCookie(config.api.bearerTokenCookieName)
       }
-      return response
-    } catch (error) {
-      return new Response(
-        JSON.stringify({
-          message: `${error}`,
-        }),
-        {
-          status: 500,
-          statusText: 'Network Error',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      )
-    }
+    } catch {}
+    return response
   }
 
   // Create the client using the wrapped fetch function

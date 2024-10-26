@@ -56,6 +56,7 @@ MIDDLEWARE = [
     "django_hosts.middleware.HostsResponseMiddleware",
 ]
 
+APEX_DOMAIN = config.HOSTS.DOMAIN
 ADMIN_SUBDOMAIN = config.HOSTS.ADMIN_SUBDOMAIN
 API_SUBDOMAIN = config.HOSTS.API_SUBDOMAIN
 
@@ -164,6 +165,17 @@ SPECTACULAR_SETTINGS = {
     "COMPONENT_SPLIT_REQUEST": True,
 }
 
-CORS_ALLOW_ALL_ORIGINS = DEBUG
+CORS_ALLOWED_ORIGINS = [
+    f"https://{API_SUBDOMAIN}.{APEX_DOMAIN}",
+]
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = config.EMAIL.SMTP.HOST
+EMAIL_PORT = config.EMAIL.SMTP.PORT
+EMAIL_HOST_USER = config.EMAIL.SMTP.USER
+EMAIL_USE_TLS = True
+DEFAULT_VERIFICATION_FROM_EMAIL = config.EMAIL.DEFAULT_VERIFICATION_FROM_EMAIL
+
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

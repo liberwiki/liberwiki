@@ -31,6 +31,15 @@ CONFIG = config(
             },
         },
         "LANGUAGE": str,
+        "EMAIL": {
+            "SMTP": {
+                "HOST": str,
+                "PORT": int,
+                "USER": str,
+                "PASSWORD": str,
+            },
+            "DEFAULT_VERIFICATION_FROM_EMAIL": str,
+        },
     },
     prefix="ACIKSOZLUK",
     sep="__",
