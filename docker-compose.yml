@@ -1,46 +1,55 @@
 services:
   backend:
     build:
-      context: ./aciksozluk
+      context: ./liberwiki
       dockerfile: Dockerfile
+    env_file: .env
     environment:
-      - ACIKSOZLUK__DEBUG
-      - ACIKSOZLUK__DB__NAME
-      - ACIKSOZLUK__DB__USER
-      - ACIKSOZLUK__DB__PASSWORD
-      - ACIKSOZLUK__DB__HOST
-      - ACIKSOZLUK__DB__PORT
-      - ACIKSOZLUK__SECRET_KEY
-      - ACIKSOZLUK__HOST
-      - ACIKSOZLUK__ALLOWED_HOSTS
-      - ACIKSOZLUK__HOSTS__DOMAIN
-      - ACIKSOZLUK__HOSTS__API_SUBDOMAIN
-      - ACIKSOZLUK__HOSTS__ADMIN_SUBDOMAIN
-      - ACIKSOZLUK__AUTH__VERIFY_EMAIL_URL_TEMPLATE
-      - ACIKSOZLUK__SETUP__SUPERUSER__USERNAME
-      - ACIKSOZLUK__SETUP__SUPERUSER__EMAIL
-      - ACIKSOZLUK__SETUP__SUPERUSER__PASSWORD
-      - DJANGO_SETTINGS_MODULE=aciksozluk.settings
+      - LIBERWIKI__DEBUG
+      - LIBERWIKI__DB__NAME
+      - LIBERWIKI__DB__USER
+      - LIBERWIKI__DB__PASSWORD
+      - LIBERWIKI__DB__HOST
+      - LIBERWIKI__DB__PORT
+      - LIBERWIKI__SECRET_KEY
+      - LIBERWIKI__HOST
+      - LIBERWIKI__ALLOWED_HOSTS
+      - LIBERWIKI__HOSTS__DOMAIN
+      - LIBERWIKI__HOSTS__API_SUBDOMAIN
+      - LIBERWIKI__HOSTS__ADMIN_SUBDOMAIN
+      - LIBERWIKI__AUTH__VERIFY_EMAIL_URL_TEMPLATE
+      - LIBERWIKI__SETUP__SUPERUSER__USERNAME
+      - LIBERWIKI__SETUP__SUPERUSER__EMAIL
+      - LIBERWIKI__SETUP__SUPERUSER__PASSWORD
+      - DJANGO_SETTINGS_MODULE=liberwiki.settings
     ports:
       - "8000:8000"
 
   frontend:
     build:
-      context: ./aciksozluk-frontend
+      context: ./liberwiki-frontend
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_LIBERWIKI__NAME: ${NEXT_PUBLIC_LIBERWIKI__NAME}
+        NEXT_PUBLIC_LIBERWIKI__API__BASE_URL: ${NEXT_PUBLIC_LIBERWIKI__API__BASE_URL}
+        NEXT_PUBLIC_LIBERWIKI__LANGUAGE: ${NEXT_PUBLIC_LIBERWIKI__LANGUAGE}
+    env_file: .env
     environment:
-      - NEXT_PUBLIC__ACIKSOZLUK__NAME
-      - NEXT_PUBLIC__ACIKSOZLUK__API__BASE_URL
-      - NEXT_PUBLIC__ACIKSOZLUK__LANGUAGE
+      - NEXT_PUBLIC_LIBERWIKI__NAME
+      - NEXT_PUBLIC_LIBERWIKI__API__BASE_URL
+      - NEXT_PUBLIC_LIBERWIKI__LANGUAGE
     ports:
       - "3000:3000"
 
-  nginx:
-    image: nginx:1.27.2-alpine
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    env_file: .env
     environment:
-      - ACIKSOZLUK__HOSTS__DOMAIN
-      - ACIKSOZLUK__HOSTS__API_SUBDOMAIN
-      - ACIKSOZLUK__HOSTS__ADMIN_SUBDOMAIN
+      - LIBERWIKI__HOSTS__DOMAIN
+      - LIBERWIKI__HOSTS__API_SUBDOMAIN
+      - LIBERWIKI__HOSTS__ADMIN_SUBDOMAIN
     ports:
       - "80:80"
     entrypoint: ["/server/entrypoint.sh"]
@@ -48,12 +57,13 @@ services:
       - backend
       - frontend
 
-  postgres:
+  database:
     image: postgres:16.4
+    env_file: .env
     environment:
-      POSTGRES_DB: ${ACIKSOZLUK__DB__NAME}
-      POSTGRES_USER: ${ACIKSOZLUK__DB__USER}
-      POSTGRES_PASSWORD: ${ACIKSOZLUK__DB__PASSWORD}
+      POSTGRES_DB: ${LIBERWIKI__DB__NAME}
+      POSTGRES_USER: ${LIBERWIKI__DB__USER}
+      POSTGRES_PASSWORD: ${LIBERWIKI__DB__PASSWORD}
     ports:
       - "5432:5432"
     volumes:

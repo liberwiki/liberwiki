@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-cd aciksozluk-frontend && npm run lint
+cd liberwiki-frontend && npm run lint

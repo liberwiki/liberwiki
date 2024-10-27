@@ -1,0 +1,6 @@
+# Build artifacts & virtual environments
+liberwiki/.venv
+liberwiki-frontend/node_modules
+liberwiki-frontend/.next
+liberwiki-frontend/tsconfig.json
+server/nginx.conf
