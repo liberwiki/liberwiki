@@ -80,8 +80,6 @@ export function Entry({
             <Button variant="ghost" size="icon" onClick={handleVote('UPVOTE')}>
               <Icons.ArrowBigUp className={cn('h-5 w-5', feedback === 'UPVOTE' && 'fill-green-500 text-green-500')} />
             </Button>
-            <small>{entry.like_count}</small>
-            <small>{entry.dislike_count}</small>
             <Button variant="ghost" size="icon" onClick={handleVote('DOWNVOTE')}>
               <Icons.ArrowBigDown
                 className={cn('h-5 w-5', feedback === 'DOWNVOTE' && 'fill-destructive text-destructive')}

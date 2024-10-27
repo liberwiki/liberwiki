@@ -40,6 +40,12 @@ CONFIG = config(
             },
             "DEFAULT_VERIFICATION_FROM_EMAIL": str,
         },
+        "DEVTOOLS": {
+            "SENTRY": {
+                "DSN": str,
+                "TRACES_SAMPLE_RATE": str,
+            },
+        },
     },
     prefix="LIBERWIKI",
     sep="__",

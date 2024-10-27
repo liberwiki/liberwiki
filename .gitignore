@@ -32,3 +32,4 @@ build
 *.pem
 npm-debug.log*
 *.mo
+.env.sentry-build-plugin
