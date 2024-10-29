@@ -664,7 +664,7 @@ export interface components {
        * @description Unique identifier for this object
        */
       readonly id: string
-      /** @description Required. 150 characters or fewer. Letters (lowercase), digits or hyphens only, can't start with letters or hyphens. */
+      /** @description Required. 150 characters or fewer. Letters (lowercase), digits or hyphens only, can't start with digits or hyphens. */
       readonly username: string
       /**
        * Active
@@ -700,7 +700,7 @@ export interface components {
        * Format: email
        */
       email: string
-      /** @description Required. 150 characters or fewer. Letters (lowercase), digits or hyphens only, can't start with letters or hyphens. */
+      /** @description Required. 150 characters or fewer. Letters (lowercase), digits or hyphens only, can't start with digits or hyphens. */
       username: string
       first_name?: string
       last_name?: string
@@ -831,7 +831,7 @@ export interface components {
        * @description Unique identifier for this object
        */
       readonly id: string
-      /** @description Required. 150 characters or fewer. Letters (lowercase), digits or hyphens only, can't start with letters or hyphens. */
+      /** @description Required. 150 characters or fewer. Letters (lowercase), digits or hyphens only, can't start with digits or hyphens. */
       readonly username: string
       first_name?: string
       last_name?: string

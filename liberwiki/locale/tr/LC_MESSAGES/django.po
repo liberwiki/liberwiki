@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-19 13:49+0000\n"
+"POT-Creation-Date: 2024-10-29 12:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,33 +17,38 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-#: liberwiki/settings.py:119
-msgid "English"
-msgstr ""
-
-#: liberwiki/settings.py:120
-msgid "Turkish"
-msgstr ""
 
 #: administration/admin/group.py:20
 msgid "Permission Count"
-msgstr ""
+msgstr "İzin Sayısı"
 
-#: administration/admin/title.py:19
+#: administration/admin/title.py:20
 msgid "Entry Count"
-msgstr ""
-
-#: administration/admin/user.py:25
-msgid "Personal info"
-msgstr ""
+msgstr "Girdi Sayısı"
 
 #: administration/admin/user.py:26
-msgid "Permissions"
-msgstr ""
+msgid "Personal info"
+msgstr "Kişisel Bilgiler"
 
 #: administration/admin/user.py:27
+msgid "Permissions"
+msgstr "İzinler"
+
+#: administration/admin/user.py:28
 msgid "Important dates"
-msgstr ""
+msgstr "Önemli Tarihler"
+
+#: common/models/base.py:24
+msgid "Unique identifier for this object"
+msgstr "Objenin kimlik numarası"
+
+#: common/models/base.py:30
+msgid "Date and time this object was created"
+msgstr "Oluşturulma tarihi"
+
+#: common/models/base.py:35
+msgid "Date and time this object was last updated"
+msgstr "Güncellenme tarihi"
 
 #: common/validators/allowed_characters.py:12
 #, python-brace-format
@@ -51,170 +56,202 @@ msgid ""
 "Enter a valid value containing only the allowed characters. "
 "{allowed_characters}"
 msgstr ""
+"Yalnızca izin verilen karakterleri içeren geçerli bir değer girin. "
+"{allowed_characters}"
 
 #: core/models/entry.py:16
 msgid "Title of the entry."
-msgstr ""
+msgstr "Girdinin başlığı."
 
 #: core/models/entry.py:22
 msgid "Author of the entry."
-msgstr ""
+msgstr "Girdinin yazarı."
 
 #: core/models/entry.py:30
 msgid "Content"
-msgstr ""
+msgstr "İçerik"
 
 #: core/models/entry.py:31
 msgid "Content of the entry. In tiptap format."
-msgstr ""
+msgstr "Girdinin içeriği. TipTap formatında."
 
 #: core/models/entry.py:35
 msgid "Entry"
-msgstr ""
+msgstr "Girdi"
 
 #: core/models/entry.py:36
 msgid "Entries"
-msgstr ""
+msgstr "Girdiler"
 
-#: core/models/entry_bookmark.py:15
+#: core/models/entry_bookmark.py:15 core/models/title_bookmark.py:15
 msgid "User who bookmarked."
-msgstr ""
+msgstr "Yer imleyen kullanıcı"
 
 #: core/models/entry_bookmark.py:21
 msgid "Entry that was bookmarked."
-msgstr ""
+msgstr "Yer imlenen girdi"
 
 #: core/models/entry_bookmark.py:33
 msgid "Entry Bookmark"
-msgstr ""
+msgstr "Girdi Yerimi"
 
 #: core/models/entry_bookmark.py:34
 msgid "Entry Bookmarks"
-msgstr ""
+msgstr "Girdi Yer İmleri"
+
+#: core/models/entry_vote.py:12
+msgid "Upvote"
+msgstr "Pozitif Oy"
+
+#: core/models/entry_vote.py:13
+msgid "Downvote"
+msgstr "Negatif Oy"
+
+#: core/models/entry_vote.py:19
+msgid "User who voted."
+msgstr "Oylayan kullanıcı"
+
+#: core/models/entry_vote.py:25
+msgid "Entry that was voted."
+msgstr "Oylanan girdi"
+
+#: core/models/entry_vote.py:30
+msgid "Vote"
+msgstr "Oy"
+
+#: core/models/entry_vote.py:41
+msgid "Entry Vote"
+msgstr "Girdi Oyu"
+
+#: core/models/entry_vote.py:42
+msgid "Entry Votes"
+msgstr "Girdi Oyları"
 
 #: core/models/invitation.py:22
 msgid "Owner of the invitation."
-msgstr ""
+msgstr "Davetiyenin Sahibi"
 
 #: core/models/invitation.py:29
 msgid "Invitation code."
-msgstr ""
+msgstr "Davetiye Kodu"
 
 #: core/models/invitation.py:39
 msgid "User who used the invitation."
-msgstr ""
+msgstr "Davetiyeyi kullanan kullanıcı"
 
 #: core/models/invitation.py:57
 #, python-brace-format
 msgid "Unable to generate a unique code after {tries} tries."
-msgstr ""
+msgstr "{tries} denemeden sonra benzersiz bir kod oluşturulamadı."
 
 #: core/models/invitation.py:60
 msgid "Invitation"
-msgstr ""
+msgstr "Davetiye"
 
 #: core/models/invitation.py:61
 msgid "Invitations"
-msgstr ""
+msgstr "Davetiyeler"
 
 #: core/models/title.py:17 core/models/title.py:42
 msgid "Title"
-msgstr ""
+msgstr "Başlık"
 
 #: core/models/title.py:25
 msgid "Name of the title."
-msgstr ""
+msgstr "Başlığın adı."
 
 #: core/models/title.py:28
 msgid "Slug"
-msgstr ""
+msgstr "Jeton"
 
 #: core/models/title.py:31
 msgid "Slug of the title to display in urls."
-msgstr ""
+msgstr "Başlığın URL'lerde görüntülenmesi için jetonu."
 
 #: core/models/title.py:37
 msgid "Creator of the title."
-msgstr ""
+msgstr "Başlığı oluşturan kullanıcı."
 
 #: core/models/title.py:43
 msgid "Titles"
-msgstr ""
+msgstr "Başlıklar"
+
+#: core/models/title_bookmark.py:21
+msgid "Title that was bookmarked."
+msgstr "Yer imlenen başlık."
+
+#: core/models/title_bookmark.py:33
+msgid "Title Bookmark"
+msgstr "Başlık Yer İmi"
+
+#: core/models/title_bookmark.py:34
+msgid "Title Bookmarks"
+msgstr "Başlık Yer İmleri"
 
 #: core/models/user.py:15
 msgid "email address"
-msgstr ""
+msgstr "Email Adresi"
 
 #: core/models/user.py:17
 msgid "username"
-msgstr ""
+msgstr "Kullanıcı Adı"
 
 #: core/models/user.py:21
 msgid ""
 "Required. 150 characters or fewer. Letters (lowercase), digits or hyphens "
-"only, can't start with letters or hyphens."
+"only, can't start with digits or hyphens."
 msgstr ""
+"Gerekli. 150 karakterden az. Yalnızca harfler (küçük harf), rakamlar veya "
+"tireler, rakamlarla veya tirelerle başlayamaz."
 
 #: core/models/user.py:32
 msgid "A user with that username already exists."
-msgstr ""
+msgstr "Aynı kullanıcı adıyla başka kullanıcı zaten var."
 
 #: core/models/user.py:37
 msgid "User"
-msgstr ""
+msgstr "Kullanıcı"
 
 #: core/models/user.py:38
 msgid "Users"
-msgstr ""
+msgstr "Kullanıcılar"
 
-#: core/models/vote.py:12
-msgid "Upvote"
-msgstr ""
+#: liberwiki/settings.py:122
+msgid "English"
+msgstr "İngilizce"
 
-#: core/models/vote.py:13
-msgid "Downvote"
-msgstr ""
+#: liberwiki/settings.py:123
+msgid "Turkish"
+msgstr "Türkçe"
 
-#: core/models/vote.py:19
-msgid "User who voted."
-msgstr ""
-
-#: core/models/vote.py:25
-msgid "Entry that was voted."
-msgstr ""
-
-#: core/models/vote.py:30 core/models/vote.py:41
-msgid "Vote"
-msgstr ""
-
-#: core/models/vote.py:42
-msgid "Votes"
-msgstr ""
-
-#: rest/serializers/auth.py:14
+#: rest/serializers/auth.py:17
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
-#: rest/serializers/auth.py:16
+#: rest/serializers/auth.py:19
 msgid "Token"
-msgstr ""
-
-#: rest/serializers/auth.py:25
-msgid "Invalid email or password"
-msgstr ""
+msgstr "Token"
 
 #: rest/serializers/auth.py:28
-msgid "User account is disabled"
-msgstr ""
+msgid "Invalid email or password"
+msgstr "Yanlış email ya da şifre"
 
-#: rest/serializers/auth.py:55
-msgid "Passwords do not match"
-msgstr ""
+#: rest/serializers/auth.py:31
+msgid "User account is disabled"
+msgstr "Kullanıcı hesabı devre dışı"
 
 #: rest/serializers/auth.py:58
-msgid "Invalid or previously used invitation code"
-msgstr ""
+msgid "Passwords do not match"
+msgstr "Şifreler uyuşmuyor"
 
-#: rest/serializers/auth.py:112 rest/serializers/auth.py:115
+#: rest/serializers/auth.py:61
+msgid "Invalid or previously used invitation code"
+msgstr "Yanlış ya da daha önce kullanılmış davetiye kodu"
+
+#: rest/serializers/auth.py:90
+msgid "Verify your email address"
+msgstr "Email adresinizi doğrulayın"
+
+#: rest/serializers/auth.py:124 rest/serializers/auth.py:127
 msgid "Invalid user or token"
-msgstr ""
+msgstr "Yanlış kullanıcı ya da token"

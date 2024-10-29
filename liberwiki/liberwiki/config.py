@@ -15,9 +15,6 @@ CONFIG = config(
         },
         "SECRET_KEY": str,
         "ALLOWED_HOSTS": comma_separated_list,
-        "AUTH": {
-            "VERIFY_EMAIL_URL_TEMPLATE": str,
-        },
         "HOSTS": {
             "DOMAIN": str,
             "API_SUBDOMAIN": str,
@@ -34,7 +31,7 @@ CONFIG = config(
         "EMAIL": {
             "SMTP": {
                 "HOST": str,
-                "PORT": int,
+                "PORT": {"TSL": int},
                 "USER": str,
                 "PASSWORD": str,
             },

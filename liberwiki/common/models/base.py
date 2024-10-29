@@ -3,6 +3,7 @@ from uuid import UUID
 
 from django.db import models, transaction
 from django.utils import timezone
+from django.utils.translation import gettext as _
 from django_lifecycle import (
     AFTER_CREATE,
     AFTER_SAVE,
@@ -21,18 +22,18 @@ class BaseModel(LifecycleModelMixin, models.Model):
         primary_key=True,
         default=uuid.uuid4,
         editable=False,
-        help_text="Unique identifier for this object",
+        help_text=_("Unique identifier for this object"),
     )
     created_at = models.DateTimeField(
         db_index=True,
         default=timezone.now,
         editable=False,
-        help_text="Date and time this object was created",
+        help_text=_("Date and time this object was created"),
     )
     updated_at = models.DateTimeField(
         auto_now=True,
         db_index=True,
-        help_text="Date and time this object was last updated",
+        help_text=_("Date and time this object was last updated"),
     )
 
     class Meta:

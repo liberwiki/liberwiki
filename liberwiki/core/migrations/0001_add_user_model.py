@@ -80,7 +80,7 @@ class Migration(migrations.Migration):
                     "username",
                     models.CharField(
                         error_messages={"unique": "A user with that username already exists."},
-                        help_text="Required. 150 characters or fewer. Letters (lowercase), digits or hyphens only, can't start with letters or hyphens.",
+                        help_text="Required. 150 characters or fewer. Letters (lowercase), digits or hyphens only, can't start with digits or hyphens.",
                         max_length=150,
                         unique=True,
                         validators=[

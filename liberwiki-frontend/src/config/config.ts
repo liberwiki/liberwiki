@@ -25,5 +25,8 @@ export const config = {
         process.env.NEXT_PUBLIC_LIBERWIKI__FRONT_END__DEVTOOLS__SENTRY__REPLAYS_ON_ERROR_SAMPLE_RATE
       ),
     },
+    googleAnalytics: {
+      gaID: process.env.NEXT_PUBLIC_LIBERWIKI__FRONT_END__DEVTOOLS__GOOGLE_ANALYTICS__GA_ID,
+    },
   },
 }

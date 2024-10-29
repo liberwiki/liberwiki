@@ -111,7 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-AUTH_VERIFY_EMAIL_URL_TEMPLATE = config.AUTH.VERIFY_EMAIL_URL_TEMPLATE
+AUTH_VERIFY_EMAIL_URL_TEMPLATE = "https://{domain}/auth/signup/verify-email/{uidb64}/{token}/"
 
 # Internationalization
 # LANGUAGE_CODE = config.LANGUAGE
@@ -167,15 +167,16 @@ SPECTACULAR_SETTINGS = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    f"http://{API_SUBDOMAIN}.{APEX_DOMAIN}",
-    f"https://{API_SUBDOMAIN}.{APEX_DOMAIN}",
+    f"http://{APEX_DOMAIN}",
+    f"https://{APEX_DOMAIN}",
 ]
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = config.EMAIL.SMTP.HOST
-EMAIL_PORT = config.EMAIL.SMTP.PORT
+EMAIL_PORT = config.EMAIL.SMTP.PORT.TSL
 EMAIL_HOST_USER = config.EMAIL.SMTP.USER
-EMAIL_USE_TLS = True
+EMAIL_HOST_PASSWORD = config.EMAIL.SMTP.PASSWORD
+EMAIL_USE_TSL = True
 DEFAULT_VERIFICATION_FROM_EMAIL = config.EMAIL.DEFAULT_VERIFICATION_FROM_EMAIL
 
 sentry_sdk.init(

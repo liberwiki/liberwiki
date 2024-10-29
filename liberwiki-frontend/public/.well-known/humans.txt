@@ -1,0 +1,2 @@
+# We are open source and hosted on GitHub, you can check out all contributors here:
+# https://github.com/liber-wiki/liberwiki/graphs/contributors

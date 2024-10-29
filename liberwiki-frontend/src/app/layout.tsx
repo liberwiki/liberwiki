@@ -11,6 +11,8 @@ import config from '@/config'
 import { cn } from '@/lib/utils'
 import { AuthProvider, QueryClientProvider } from '@/providers'
 
+import { GoogleAnalytics } from '@next/third-parties/google'
+
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -19,12 +21,18 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const gaID = config.devtools.googleAnalytics.gaID
   return (
     <QueryClientProvider>
       <AuthProvider>
         <html lang="en" suppressHydrationWarning>
-          <head title="liberwiki">
-            <title>{config.name}</title>
+          <head>
+            <meta
+              content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+              name="viewport"
+            />
+
+            {gaID && <GoogleAnalytics gaId={gaID} />}
           </head>
           <body className={cn('min-h-screen font-sans antialiased dark', inter.className)}>
             {children}

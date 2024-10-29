@@ -19,7 +19,7 @@ class User(AbstractUser, BaseModel):
         unique=True,
         help_text=_(
             "Required. 150 characters or fewer. "
-            "Letters (lowercase), digits or hyphens only, can't start with letters or hyphens."
+            "Letters (lowercase), digits or hyphens only, can't start with digits or hyphens."
         ),
         validators=[
             AllowedCharactersValidator(
