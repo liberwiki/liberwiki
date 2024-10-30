@@ -8,7 +8,15 @@ import NavTitle from '@/components/liberwiki/NavTitle'
 import Paginator from '@/components/liberwiki/Paginator'
 import { Button } from '@/components/shadcn/button'
 import { ScrollArea, ScrollBar } from '@/components/shadcn/scroll-area'
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/shadcn/sheet'
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/shadcn/sheet'
 
 import { useClientTranslation } from '@/i18n'
 import { useLiberWikiAPI } from '@/lib/serverHooks'
@@ -31,11 +39,11 @@ export function MobileNav() {
           <Icons.Menu />
         </Button>
       </SheetTrigger>
-      <SheetHeader className="hidden">
-        <SheetDescription className="hidden">{t('common:navigation')}</SheetDescription>
-      </SheetHeader>
-      <SheetTitle className="hidden">{t('common:navigation')}</SheetTitle>
       <SheetContent side="left" className="px-2">
+        <SheetHeader className="hidden">
+          <SheetTitle className="hidden">{t('common:navigation')}</SheetTitle>
+          <SheetDescription className="hidden">{t('common:navigation')}</SheetDescription>
+        </SheetHeader>
         <ScrollArea className="my-4 h-[calc(100vh-4rem)] pr-0">
           <div className="flex flex-col">
             <Paginator
@@ -46,9 +54,11 @@ export function MobileNav() {
             />
             {isSuccess &&
               titles?.results?.map((title) => (
-                <NavTitle key={title.id} title={title}>
-                  {title.name}
-                </NavTitle>
+                <SheetClose asChild key={title.id}>
+                  <NavTitle key={title.id} title={title}>
+                    {title.name}
+                  </NavTitle>
+                </SheetClose>
               ))}
           </div>
           <ScrollBar orientation="vertical" />

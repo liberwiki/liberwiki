@@ -17,7 +17,7 @@ export async function Header() {
   const { t } = await sUseTranslation(['common'])
 
   return (
-    <header className="sticky top-0 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-primary">
+    <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-primary">
       <div className="container flex h-14 items-center max-md:px-4 gap-2">
         <div className="xl:w-1/6">
           <Link href={{ pathname: '/' }} className="items-center gap-2 hidden xl:flex">

@@ -9,7 +9,7 @@ import _ from 'lodash'
 import Editor from '@/components/liberwiki/Editor'
 import { Button } from '@/components/shadcn/button'
 import { Card, CardContent } from '@/components/shadcn/card'
-import { Overlay, OverlayContent, OverlayTrigger } from '@/components/shadcn/overlay'
+import { Overlay, OverlayClose, OverlayContent, OverlayTrigger } from '@/components/shadcn/overlay'
 
 import { APIType, Includes } from '@/api/typeHelpers'
 import { useClientTranslation } from '@/i18n'
@@ -109,9 +109,11 @@ export function Entry({
               <OverlayContent side="bottom" align="end">
                 <div className="flex flex-col gap-2">
                   {(user?.id === entry.author.id || user?.is_superuser) && (
-                    <Button variant="ghost" className="w-full justify-start" onClick={handleDelete}>
-                      {t('entry:delete')}
-                    </Button>
+                    <OverlayClose>
+                      <Button variant="ghost" className="w-full justify-start" onClick={handleDelete}>
+                        {t('entry:delete')}
+                      </Button>
+                    </OverlayClose>
                   )}
                 </div>
               </OverlayContent>

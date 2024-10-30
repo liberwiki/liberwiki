@@ -1,6 +1,7 @@
 import React, {createContext, ReactNode, useContext} from "react";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/shadcn/popover";
-import {Sheet, SheetContent, SheetTrigger} from "@/components/shadcn/sheet";
+import {Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle} from "@/components/shadcn/sheet";
+import { PopoverClose } from "@radix-ui/react-popover";
 import {cn, tailwindConfig} from "@/lib/utils";
 import _ from "lodash";
 
@@ -108,4 +109,33 @@ export function OverlayContent({children, ...props}: OverlayContentProps) {
   return (
     <SelectedContent {...contentProps}>{children}</SelectedContent>
   );
+}
+
+
+interface OverlayCloseProps extends React.ComponentProps<typeof PopoverClose>, React.ComponentProps<typeof SheetClose> {
+}
+
+export function OverlayClose({ children, ...props }: OverlayCloseProps) {
+  const {overlayType} = useContext(OverlayContext);
+  const CloseComponents = {
+    [OverlayType.Popover]: PopoverClose,
+    [OverlayType.Sheet]: SheetClose,
+  };
+
+  const SelectedCloseComponent = CloseComponents[overlayType];
+
+  return <SelectedCloseComponent {...props}>{children}</SelectedCloseComponent>;
+}
+
+interface OverlayTitleProps {
+  children: ReactNode;
+  className?: string;
+}
+
+export function OverlayTitle({ children, className }: OverlayTitleProps) {
+  const {overlayType} = useContext(OverlayContext);
+  if (overlayType === OverlayType.Sheet) {
+    return <SheetTitle className={className}>{children}</SheetTitle>;
+  }
+  return <></>
 }

@@ -13,7 +13,7 @@ import { Button } from '@/components/shadcn/button'
 import { Calendar } from '@/components/shadcn/calendar'
 import { Checkbox } from '@/components/shadcn/checkbox'
 import { Label } from '@/components/shadcn/label'
-import { Overlay, OverlayContent, OverlayTrigger } from '@/components/shadcn/overlay'
+import { Overlay, OverlayContent, OverlayTitle, OverlayTrigger } from '@/components/shadcn/overlay'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover'
 import { Separator } from '@/components/shadcn/separator'
 
@@ -129,6 +129,7 @@ export function Title({ title }: { title: APIType<'Title'> }) {
                 </Button>
               </OverlayTrigger>
               <OverlayContent align="start" side="bottom">
+                <OverlayTitle className="hidden">Ordering</OverlayTitle>
                 <div className="flex flex-col">
                   <Button
                     variant="ghost"
