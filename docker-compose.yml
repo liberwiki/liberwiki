@@ -29,8 +29,9 @@ services:
       - LIBERWIKI__DEVTOOLS__SENTRY__DSN
       - LIBERWIKI__DEVTOOLS__SENTRY__TRACES_SAMPLE_RATE
       - DJANGO_SETTINGS_MODULE=liberwiki.settings
-    ports:
-      - "8000:8000"
+    networks:
+      - internal
+    restart: unless-stopped
 
   frontend:
     build:
@@ -57,8 +58,9 @@ services:
       - NEXT_PUBLIC_LIBERWIKI__FRONT_END__DEVTOOLS__SENTRY__REPLAYS_SESSION_SAMPLE_RATE
       - NEXT_PUBLIC_LIBERWIKI__FRONT_END__DEVTOOLS__SENTRY__REPLAYS_ON_ERROR_SAMPLE_RATE
       - NEXT_PUBLIC_LIBERWIKI__FRONT_END__DEVTOOLS__GOOGLE_ANALYTICS__GA_ID
-    ports:
-      - "3000:3000"
+    networks:
+      - internal
+    restart: unless-stopped
 
   server:
     build:
@@ -75,6 +77,10 @@ services:
     depends_on:
       - backend
       - frontend
+    networks:
+      - internal
+      - external
+    restart: unless-stopped
 
   database:
     image: postgres:16.4
@@ -83,10 +89,17 @@ services:
       POSTGRES_DB: ${LIBERWIKI__DB__NAME}
       POSTGRES_USER: ${LIBERWIKI__DB__USER}
       POSTGRES_PASSWORD: ${LIBERWIKI__DB__PASSWORD}
-    ports:
-      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - internal
+    restart: unless-stopped
 
 volumes:
   postgres_data:
+
+networks:
+  internal:
+    internal: true
+  external:
+    driver: bridge
