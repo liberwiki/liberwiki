@@ -1,1 +1,37 @@
-{{ url }}
+{% extends 'core/mails/base.html' %}
+
+{% load i18n %}
+
+{% block content %}
+  <mj-text>
+    {% blocktranslate trimmed with name=user.username %}Hello {{ name }}{% endblocktranslate %},
+  </mj-text>
+
+  <mj-text>
+  {% blocktranslate trimmed %}
+    Thank you for your interest in joining Liber Wiki! To complete your registration, please confirm your email by
+    clicking the link below. This will take you to the final steps of setting up your account.
+  {% endblocktranslate %}
+  </mj-text>
+
+  <mj-button href="{{ url }}">
+    {% blocktranslate trimmed %}Confirm Registration{% endblocktranslate %}
+  </mj-button>
+
+  <mj-text>
+    {% blocktranslate trimmed %}
+    If you didn't sign up for an account on Liber Wiki, you can use the same link to safely remove your email from our
+    database or simply ignore this email.
+    {% endblocktranslate %}
+  </mj-text>
+
+  <mj-text>
+  {% blocktranslate trimmed %}
+    Welcome to a world of shared knowledge and insight!
+  {% endblocktranslate %}
+  </mj-text>
+
+  <mj-text>
+    {% blocktranslate trimmed %}Best regards{% endblocktranslate %}, <br />{% blocktranslate trimmed %}The Liber Wiki Team{% endblocktranslate %}
+  </mj-text>
+{% endblock %}

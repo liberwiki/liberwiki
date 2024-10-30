@@ -5,6 +5,7 @@ load_dotenv()
 
 CONFIG = config(
     {
+        "NAME": str,
         "DEBUG": boolean,
         "DB": {
             "NAME": str,

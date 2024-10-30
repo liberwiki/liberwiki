@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# This file is distributed under the same license as the Liber Wiki package.
+# Işık Kaplan <isik.kaplan.social@outlook.com>, 2024.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-29 12:25+0000\n"
+"POT-Creation-Date: 2024-10-30 13:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,15 +38,15 @@ msgstr "İzinler"
 msgid "Important dates"
 msgstr "Önemli Tarihler"
 
-#: common/models/base.py:24
+#: common/models/base.py:25
 msgid "Unique identifier for this object"
 msgstr "Objenin kimlik numarası"
 
-#: common/models/base.py:30
+#: common/models/base.py:31
 msgid "Date and time this object was created"
 msgstr "Oluşturulma tarihi"
 
-#: common/models/base.py:35
+#: common/models/base.py:36
 msgid "Date and time this object was last updated"
 msgstr "Güncellenme tarihi"
 
@@ -216,42 +216,81 @@ msgstr "Kullanıcı"
 msgid "Users"
 msgstr "Kullanıcılar"
 
-#: liberwiki/settings.py:122
+#: core/templates/core/mails/email_verification.html:7
+#, python-format
+msgid "Hello %(name)s"
+msgstr "Merhaba %(name)s"
+
+#: core/templates/core/mails/email_verification.html:11
+msgid ""
+"Thank you for your interest in joining Liber Wiki! To complete your "
+"registration, please confirm your email by clicking the link below. This "
+"will take you to the final steps of setting up your account."
+msgstr ""
+"Liber Wiki'ye katılmak için ilginiz için teşekkür ederiz! Kaydınızı tamamlamak "
+"için lütfen aşağıdaki bağlantıya tıklayarak emailinizi doğrulayın. Bu, hesabınızı "
+"oluşturmanın son adımlarına götürecektir."
+
+#: core/templates/core/mails/email_verification.html:18
+msgid "Confirm Registration"
+msgstr "Üyeliğinizi Onaylayın"
+
+#: core/templates/core/mails/email_verification.html:22
+msgid ""
+"If you didn't sign up for an account on Liber Wiki, you can use the same "
+"link to safely remove your email from our database or simply ignore this email."
+msgstr ""
+"Liber Wiki'de bir hesap oluşturmadıysanız, aynı bağlantıyı kullanarak emailinizi "
+"veritabanımızdan güvenli bir şekilde kaldırabilir veya bu emaili yoksayabilirsiniz."
+
+#: core/templates/core/mails/email_verification.html:29
+msgid "Welcome to a world of shared knowledge and insight!"
+msgstr "Bilgi ve sezginin paylaşıldığı bir dünyaya hoş geldiniz!"
+
+#: core/templates/core/mails/email_verification.html:35
+msgid "Best regards"
+msgstr "Saygılarımızla"
+
+#: core/templates/core/mails/email_verification.html:35
+msgid "The Liber Wiki Team"
+msgstr "Liber Wiki Ekibi"
+
+#: liberwiki/settings.py:123
 msgid "English"
 msgstr "İngilizce"
 
-#: liberwiki/settings.py:123
+#: liberwiki/settings.py:124
 msgid "Turkish"
 msgstr "Türkçe"
 
-#: rest/serializers/auth.py:17
+#: rest/serializers/auth.py:18
 msgid "Email"
 msgstr "Email"
 
-#: rest/serializers/auth.py:19
+#: rest/serializers/auth.py:20
 msgid "Token"
 msgstr "Token"
 
-#: rest/serializers/auth.py:28
+#: rest/serializers/auth.py:29
 msgid "Invalid email or password"
 msgstr "Yanlış email ya da şifre"
 
-#: rest/serializers/auth.py:31
+#: rest/serializers/auth.py:32
 msgid "User account is disabled"
 msgstr "Kullanıcı hesabı devre dışı"
 
-#: rest/serializers/auth.py:58
+#: rest/serializers/auth.py:59
 msgid "Passwords do not match"
 msgstr "Şifreler uyuşmuyor"
 
-#: rest/serializers/auth.py:61
+#: rest/serializers/auth.py:62
 msgid "Invalid or previously used invitation code"
 msgstr "Yanlış ya da daha önce kullanılmış davetiye kodu"
 
-#: rest/serializers/auth.py:90
+#: rest/serializers/auth.py:91
 msgid "Verify your email address"
 msgstr "Email adresinizi doğrulayın"
 
-#: rest/serializers/auth.py:124 rest/serializers/auth.py:127
+#: rest/serializers/auth.py:125 rest/serializers/auth.py:128
 msgid "Invalid user or token"
 msgstr "Yanlış kullanıcı ya da token"

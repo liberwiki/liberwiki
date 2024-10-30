@@ -1,9 +1,9 @@
+from common.utils.email import mjml_template
 from core.models import Invitation, User
 from django.contrib.auth import authenticate
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.mail import send_mail
 from django.db import transaction
-from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.translation import gettext_lazy as _
@@ -82,10 +82,10 @@ class SignupSerializer(serializers.ModelSerializer):
         self.invitation.update(used_by=user)
         return user
 
-    @staticmethod
-    def send_verification_email(user, uidb64, token):
+    def send_verification_email(self, user, uidb64, token):
+        request = self.context.get("request")
         url = settings.AUTH_VERIFY_EMAIL_URL_TEMPLATE.format(domain=settings.PARENT_HOST, uidb64=uidb64, token=token)
-        html_content = render_to_string("core/mails/email_verification.html", {"user": user, "url": url})
+        html_content = mjml_template("core/mails/email_verification.html", {"user": user, "url": url}, request)
         send_mail(
             _("Verify your email address"),
             strip_tags(html_content),

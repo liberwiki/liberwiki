@@ -5,6 +5,7 @@ services:
       dockerfile: Dockerfile
     env_file: .env
     environment:
+      - LIBERWIKI__NAME
       - LIBERWIKI__DEBUG
       - LIBERWIKI__DB__NAME
       - LIBERWIKI__DB__USER
