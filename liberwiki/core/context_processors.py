@@ -10,5 +10,4 @@ def config_processor(request):
             LANGUAGE=CONFIG.LANGUAGE,
         )
     )
-    print(context)
     return context

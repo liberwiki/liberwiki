@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from common.utils.email import mjml_template, text_template
+from common.utils.error_handling import suppress_callable_to_sentry
 from core.models import Invitation, User
 from django.contrib.auth import authenticate
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
@@ -83,6 +84,7 @@ class SignupSerializer(serializers.ModelSerializer):
         self.invitation.update(used_by=user)
         return user
 
+    @suppress_callable_to_sentry(Exception)
     def send_verification_email(self, user, uidb64, token):
         request = self.context.get("request")
         email_folder = Path("core/mails/email_verification")
@@ -94,7 +96,7 @@ class SignupSerializer(serializers.ModelSerializer):
             text_content,
             settings.DEFAULT_VERIFICATION_FROM_EMAIL,
             [user.email],
-            fail_silently=True,
+            fail_silently=False,
             html_message=html_content,
         )
 
