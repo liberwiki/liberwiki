@@ -1,4 +1,4 @@
-{% extends 'core/mails/base.html' %}
+{% extends 'core/mails/base/base.html' %}
 
 {% load i18n %}
 
@@ -32,6 +32,8 @@
   </mj-text>
 
   <mj-text>
-    {% blocktranslate trimmed %}Best regards{% endblocktranslate %}, <br />{% blocktranslate trimmed %}The Liber Wiki Team{% endblocktranslate %}
+    {% blocktranslate trimmed %}Best regards{% endblocktranslate %},
+    <br />
+    {% blocktranslate trimmed %}The Liber Wiki Team{% endblocktranslate %}
   </mj-text>
 {% endblock %}

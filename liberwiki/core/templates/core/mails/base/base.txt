@@ -1,0 +1,4 @@
+{{ config.NAME }},
+
+{% block content %}
+{% endblock content %}

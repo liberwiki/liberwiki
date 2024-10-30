@@ -1,4 +1,3 @@
-from django.template import RequestContext
 from django.template.loader import render_to_string
 from mjml import mjml2html
 
@@ -16,4 +15,8 @@ def mjml(mjml_string):
 
 
 def mjml_template(template, context, request=None):
-    return mjml(render_to_string(template, context, RequestContext(request, context, use_l10n=True, use_tz=True)))
+    return mjml(render_to_string(template, context, request))
+
+
+def text_template(template, context, request=None):
+    return render_to_string(template, context, request)
