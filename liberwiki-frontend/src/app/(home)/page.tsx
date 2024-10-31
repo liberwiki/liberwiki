@@ -7,7 +7,7 @@ import Title from '@/components/liberwiki/Title'
 import { includesType } from '@/api'
 import { useLiberWikiAPI } from '@/lib/serverHooks'
 
-export default function TitlePage() {
+export default function Home() {
   const liberwiki = useLiberWikiAPI()
 
   const { data: entries, isSuccess } = liberwiki.entries({

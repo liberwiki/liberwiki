@@ -7,8 +7,8 @@ import { runMiddlewareIfPathMatches } from '@/lib/utils'
 
 const membersOnly = config.membersOnly
 
-export function redirectAuthenticatedBackTo(redirectTo: string) {
-  return runMiddlewareIfPathMatches(/^\/auth\//)(async function (request: NextRequest) {
+export function redirectAuthenticatedBackTo(path: RegExp, redirectTo: string) {
+  return runMiddlewareIfPathMatches(path)(async function (request: NextRequest) {
     const isAuthenticated = !!(await getCookie(config.api.bearerTokenCookieName))
     if (isAuthenticated) {
       return NextResponse.redirect(new URL(redirectTo, request.url))
@@ -16,11 +16,11 @@ export function redirectAuthenticatedBackTo(redirectTo: string) {
   })
 }
 
-export function membersOnlyMode() {
-  return runMiddlewareIfPathMatches(/^(?!\/$|\/auth\/).*$/)(async function (request: NextRequest) {
+export function membersOnlyMode(allowedPath: RegExp, redirectTo: string) {
+  return runMiddlewareIfPathMatches(allowedPath)(async function (request: NextRequest) {
     const isAuthenticated = !!(await getCookie(config.api.bearerTokenCookieName))
     if (membersOnly && !isAuthenticated) {
-      return NextResponse.redirect(new URL('/', request.url))
+      return NextResponse.rewrite(new URL(redirectTo, request.url))
     }
   })
 }

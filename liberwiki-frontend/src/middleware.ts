@@ -10,8 +10,8 @@ export const config = {
 }
 
 const middlewares: ((request: NextRequest) => Promise<NextResponse | void>)[] = [
-  AuthMiddlewares.redirectAuthenticatedBackTo('/titles'),
-  AuthMiddlewares.membersOnlyMode(),
+  AuthMiddlewares.redirectAuthenticatedBackTo(/^\/auth\//, '/'),
+  AuthMiddlewares.membersOnlyMode(/^(?!\/lockdown$|\/auth\/).*$/, '/lockdown'),
   AuthMiddlewares.anonymousNotAllowed(/^\/account\//, '/'),
 ]
 

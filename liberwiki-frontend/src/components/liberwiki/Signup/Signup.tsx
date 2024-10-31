@@ -159,7 +159,7 @@ export function Signup() {
             </div>
             {!config.membersOnly && (
               <div className="w-100 flex justify-center">
-                <Link href={{ pathname: '/titles' }} className="hover:underline">
+                <Link href={{ pathname: '/' }} className="hover:underline">
                   {t('common:backToWebsite')}
                 </Link>
               </div>
