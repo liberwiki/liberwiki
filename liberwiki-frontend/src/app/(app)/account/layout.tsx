@@ -9,6 +9,6 @@ export const metadata: Metadata = {
   description: config.name,
 }
 
-export default function AccountLayout({ children }: { children: React.ReactNode }) {
+export default async function AccountLayout({ children }: { children: React.ReactNode }) {
   return <main className="flex items-center justify-center min-h-screen">{children}</main>
 }

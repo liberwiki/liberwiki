@@ -1,3 +1,5 @@
+"use client"
+
 import React, {createContext, ReactNode, useContext} from "react";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/shadcn/popover";
 import {Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle} from "@/components/shadcn/sheet";

@@ -1,9 +1,9 @@
 {
+  "verificationRejected": "This incident has been recorded.",
+  "emailWillBeDeleted": "This email address will be deleted from our database.",
   "emailVerifiedSuccessfully": "Email verified successfully!",
   "youWillBeRedirectedToLogin": "You will be redirected to the login page",
   "verificationFailed": "Verification failed. Please try again",
-  "verificationRejected": "This incident has been recorded.",
-  "emailWillBeDeleted": "This email address will be deleted from our database.",
   "emailVerification": "Email Verification",
   "confirmYourIdentity": "Please confirm your identity to complete the sign-up process",
   "areYou": "Are you {{username}}?",

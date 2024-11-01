@@ -6,7 +6,7 @@ import LeftColumn from '@/components/liberwiki/LeftColumn'
 import RightColumn from '@/components/liberwiki/RightColumn'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
 
-export default function TitleLayout({ children }: { children: React.ReactNode }) {
+export default async function TitleLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Header />

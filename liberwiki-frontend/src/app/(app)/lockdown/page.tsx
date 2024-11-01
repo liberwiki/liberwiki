@@ -1,7 +1,5 @@
-'use client'
-
 import LockDown from '@/components/liberwiki/LockDown'
 
-export default function LockDownPage() {
+export default async function LockDownPage() {
   return <LockDown />
 }

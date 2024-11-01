@@ -1,16 +1,14 @@
-'use client'
-
 import _ from 'lodash'
 
 import Title from '@/components/liberwiki/Title'
 
-import { includesType } from '@/api'
-import { useLiberWikiAPI } from '@/lib/serverHooks'
+import { APIQuery, includesType } from '@/api'
+import { useLiberWikiAPI as sUseLiberWikiAPI } from '@/lib/serverHooks'
 
-export default function Home() {
-  const liberwiki = useLiberWikiAPI()
+export default async function Home({ searchParams }: { searchParams: APIQuery<'/v0/entries/'> }) {
+  const liberwiki = sUseLiberWikiAPI()
 
-  const { data: entries, isSuccess } = liberwiki.entries({
+  const { data: entries } = await liberwiki.entries({
     page_size: 1,
     page: 1,
     ordering: '-created_at',
@@ -20,5 +18,5 @@ export default function Home() {
   const firstEntry = _.first(entries?.results)
   const entry = firstEntry && includesType(firstEntry, 'title', 'Title')
 
-  return isSuccess && entry && <Title title={entry.title} />
+  return entry && <Title title={entry.title} searchParams={searchParams} />
 }

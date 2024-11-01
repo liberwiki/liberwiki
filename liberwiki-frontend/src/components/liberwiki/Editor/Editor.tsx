@@ -1,3 +1,5 @@
+'use client'
+
 import '@/components/liberwiki/Editor/editor.css'
 
 import * as Icons from 'lucide-react'

@@ -1,43 +1,17 @@
-'use client'
-
-import { useRouter } from 'next/navigation'
-
 import * as Icons from 'lucide-react'
 
-import { Button } from '@/components/shadcn/button'
+import { RejectButton, VerifyButton } from '@/components/liberwiki/VerifyEmail/client'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/shadcn/card'
 
-import { useClientTranslation } from '@/i18n'
-import { useLiberWikiAPI } from '@/lib/serverHooks'
+import { sUseTranslation } from '@/i18n'
+import { useLiberWikiAPI as sUseLiberWikiAPI } from '@/lib/serverHooks'
 
-import { toast } from 'sonner'
-
-export function VerifyEmail({ uidb64, token }: { uidb64: string; token: string }) {
-  const liberwiki = useLiberWikiAPI()
-  const router = useRouter()
-
-  const { t } = useClientTranslation(['verifyEmail'])
-
-  const { data: userData, isSuccess } = liberwiki.user(atob(uidb64))
-  const { mutateAsync: verifyEmail } = liberwiki.verifyEmail()
-
-  async function handleVerify() {
-    const { response } = await verifyEmail({ uidb64, token })
-    if (response.ok) {
-      toast(t('verifyEmail:emailVerifiedSuccessfully'), { description: t('verifyEmail:youWillBeRedirectedToLogin') })
-      router.push('/auth/login')
-    } else {
-      toast(t('verifyEmail:verificationFailed'))
-    }
-  }
-
-  async function handleReject() {
-    router.push('/')
-    toast(t('verifyEmail:verificationRejected'), { description: t('verifyEmail:emailWillBeDeleted') })
-  }
+export async function VerifyEmail({ uidb64, token }: { uidb64: string; token: string }) {
+  const liberwiki = sUseLiberWikiAPI()
+  const { t } = await sUseTranslation(['verifyEmail'])
+  const { data: userData } = await liberwiki.user(atob(uidb64))
 
   return (
-    isSuccess &&
     userData && (
       <Card className="max-w-md w-full">
         <CardHeader className="flex flex-col gap-1 text-center">
@@ -51,14 +25,14 @@ export function VerifyEmail({ uidb64, token }: { uidb64: string; token: string }
           </div>
         </CardContent>
         <CardFooter className="flex justify-between gap-4">
-          <Button onClick={handleVerify} className="flex-1 gap-2" variant="default">
+          <VerifyButton className="flex-1 gap-2" variant="default" uidb64={uidb64} token={token}>
             <Icons.CheckCircle className="h-4 w-4" />
             {t('verifyEmail:yesItsMe')}
-          </Button>
-          <Button onClick={handleReject} className="flex-1 gap-2" variant="destructive">
+          </VerifyButton>
+          <RejectButton className="flex-1 gap-2" variant="destructive">
             <Icons.XCircle className="h-4 w-4" />
             {t('verifyEmail:noItsNotMe')}
-          </Button>
+          </RejectButton>
         </CardFooter>
       </Card>
     )

@@ -150,6 +150,10 @@ export function shortFormattedDate(date?: Date) {
   return formattedDate(SHORT_DATE_FORMAT, date || new Date())
 }
 
+export function optionalDate(date?: string) {
+  return date ? new Date(date) : undefined
+}
+
 export function preventDefault<T extends (event: Event) => unknown>(callable: T): T {
   return async function (event: Event) {
     event.preventDefault()

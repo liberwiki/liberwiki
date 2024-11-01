@@ -9,7 +9,6 @@ import { Toaster } from '@/components/shadcn/sonner'
 
 import config from '@/config'
 import { cn } from '@/lib/utils'
-import { AuthProvider, QueryClientProvider } from '@/providers'
 
 import { GoogleAnalytics } from '@next/third-parties/google'
 
@@ -20,26 +19,22 @@ export const metadata: Metadata = {
   description: config.name,
 }
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const gaID = config.devtools.googleAnalytics.gaID
   return (
-    <QueryClientProvider>
-      <AuthProvider>
-        <html lang="en" suppressHydrationWarning>
-          <head>
-            <meta
-              content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
-              name="viewport"
-            />
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+          name="viewport"
+        />
 
-            {gaID && <GoogleAnalytics gaId={gaID} />}
-          </head>
-          <body className={cn('min-h-screen font-sans antialiased dark', inter.className)}>
-            {children}
-            <Toaster />
-          </body>
-        </html>
-      </AuthProvider>
-    </QueryClientProvider>
+        {gaID && <GoogleAnalytics gaId={gaID} />}
+      </head>
+      <body className={cn('min-h-screen font-sans antialiased dark', inter.className)}>
+        {children}
+        <Toaster />
+      </body>
+    </html>
   )
 }

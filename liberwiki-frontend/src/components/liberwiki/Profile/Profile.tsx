@@ -1,35 +1,20 @@
-import { useRouter } from 'next/navigation'
-
 import * as Icons from 'lucide-react'
 
 import { InfoItem } from '@/components/liberwiki/Profile/InfoItem'
-import { Button } from '@/components/shadcn/button'
+import { LogoutButton } from '@/components/liberwiki/Profile/client/LogoutButton'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/shadcn/card'
 
-import config from '@/config'
-import { useClientTranslation } from '@/i18n'
-import { removeCookie } from '@/lib/serverActions'
-import { useLiberWikiAPI } from '@/lib/serverHooks'
+import { sUseTranslation } from '@/i18n'
+import { useLiberWikiAPI as sUseLiberWikiAPI } from '@/lib/serverHooks'
 
 import { format } from 'date-fns'
-import { toast } from 'sonner'
 
-export function Profile() {
-  const liberwiki = useLiberWikiAPI()
-  const router = useRouter()
-
-  const { t } = useClientTranslation(['common', 'profile'])
-
-  const { data: userData, isSuccess } = liberwiki.me()
-
-  async function handleLogout() {
-    await removeCookie(config.api.bearerTokenCookieName)
-    toast(t('profile:loggedOut'), { description: format(new Date(), "EEEE, MMMM dd, yyyy 'at' hh:mm a") })
-    router.push('/')
-  }
+export async function Profile() {
+  const liberwiki = sUseLiberWikiAPI()
+  const { t } = await sUseTranslation(['common', 'profile'])
+  const { data: userData } = await liberwiki.me()
 
   return (
-    isSuccess &&
     userData && (
       <Card className="max-w-md w-full max-md:bg-background">
         <CardHeader className="flex flex-col gap-1 text-center">
@@ -47,10 +32,10 @@ export function Profile() {
           </div>
         </CardContent>
         <CardFooter>
-          <Button className="w-full gap-2" variant="default" onClick={handleLogout}>
+          <LogoutButton className="w-full gap-2" variant="default">
             {t('profile:logout')}
             <Icons.LogOut className="h-4 w-4" />
-          </Button>
+          </LogoutButton>
         </CardFooter>
       </Card>
     )

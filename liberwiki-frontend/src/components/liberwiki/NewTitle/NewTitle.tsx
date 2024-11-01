@@ -1,38 +1,12 @@
-'use client'
-
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 
-import Editor from '@/components/liberwiki/Editor'
+import { NewTitleEntryEditor } from '@/components/liberwiki/NewTitle/client'
 import { Separator } from '@/components/shadcn/separator'
 
-import { useClientTranslation } from '@/i18n'
-import { useLiberWikiAPI } from '@/lib/serverHooks'
+import { sUseTranslation } from '@/i18n'
 
-import { toast } from 'sonner'
-
-export function NewTitle({ newTitle }: { newTitle: string }) {
-  newTitle = decodeURI(newTitle)
-  const liberwiki = useLiberWikiAPI()
-  const queryClient = liberwiki.useQueryClient()
-  const router = useRouter()
-
-  const { t } = useClientTranslation(['title', 'entry'])
-
-  const { mutateAsync: createTitle } = liberwiki.createTitle()
-  const { mutateAsync: createEntry } = liberwiki.createEntry()
-
-  async function handleEditorSubmit(content: object) {
-    const { data: title, response: createTitleResponse } = await createTitle({ name: newTitle })
-    const { response: createEntryResponse } = await createEntry({ title: title?.id as string, content })
-    if (createTitleResponse.ok && createEntryResponse.ok) {
-      toast(t('entry:yourEntryHasBeenCreated'))
-    } else {
-      toast(t('entry:entryCreationError'))
-    }
-    router.push(`/titles/${title?.slug}`)
-    await queryClient.invalidateQueries()
-  }
+export async function NewTitle({ newTitle }: { newTitle: string }) {
+  const { t } = await sUseTranslation(['title', 'entry'])
 
   return (
     <>
@@ -46,7 +20,7 @@ export function NewTitle({ newTitle }: { newTitle: string }) {
       </div>
       <div className="text-center text-gray-500 p-10">{t('title:noEntryFound')}</div>
       <div className="p-2 w-full">
-        <Editor readonly={false} onSubmit={handleEditorSubmit} />
+        <NewTitleEntryEditor newTitle={decodeURI(newTitle)} />
       </div>
     </>
   )

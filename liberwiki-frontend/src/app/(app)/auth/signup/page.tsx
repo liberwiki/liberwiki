@@ -1,7 +1,5 @@
-'use client'
-
 import Signup from '@/components/liberwiki/Signup'
 
-export default function SignupPage() {
+export default async function SignupPage() {
   return <Signup />
 }

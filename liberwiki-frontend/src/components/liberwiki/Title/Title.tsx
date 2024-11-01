@@ -1,117 +1,57 @@
-'use client'
-
 import Link from 'next/link'
 
-import { useState } from 'react'
+import _ from 'lodash'
 
-import * as Icons from 'lucide-react'
-
-import Editor from '@/components/liberwiki/Editor'
 import Entry from '@/components/liberwiki/Entry'
 import Paginator from '@/components/liberwiki/Paginator'
-import { Button } from '@/components/shadcn/button'
-import { Calendar } from '@/components/shadcn/calendar'
-import { Checkbox } from '@/components/shadcn/checkbox'
+import { FollowButton, NewEntryEditor } from '@/components/liberwiki/Title/client'
+import { Button, buttonVariants } from '@/components/shadcn/button'
+import { Input } from '@/components/shadcn/input'
 import { Label } from '@/components/shadcn/label'
 import { Overlay, OverlayContent, OverlayTitle, OverlayTrigger } from '@/components/shadcn/overlay'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover'
 import { Separator } from '@/components/shadcn/separator'
+import { SingleDateInput } from '@/components/shadcn/single-date-input'
 
-import { APIType, includesType } from '@/api'
+import { APIQuery, APIType, includesType } from '@/api'
 import config from '@/config'
-import { useClientTranslation } from '@/i18n'
-import { useFormState } from '@/lib/hooks'
-import { useLiberWikiAPI } from '@/lib/serverHooks'
-import { preventDefault } from '@/lib/utils'
-import { useAuth } from '@/providers/authProvider'
+import { sUseTranslation } from '@/i18n'
+import { useLiberWikiAPI as sUseLiberWikiAPI } from '@/lib/serverHooks'
+import { cn, optionalDate } from '@/lib/utils'
 
-import { format } from 'date-fns'
-import { toast } from 'sonner'
-
-export function Title({ title }: { title: APIType<'Title'> }) {
+export async function Title({
+  title,
+  searchParams,
+}: {
+  title: APIType<'Title'>
+  searchParams: APIQuery<'/v0/entries/'>
+}) {
   const entryPerPage = config.ux.defaultEntryPageSize
-  const liberwiki = useLiberWikiAPI()
-  const { user } = useAuth()
-  const [currentPage, setCurrentPage] = useState<number>(1)
+  const liberwiki = sUseLiberWikiAPI()
+  const { t } = await sUseTranslation(['common', 'title', 'entry', 'advancedEntrySearch'])
 
-  const { t } = useClientTranslation(['common', 'title', 'entry', 'advancedEntrySearch'])
-
-  const queryClient = liberwiki.useQueryClient()
-  const { mutateAsync: createEntry } = liberwiki.createEntry()
-  const { mutateAsync: bookmarkTitle } = liberwiki.bookmarkTitle(title.id)
-  const { mutateAsync: unbookmarkTitle } = liberwiki.unbookmarkTitle(title.id)
-
-  const [isBookmarked, setIsBookmarked] = useState<boolean>(title.is_bookmarked)
-
-  const {
-    formState: searchState,
-    handleFormStateValue: handleSearchStateValue,
-    handleFormStateOnClick: handleSearchStateOnClick,
-  } = useFormState<{
-    mine: boolean
-    fromDate: Date | undefined
-    toDate: Date | undefined
-    orderBy: 'chronological' | 'likes' | 'dislikes' | 'bookmarks'
-  }>({
-    mine: false,
-    fromDate: undefined,
-    toDate: undefined,
-    orderBy: 'chronological',
-  })
-
-  const { isSuccess, data: entries } = liberwiki.entries({
-    page: currentPage,
-    title__slug: title.slug,
+  const { data: entries } = await liberwiki.entries({
     page_size: entryPerPage,
+    title__slug: title.slug,
     include: 'author',
-    author: searchState.mine ? user?.id : undefined,
-    created_at__gte: searchState.fromDate ? format(searchState.fromDate, 'yyyy-MM-dd') : undefined,
-    created_at__lte: searchState.toDate ? format(searchState.toDate, 'yyyy-MM-dd') : undefined,
-    ordering: {
-      chronological: 'created_at',
-      likes: '-like_count',
-      dislikes: '-dislike_count',
-      bookmarks: '-bookmark_count',
-    }[searchState.orderBy] as 'created_at' | '-like_count' | '-dislike_count' | '-bookmark_count',
-    // TODO: figure out why we need this ^ as here as it seems like TS should be able to figure it out
+    page: searchParams.page,
+    author: searchParams.author,
+    created_at__gte: searchParams.created_at__gte,
+    created_at__lte: searchParams.created_at__lte,
+    ordering: searchParams.ordering,
   })
-
-  async function handleEditorSubmit(content: object) {
-    const { response: createEntryResponse } = await createEntry({ title: title?.id as string, content })
-    if (createEntryResponse.ok) {
-      toast(t('entry:yourEntryHasBeenCreated'))
-      await queryClient.invalidateQueries({ queryKey: ['titles'] })
-      await queryClient.invalidateQueries({ queryKey: ['entries'] })
-      if (entries) {
-        // If the current page is full, and a new entry is created, go to the next page
-        setCurrentPage(entries.count % entryPerPage === 0 ? entries.total_pages + 1 : entries.total_pages)
-      }
-    } else {
-      toast(t('entry:entryCreationError'))
-    }
-  }
-
-  async function handleEntryDelete() {
-    // I couldn't get this logic working without explicitly passing a function to the Entry component
-    if (entries) {
-      // If current page only has 1 entry, and it is deleted, go to the previous page
-      setCurrentPage(entries.count % entryPerPage === 1 ? entries.total_pages - 1 : entries.total_pages)
-    }
-  }
-
-  async function handleBookmark() {
-    setIsBookmarked(!isBookmarked)
-    await (isBookmarked ? unbookmarkTitle() : bookmarkTitle())
-    await queryClient.invalidateQueries({ queryKey: ['titles', { slug: title.slug, page_size: 1, page: 1 }] })
-  }
 
   const orderingLabels = {
-    chronological: t('advancedEntrySearch:orderByChronological'),
-    likes: t('advancedEntrySearch:orderByLikes'),
-    dislikes: t('advancedEntrySearch:orderByDislikes'),
-    bookmarks: t('advancedEntrySearch:orderByBookmarks'),
+    '-date': t('advancedEntrySearch:orderByChronological'),
+    '-like_count': t('advancedEntrySearch:orderByLikes'),
+    '-dislike_count': t('advancedEntrySearch:orderByDislikes'),
+    '-bookmark_count': t('advancedEntrySearch:orderByBookmarks'),
   }
 
+  function newOrderingHref(ordering: APIQuery<'/v0/entries/'>['ordering']) {
+    return { pathname: `/titles/${title.slug}`, query: { ...searchParams, ordering } }
+  }
+
+  const currentOrdering = _.get(orderingLabels, searchParams.ordering || '-date', orderingLabels['-date'])
   return (
     <>
       <div className="w-full">
@@ -124,41 +64,37 @@ export function Title({ title }: { title: APIType<'Title'> }) {
               <OverlayTrigger>
                 <Button variant="ghost" className="px-0 hover:bg-transparent">
                   <p className="font-medium text-primary hover:underline">
-                    {`${t('advancedEntrySearch:currentOrdering')}: ${orderingLabels[searchState.orderBy]}`}
+                    {`${t('advancedEntrySearch:currentOrdering')}: ${currentOrdering}`}
                   </p>
                 </Button>
               </OverlayTrigger>
               <OverlayContent align="start" side="bottom">
                 <OverlayTitle className="hidden">Ordering</OverlayTitle>
                 <div className="flex flex-col">
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start"
-                    onClick={handleSearchStateOnClick('orderBy', 'chronological')}
+                  <Link
+                    href={newOrderingHref('-created_at')}
+                    className={cn(buttonVariants({ variant: 'ghost', className: 'w-full justify-start' }))}
                   >
                     {t('advancedEntrySearch:orderByChronological')}
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start"
-                    onClick={handleSearchStateOnClick('orderBy', 'likes')}
+                  </Link>
+                  <Link
+                    href={newOrderingHref('-like_count')}
+                    className={cn(buttonVariants({ variant: 'ghost', className: 'w-full justify-start' }))}
                   >
                     {t('advancedEntrySearch:orderByLikes')}
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start"
-                    onClick={handleSearchStateOnClick('orderBy', 'dislikes')}
+                  </Link>
+                  <Link
+                    href={newOrderingHref('-dislike_count')}
+                    className={cn(buttonVariants({ variant: 'ghost', className: 'w-full justify-start' }))}
                   >
                     {t('advancedEntrySearch:orderByDislikes')}
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start"
-                    onClick={handleSearchStateOnClick('orderBy', 'bookmarks')}
+                  </Link>
+                  <Link
+                    href={newOrderingHref('-bookmark_count')}
+                    className={cn(buttonVariants({ variant: 'ghost', className: 'w-full justify-start' }))}
                   >
                     {t('advancedEntrySearch:orderByBookmarks')}
-                  </Button>
+                  </Link>
                 </div>
               </OverlayContent>
             </Overlay>
@@ -169,103 +105,61 @@ export function Title({ title }: { title: APIType<'Title'> }) {
                 </Button>
               </OverlayTrigger>
               <OverlayContent align="start" side="bottom" className="w-full">
-                <div className="grid gap-6 md:w-96">
-                  <div className="flex flex-col gap-2">
-                    <h4 className="font-semibold text-lg leading-none">
-                      {t('advancedEntrySearch:advancedEntrySearch')}
-                    </h4>
-                    <p className="text-sm text-muted-foreground">{t('advancedEntrySearch:refineYourSearch')}</p>
-                  </div>
-                  <div className="flex flex-col gap-4">
+                <form id="entrySearchForm" action={`/titles/${title.slug}`}>
+                  <div className="grid gap-6 md:w-96">
                     <div className="flex flex-col gap-2">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="flex flex-col gap-2">
-                          <Label htmlFor="fromDate">{t('advancedEntrySearch:fromDate')}</Label>
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <Button
-                                variant={'outline'}
-                                className={`w-full text-left font-normal justify-between ${!searchState.fromDate && 'text-muted-foreground'}`}
-                              >
-                                {searchState.fromDate ? (
-                                  format(searchState.fromDate, 'PPP')
-                                ) : (
-                                  <span>{t('advancedEntrySearch:pickADate')}</span>
-                                )}
-                                {searchState.fromDate && (
-                                  <Icons.X
-                                    className="h-4 w-4"
-                                    onClick={preventDefault(handleSearchStateOnClick('fromDate', undefined))}
-                                  />
-                                )}
-                              </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0" align="start">
-                              <Calendar
-                                mode="single"
-                                selected={searchState.fromDate}
-                                onSelect={handleSearchStateValue('fromDate')}
-                                initialFocus
-                              />
-                            </PopoverContent>
-                          </Popover>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                          <Label htmlFor="toDate">{t('advancedEntrySearch:toDate')}</Label>
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <Button
-                                variant={'outline'}
-                                className={`w-full text-left font-normal justify-between ${!searchState.toDate && 'text-muted-foreground'}`}
-                              >
-                                {searchState.toDate ? (
-                                  format(searchState.toDate, 'PPP')
-                                ) : (
-                                  <span>{t('advancedEntrySearch:pickADate')}</span>
-                                )}
-                                {searchState.toDate && (
-                                  <Icons.X
-                                    className="h-4 w-4"
-                                    onClick={preventDefault(handleSearchStateOnClick('toDate', undefined))}
-                                  />
-                                )}
-                              </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0" align="start">
-                              <Calendar
-                                mode="single"
-                                selected={searchState.toDate}
-                                onSelect={handleSearchStateValue('toDate')}
-                                initialFocus
-                              />
-                            </PopoverContent>
-                          </Popover>
+                      <h4 className="font-semibold text-lg leading-none">
+                        {t('advancedEntrySearch:advancedEntrySearch')}
+                      </h4>
+                      <p className="text-sm text-muted-foreground">{t('advancedEntrySearch:refineYourSearch')}</p>
+                    </div>
+                    <div className="flex flex-col gap-4">
+                      <div className="flex flex-col gap-2">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="flex flex-col gap-2">
+                            <Label htmlFor="fromDate">{t('advancedEntrySearch:fromDate')}</Label>
+                            <SingleDateInput
+                              form="entrySearchForm"
+                              name="created_at__gte"
+                              placeholder={t('advancedEntrySearch:pickADate')}
+                              value={optionalDate(searchParams.created_at__gte)}
+                            />
+                          </div>
+                          <div className="flex flex-col gap-2">
+                            <Label htmlFor="toDate">{t('advancedEntrySearch:toDate')}</Label>
+                            <SingleDateInput
+                              form="entrySearchForm"
+                              name="created_at__lte"
+                              placeholder={t('advancedEntrySearch:pickADate')}
+                              value={optionalDate(searchParams.created_at__lte)}
+                            />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="flex items-center gap-2 py-2">
-                      <Checkbox
-                        id="mine"
-                        name="mine"
-                        checked={searchState.mine}
-                        onCheckedChange={(checked) => handleSearchStateValue('mine')(checked as boolean)}
-                      />
-                      <Label htmlFor="mine">{t('advancedEntrySearch:mine')}</Label>
+                      <div className="flex flex-col gap-2 py-2">
+                        <Label htmlFor="from">{t('advancedEntrySearch:from')}</Label>
+                        <Input
+                          form="entrySearchForm"
+                          id="author"
+                          name="author"
+                          value={searchParams.author}
+                          placeholder={t('advancedEntrySearch:enterUserID')}
+                        />
+                      </div>
+                      <Button type="submit">{t('common:search')}</Button>
                     </div>
                   </div>
-                </div>
+                  <Input type="hidden" name="ordering" value={searchParams.ordering} />
+                </form>
               </OverlayContent>
             </Overlay>
-            <Button variant="ghost" className="px-0 hover:bg-transparent" onClick={handleBookmark}>
-              <p className="font-medium text-primary hover:underline">
-                {title.is_bookmarked ? t('title:follow') : t('title:unfollow')}
-              </p>
-            </Button>
+            <FollowButton title={title} />
           </div>
           <Paginator
-            currentPage={currentPage}
+            queryParams={searchParams}
+            pathname={`/titles/${title.slug}`}
+            currentPage={searchParams.page || 1}
             totalPages={entries?.total_pages || 1}
-            onPageChange={setCurrentPage}
             className="mt-1"
           />
         </div>
@@ -273,17 +167,14 @@ export function Title({ title }: { title: APIType<'Title'> }) {
           <Separator />
         </div>
       </div>
-      {isSuccess &&
-        entries &&
+      {entries &&
         ((entries.results.length || 0) > 0 ? (
-          entries.results.map((entry) => (
-            <Entry key={entry.id} entry={includesType(entry, 'author', 'User')} onDelete={handleEntryDelete} />
-          ))
+          entries.results.map((entry) => <Entry key={entry.id} entry={includesType(entry, 'author', 'User')} />)
         ) : (
           <div className="text-center text-gray-500 p-10">{t('title:noEntryFound')}</div>
         ))}
       <div className="p-2 w-full">
-        <Editor readonly={false} onSubmit={handleEditorSubmit} />
+        <NewEntryEditor title={title} />
       </div>
     </>
   )

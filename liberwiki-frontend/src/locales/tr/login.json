@@ -1,7 +1,7 @@
 {
-  "loginDescription": "Hesabınıza giriş yapmak için e-posta adresinizi ve şifrenizi girin",
   "enterYourEmail": "E-posta adresinizi girin",
   "password": "Şifre",
   "enterYourPassword": "Şifrenizi girin",
-  "signUpInstead": "Bunun yerine kayıt ol?"
+  "signUpInstead": "Bunun yerine kayıt ol?",
+  "loginDescription": "Hesabınıza giriş yapmak için e-posta adresinizi ve şifrenizi girin"
 }

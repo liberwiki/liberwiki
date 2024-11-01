@@ -7,10 +7,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { SeparatorWithText } from '@/components/shadcn/separator-with-text'
 
 import config from '@/config'
-import { useClientTranslation } from '@/i18n'
+import { sUseTranslation } from '@/i18n'
 
-export function LockDown() {
-  const { t } = useClientTranslation(['lockdown'])
+export async function LockDown() {
+  const { t } = await sUseTranslation(['lockdown'])
+
   return (
     <Card className="max-w-md w-full">
       <CardHeader className="flex flex-col gap-3">

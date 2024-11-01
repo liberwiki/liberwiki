@@ -2,8 +2,8 @@ import Link from 'next/link'
 
 import * as Icons from 'lucide-react'
 
-import { AdvancedSearch } from '@/components/liberwiki/Header/AdvancedSearch'
 import { MobileNav } from '@/components/liberwiki/Header/MobileNav'
+import { AdvancedSearch } from '@/components/liberwiki/Header/client'
 import { Button } from '@/components/shadcn/button'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/shadcn/sheet'
 
@@ -13,7 +13,6 @@ import { useLiberWikiAPI as sUseLiberWikiAPI } from '@/lib/serverHooks'
 
 export async function Header() {
   const liberwiki = sUseLiberWikiAPI()
-
   const { t } = await sUseTranslation(['common'])
 
   return (

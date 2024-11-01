@@ -1,74 +1,23 @@
 import Link from 'next/link'
 
-import { useState } from 'react'
-
 import * as Icons from 'lucide-react'
 
-import _ from 'lodash'
-
 import Editor from '@/components/liberwiki/Editor'
+import { BookmarkButton, DeleteButton, FeedbackButtons } from '@/components/liberwiki/Entry/client'
 import { Button } from '@/components/shadcn/button'
 import { Card, CardContent } from '@/components/shadcn/card'
 import { Overlay, OverlayClose, OverlayContent, OverlayTrigger } from '@/components/shadcn/overlay'
 
 import { APIType, Includes } from '@/api/typeHelpers'
-import { useClientTranslation } from '@/i18n'
-import { useLiberWikiAPI } from '@/lib/serverHooks'
-import { cn } from '@/lib/utils'
-import { useAuth } from '@/providers/authProvider'
+import { sUseTranslation } from '@/i18n'
+import { useLiberWikiAPI as sUseLiberWikiAPI } from '@/lib/serverHooks'
+import { shortFormattedDate } from '@/lib/utils'
 
-import { format } from 'date-fns'
-import { toast } from 'sonner'
+export async function Entry({ entry }: { entry: Includes<APIType<'Entry'>, 'author', APIType<'User'>> }) {
+  const liberwiki = sUseLiberWikiAPI()
+  const { t } = await sUseTranslation(['entry'])
+  const { data: user } = await liberwiki.me()
 
-export function Entry({
-  entry,
-  onDelete = () => {},
-}: {
-  entry: Includes<APIType<'Entry'>, 'author', APIType<'User'>>
-  onDelete?: () => void
-}) {
-  const { user } = useAuth()
-  const liberwiki = useLiberWikiAPI()
-  const queryClient = liberwiki.useQueryClient()
-
-  const { t } = useClientTranslation(['common', 'entry'])
-
-  const { mutateAsync: deleteEntry } = liberwiki.deleteEntry(entry.id)
-  const { mutateAsync: upvoteEntry } = liberwiki.upvoteEntry(entry.id)
-  const { mutateAsync: downvoteEntry } = liberwiki.downvoteEntry(entry.id)
-  const { mutateAsync: unvoteEntry } = liberwiki.unvoteEntry(entry.id)
-  const { mutateAsync: bookmarkEntry } = liberwiki.bookmarkEntry(entry.id)
-  const { mutateAsync: unbookmarkEntry } = liberwiki.unbookmarkEntry(entry.id)
-
-  const [feedback, setFeedback] = useState<APIType<'VoteEnum'> | null>(entry.vote)
-  const [isBookmarked, setIsBookmarked] = useState<boolean>(entry.is_bookmarked)
-
-  async function handleBookmark() {
-    setIsBookmarked(!isBookmarked)
-    await (isBookmarked ? unbookmarkEntry() : bookmarkEntry())
-    await queryClient.invalidateQueries({ queryKey: ['entries'] })
-  }
-
-  function handleVote(vote: APIType<'VoteEnum'>) {
-    return async function () {
-      if (feedback === vote) {
-        setFeedback(null)
-        await unvoteEntry()
-      } else {
-        setFeedback(vote)
-        await _.get({ UPVOTE: upvoteEntry, DOWNVOTE: downvoteEntry }, vote)()
-      }
-      await queryClient.invalidateQueries({ queryKey: ['entries'] })
-    }
-  }
-
-  async function handleDelete() {
-    await deleteEntry()
-    await queryClient.invalidateQueries({ queryKey: ['titles'] })
-    await queryClient.invalidateQueries({ queryKey: ['entries'] })
-    onDelete()
-    toast(t('entry:entryHasBenDeleted', { entryId: entry.id }))
-  }
   return (
     <Card className="w-full border-0">
       <CardContent className="pt-6">
@@ -77,17 +26,8 @@ export function Entry({
         </div>
         <div className="flex justify-between items-center -mx-4">
           <div className="flex gap-2 items-center">
-            <Button variant="ghost" size="icon" onClick={handleVote('UPVOTE')}>
-              <Icons.ArrowBigUp className={cn('h-5 w-5', feedback === 'UPVOTE' && 'fill-green-500 text-green-500')} />
-            </Button>
-            <Button variant="ghost" size="icon" onClick={handleVote('DOWNVOTE')}>
-              <Icons.ArrowBigDown
-                className={cn('h-5 w-5', feedback === 'DOWNVOTE' && 'fill-destructive text-destructive')}
-              />
-            </Button>
-            <Button variant="ghost" size="icon" onClick={handleBookmark}>
-              <Icons.Heart className={cn('h-4 w-4', isBookmarked && 'fill-primary')} />
-            </Button>
+            <FeedbackButtons entry={entry} />
+            <BookmarkButton entry={entry} />
             <Button variant="ghost" size="icon">
               <Icons.Share2 className="h-4 w-4" />
             </Button>
@@ -98,7 +38,7 @@ export function Entry({
                 {entry.author.username}
               </Link>
               <span className="mx-1">•</span>
-              <span>{format(new Date(entry.created_at), 'dd.MM.yyyy')}</span>
+              <span>{shortFormattedDate(new Date(entry.created_at))}</span>
             </div>
             <Overlay breakpoint="md">
               <OverlayTrigger>
@@ -109,10 +49,10 @@ export function Entry({
               <OverlayContent side="bottom" align="end">
                 <div className="flex flex-col gap-2">
                   {(user?.id === entry.author.id || user?.is_superuser) && (
-                    <OverlayClose>
-                      <Button variant="ghost" className="w-full justify-start" onClick={handleDelete}>
+                    <OverlayClose asChild>
+                      <DeleteButton variant="ghost" className="w-full justify-start" entry={entry}>
                         {t('entry:delete')}
-                      </Button>
+                      </DeleteButton>
                     </OverlayClose>
                   )}
                 </div>

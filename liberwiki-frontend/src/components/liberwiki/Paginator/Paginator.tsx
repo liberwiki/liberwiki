@@ -1,74 +1,100 @@
+import Link from 'next/link'
+
 import * as Icons from 'lucide-react'
 
-import { Button } from '@/components/shadcn/button'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
+import _ from 'lodash'
 
-import { useClientTranslation } from '@/i18n'
+import { buttonVariants } from '@/components/shadcn/button'
+import { Overlay, OverlayContent, OverlayTrigger } from '@/components/shadcn/overlay'
+import { ScrollArea } from '@/components/shadcn/scroll-area'
+
+import { sUseTranslation } from '@/i18n'
 import { cn } from '@/lib/utils'
 
-export function Paginator({
+export async function Paginator({
+  pageQueryParamName = 'page',
+  pathname,
+  queryParams,
   currentPage,
   totalPages,
-  onPageChange,
   className,
   force = false,
 }: {
+  pageQueryParamName?: string
+  pathname?: string
+  queryParams: Record<string, string | number | boolean | undefined>
   currentPage: number
   totalPages: number
-  onPageChange: (p: number) => void
   className?: string
   force?: boolean
 }) {
-  const { t } = useClientTranslation(['paginator'])
+  const { t } = await sUseTranslation(['paginator'])
 
   if (!force && totalPages <= 1) {
     return null
   }
+
   return (
     <div className={cn('flex w-full items-center justify-end gap-2', className)}>
-      <Button
-        variant="outline"
-        size="sm"
-        disabled={currentPage === 1}
+      <Link
+        className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}
         aria-label={t('paginator:previousPage')}
-        onClick={() => onPageChange(currentPage - 1)}
+        href={{
+          pathname,
+          query: { ...queryParams, [pageQueryParamName]: _.max([Number(currentPage) - 1, 1]) },
+        }}
       >
         <Icons.ChevronLeft className="h-3 w-3" />
-      </Button>
+      </Link>
       <div className="flex items-center gap-2 !ml-0">
-        <Select value={currentPage.toString()} onValueChange={(value) => onPageChange(parseInt(value))}>
-          <SelectTrigger className="w-16 h-9">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <SelectItem key={page} value={page.toString()}>
-                {page}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <Overlay breakpoint="md">
+          <OverlayTrigger asChild>
+            <button
+              className={cn(
+                buttonVariants({ variant: 'outline', size: 'sm' }),
+                'w-16 h-9 flex justify-between items-center'
+              )}
+            >
+              {currentPage}
+              <Icons.ChevronDown className="h-3 w-3" />
+            </button>
+          </OverlayTrigger>
+          <OverlayContent side="bottom" popoverContentProps={{ className: 'w-36' }}>
+            <ScrollArea>
+              <div className="flex flex-col max-h-48">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <Link
+                    className={cn(buttonVariants({ variant: 'ghost', className: 'w-full justify-center' }))}
+                    href={{ pathname, query: { ...queryParams, [pageQueryParamName]: Number(page) } }}
+                    prefetch={false}
+                    key={page}
+                  >
+                    {page}
+                  </Link>
+                ))}
+              </div>
+            </ScrollArea>
+          </OverlayContent>
+        </Overlay>
         <span>/</span>
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={currentPage === totalPages}
+        <Link
+          className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}
           aria-label={t('paginator:maxPage')}
-          onClick={() => onPageChange(totalPages)}
+          href={{ pathname, query: { ...queryParams, [pageQueryParamName]: Number(totalPages) } }}
         >
           {totalPages}
-        </Button>
+        </Link>
       </div>
-      <Button
-        variant="outline"
-        size="sm"
-        disabled={currentPage === totalPages}
+      <Link
+        className={cn(buttonVariants({ variant: 'outline', size: 'sm', className: '!ml-0' }))}
         aria-label={t('paginator:nextPage')}
-        className="!ml-0"
-        onClick={() => onPageChange(currentPage + 1)}
+        href={{
+          pathname,
+          query: { ...queryParams, [pageQueryParamName]: _.min([Number(currentPage) + 1, totalPages]) },
+        }}
       >
         <Icons.ChevronRight className="h-3 w-3" />
-      </Button>
+      </Link>
     </div>
   )
 }
