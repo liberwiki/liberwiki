@@ -61,6 +61,7 @@ services:
       - NEXT_PUBLIC_LIBERWIKI__FRONT_END__DEVTOOLS__GOOGLE_ANALYTICS__GA_ID
     networks:
       - internal
+      - external
     restart: unless-stopped
 
   server:
