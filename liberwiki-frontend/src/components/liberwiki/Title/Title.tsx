@@ -32,7 +32,7 @@ export async function Title({
   const { data: entries } = await liberwiki.entries({
     page_size: entryPerPage,
     title__slug: title.slug,
-    include: 'author',
+    include: 'author,title',
     page: searchParams.page,
     author: searchParams.author,
     created_at__gte: searchParams.created_at__gte,
@@ -169,7 +169,9 @@ export async function Title({
       </div>
       {entries &&
         ((entries.results.length || 0) > 0 ? (
-          entries.results.map((entry) => <Entry key={entry.id} entry={includesType(entry, 'author', 'User')} />)
+          entries.results.map((entry) => (
+            <Entry key={entry.id} entry={includesType(includesType(entry, 'author', 'User'), 'title', 'Title')} />
+          ))
         ) : (
           <div className="text-center text-gray-500 p-10">{t('title:noEntryFound')}</div>
         ))}

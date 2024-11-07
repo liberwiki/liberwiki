@@ -1,5 +1,4 @@
 {
-  "signupWithInvitationCode": "Sign Up with your invitation code",
   "enterYourEmail": "Enter your email",
   "enterYourUsername": "Enter your username",
   "password": "Password",
@@ -7,5 +6,6 @@
   "passwordConfirmation": "Password Confirmation",
   "enterYourPasswordConfirmation": "Confirm your password",
   "invitationCode": "Invitation Code",
-  "loginInstead": "Login Instead?"
+  "loginInstead": "Login Instead?",
+  "signupWithInvitationCode": "Sign Up with your invitation code"
 }

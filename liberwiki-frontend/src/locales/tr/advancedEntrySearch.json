@@ -1,14 +1,14 @@
 {
+  "orderByChronological": "Kronolojik",
+  "orderByLikes": "Beğeniler",
+  "orderByDislikes": "Sevilmeyenler",
+  "orderByBookmarks": "Yer İmleri",
+  "currentOrdering": "Sıralama",
   "advancedEntrySearch": "Gelişmiş Girdi Arama",
   "refineYourSearch": "Aramanızı ek filtrelerle daraltın.",
   "fromDate": "Başlangıç Tarihi",
   "pickADate": "Bir Tarih Seçin",
   "toDate": "Bitiş Tarihi",
   "from": "Kimden",
-  "enterUserID": "Bir Kullanıcı Numarası ya da Kullanıcı Adı Girin",
-  "orderByChronological": "Kronolojik",
-  "orderByLikes": "Beğeniler",
-  "orderByDislikes": "Sevilmeyenler",
-  "orderByBookmarks": "Yer İmleri",
-  "currentOrdering": "Sıralama"
+  "enterUserID": "Bir Kullanıcı Numarası ya da Kullanıcı Adı Girin"
 }

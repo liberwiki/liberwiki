@@ -1,14 +1,14 @@
 {
+  "orderByChronological": "Chronological",
+  "orderByLikes": "Likes",
+  "orderByDislikes": "Dislikes",
+  "orderByBookmarks": "Bookmarks",
+  "currentOrdering": "Ordering",
   "advancedEntrySearch": "Advanced Entry Search",
   "refineYourSearch": "Refine your search with additional filters.",
   "fromDate": "From Date",
   "pickADate": "Pick A Date",
   "toDate": "To Date",
   "from": "From",
-  "enterUserID": "Enter A User ID or Username",
-  "orderByChronological": "Chronological",
-  "orderByLikes": "Likes",
-  "orderByDislikes": "Dislikes",
-  "orderByBookmarks": "Bookmarks",
-  "currentOrdering": "Ordering"
+  "enterUserID": "Enter A User ID or Username"
 }

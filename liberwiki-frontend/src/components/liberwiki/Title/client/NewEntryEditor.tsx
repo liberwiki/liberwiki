@@ -25,7 +25,7 @@ export default function NewEntryEditor(
     const { response: createEntryResponse } = await liberwiki.createEntry({ title: title?.id as string, content })
     if (createEntryResponse.ok) {
       toast(t('entry:yourEntryHasBeenCreated'))
-      const [tet, epp] = [title.entry_count, config.ux.defaultEntryPageSize]
+      const [tet, epp] = [title.entry_count + 1, config.ux.defaultEntryPageSize]
       const targetPage = tet % epp === 0 ? tet / epp : Math.floor(tet / epp) + 1
       router.push(`?${new URLSearchParams({ page: String(targetPage) }).toString()}`)
     } else {

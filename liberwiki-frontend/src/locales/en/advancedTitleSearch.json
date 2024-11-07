@@ -1,13 +1,3 @@
 {
-  "advancedTitleSearch": "Advanced Title Search",
-  "refineYourSearch": "Refine your search with additional filters.",
-  "freeTextSearch": "Free Text Search",
-  "enterKeywords": "Enter keywords",
-  "author": "Author",
-  "allAuthors": "All Authors",
-  "fromDate": "From Date",
-  "pickADate": "Pick A Date",
-  "toDate": "To Date",
-  "mine": "Mine",
-  "fromMyFavorites": "From my favorites"
+  "noResults": "We couldn't find anything with this query, maybe try changing it slightly?"
 }

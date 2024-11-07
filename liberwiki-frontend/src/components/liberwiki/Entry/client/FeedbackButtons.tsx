@@ -12,7 +12,11 @@ import { APIType, Includes } from '@/api/typeHelpers'
 import { useLiberWikiAPI } from '@/lib/serverHooks'
 import { cn } from '@/lib/utils'
 
-export default function FeedbackButtons({ entry }: { entry: Includes<APIType<'Entry'>, 'author', APIType<'User'>> }) {
+export default function FeedbackButtons({
+  entry,
+}: {
+  entry: Includes<Includes<APIType<'Entry'>, 'author', APIType<'User'>>, 'title', APIType<'Title'>>
+}) {
   const liberwiki = useLiberWikiAPI()
   const [feedback, setFeedback] = useState<APIType<'VoteEnum'> | null>(entry.vote)
 

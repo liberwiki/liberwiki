@@ -30,6 +30,7 @@ export class LiberWikiAPI {
       init.headers[config.api.bearerTokenHeaderName] = `${config.api.bearerTokenPrefix} ${bearerToken}`
     }
     init.headers['Content-Type'] = 'application/json'
+    init.cache = 'no-cache'
     const response = await fetch(input, init)
     try {
       if (_.isEqual(await response.clone().json(), { detail: 'Invalid token.' })) {

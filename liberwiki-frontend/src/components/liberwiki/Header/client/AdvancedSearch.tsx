@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 import React from 'react'
@@ -8,96 +9,93 @@ import * as Icons from 'lucide-react'
 
 import _ from 'lodash'
 
-import { Button } from '@/components/shadcn/button'
-import { Input } from '@/components/shadcn/input'
-import { Overlay, OverlayContent, OverlayTrigger } from '@/components/shadcn/overlay'
+import { PopoverClose } from '@radix-ui/react-popover'
 
+import { Button, buttonVariants } from '@/components/shadcn/button'
+import { Input } from '@/components/shadcn/input'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover'
+import { ScrollArea } from '@/components/shadcn/scroll-area'
+
+import { APIType } from '@/api'
 import { useClientTranslation } from '@/i18n'
-import { useElementAttribute, useFormState } from '@/lib/hooks'
 import { useLiberWikiAPI } from '@/lib/serverHooks'
+import { cn } from '@/lib/utils'
 
 export default function AdvancedSearch() {
   const liberwiki = useLiberWikiAPI()
   const router = useRouter()
+  const [search, setSearch] = React.useState<string>('')
+  const [searchResults, setSearchResults] = React.useState<APIType<'Title'>[]>([])
 
-  const {
-    // We are trying to keep the width of the popover the same as the search box
-    // Proven too hard to do with only css/tailwind
-    ref: searchBoxRef,
-    attributeValue: popoverWidth,
-  } = useElementAttribute<HTMLDivElement, keyof HTMLDivElement>('offsetWidth')
   const { t } = useClientTranslation(['common', 'advancedTitleSearch'])
 
-  const { formState: searchState, handleFormStateEvent: handleSearchStateEvent } = useFormState<{
-    search: string
-  }>({
-    search: '',
-  })
+  async function handleAutocomplete(event: React.ChangeEvent<HTMLInputElement>) {
+    setSearch(event.target.value)
+    const { data: titles } = await liberwiki.titles({ name__icontains: event.target.value })
+    setSearchResults(titles?.results || [])
+  }
 
   async function handleSearch(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    const { data: titles } = await liberwiki.titles({ page_size: 1, name__iexact: searchState.search })
+    const { data: titles } = await liberwiki.titles({ page_size: 1, name__iexact: search })
     if (titles && titles.results.length !== 0) {
       router.push(`/titles/${_.first(titles?.results)?.slug}`)
     } else {
-      router.push(`/titles/${searchState.search}`)
+      router.push(`/titles/${search}`)
     }
   }
 
   return (
-    <>
-      <form onSubmit={handleSearch} className="w-full">
-        <div className="relative" ref={searchBoxRef}>
-          <Input
-            type="text"
-            name="search"
-            placeholder={t('common:search')}
-            className="pr-20 h-10"
-            value={searchState.search}
-            onChange={handleSearchStateEvent('search')}
-          />
-          {
-            <div className="absolute right-0 top-0 h-full flex items-center pr-3">
-              <Overlay breakpoint="md" displayType="flex">
-                <OverlayTrigger>
-                  <Button type="button" variant="ghost" size="icon" className="h-full px-2 hover:bg-transparent">
-                    <Icons.ChevronDown className="h-4 w-4" />
-                  </Button>
-                </OverlayTrigger>
-                <OverlayContent
-                  onOpenAutoFocus={(e) => e.preventDefault()}
-                  popoverContentProps={{
-                    align: 'end',
-                    className: 'p-6 advanced-search-popover',
-                    style: { width: `${popoverWidth}px` },
-                  }}
-                  sideOffset={8}
-                  side="bottom"
-                >
-                  <div>Search results will appear here</div>
-                </OverlayContent>
-              </Overlay>
-              <Button type="submit" variant="ghost" size="icon" className="h-full px-2 hover:bg-transparent">
-                <Icons.Search className="h-4 w-4" />
-              </Button>
-            </div>
-          }
+    <form onSubmit={handleSearch} className="w-full">
+      <div className="relative">
+        <Popover>
+          <PopoverTrigger asChild>
+            <Input
+              type="text"
+              name="search"
+              placeholder={t('common:search')}
+              autoComplete="none"
+              className="pr-20 h-10"
+              value={search}
+              onChange={handleAutocomplete}
+            />
+          </PopoverTrigger>
+          <PopoverContent
+            align="start"
+            className="p-0 w-[var(--radix-popover-trigger-width)] max-h-[300px] overflow-y-auto"
+            sideOffset={5}
+            onOpenAutoFocus={(e) => e.preventDefault()}
+          >
+            <ScrollArea>
+              <div className="flex flex-col max-h-48 px-2 py-4">
+                {searchResults.map((title) => (
+                  <PopoverClose asChild key={title.id}>
+                    <Link
+                      className={cn(buttonVariants({ variant: 'ghost', className: 'justify-start' }))}
+                      href={`/titles/${title.slug}`}
+                      key={title.id}
+                    >
+                      {title.name}
+                    </Link>
+                  </PopoverClose>
+                ))}
+                {searchResults.length === 0 && (
+                  <PopoverClose asChild>
+                    <div className={cn(buttonVariants({ variant: 'ghost', className: 'justify-start' }))}>
+                      {t('advancedTitleSearch:noResults')}
+                    </div>
+                  </PopoverClose>
+                )}
+              </div>
+            </ScrollArea>
+          </PopoverContent>
+        </Popover>
+        <div className="absolute right-0 top-0 h-full flex items-center pr-3">
+          <Button type="submit" variant="ghost" size="icon" className="h-full px-2 hover:bg-transparent">
+            <Icons.Search className="h-4 w-4" />
+          </Button>
         </div>
-      </form>
-      {/* TODO: This really grinds my gears, but I can't find a better way to do this */}
-      {/* Ideally we should use some tailwind magic to handle these cases */}
-      <style jsx global>{`
-        div:has(> .advanced-search-popover) {
-          left: 52px !important;
-        }
-
-        @media (max-width: 768px) {
-          div:has(> .advanced-search-popover) {
-            left: 48px !important;
-            transform: translate(0, 52px) !important;
-          }
-        }
-      `}</style>
-    </>
+      </div>
+    </form>
   )
 }

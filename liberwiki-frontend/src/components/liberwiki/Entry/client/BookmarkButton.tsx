@@ -10,7 +10,11 @@ import { APIType, Includes } from '@/api/typeHelpers'
 import { useLiberWikiAPI } from '@/lib/serverHooks'
 import { cn } from '@/lib/utils'
 
-export default function BookmarkButton({ entry }: { entry: Includes<APIType<'Entry'>, 'author', APIType<'User'>> }) {
+export default function BookmarkButton({
+  entry,
+}: {
+  entry: Includes<Includes<APIType<'Entry'>, 'author', APIType<'User'>>, 'title', APIType<'Title'>>
+}) {
   const liberwiki = useLiberWikiAPI()
   const [isBookmarked, setIsBookmarked] = useState<boolean>(entry.is_bookmarked)
 

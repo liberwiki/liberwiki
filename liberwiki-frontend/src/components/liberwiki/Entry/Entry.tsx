@@ -13,7 +13,11 @@ import { sUseTranslation } from '@/i18n'
 import { useLiberWikiAPI as sUseLiberWikiAPI } from '@/lib/serverHooks'
 import { shortFormattedDate } from '@/lib/utils'
 
-export async function Entry({ entry }: { entry: Includes<APIType<'Entry'>, 'author', APIType<'User'>> }) {
+export async function Entry({
+  entry,
+}: {
+  entry: Includes<Includes<APIType<'Entry'>, 'author', APIType<'User'>>, 'title', APIType<'Title'>>
+}) {
   const liberwiki = sUseLiberWikiAPI()
   const { t } = await sUseTranslation(['entry'])
   const { data: user } = await liberwiki.me()
@@ -46,10 +50,10 @@ export async function Entry({ entry }: { entry: Includes<APIType<'Entry'>, 'auth
                   <Icons.MoreHorizontal className="h-4 w-4" />
                 </Button>
               </OverlayTrigger>
-              <OverlayContent side="bottom" align="end">
+              <OverlayContent side="bottom" align="end" asChild>
                 <div className="flex flex-col gap-2">
                   {(user?.id === entry.author.id || user?.is_superuser) && (
-                    <OverlayClose asChild>
+                    <OverlayClose>
                       <DeleteButton variant="ghost" className="w-full justify-start" entry={entry}>
                         {t('entry:delete')}
                       </DeleteButton>

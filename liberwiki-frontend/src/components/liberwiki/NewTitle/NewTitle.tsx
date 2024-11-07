@@ -7,12 +7,13 @@ import { sUseTranslation } from '@/i18n'
 
 export async function NewTitle({ newTitle }: { newTitle: string }) {
   const { t } = await sUseTranslation(['title', 'entry'])
+  const title = decodeURI(newTitle)
 
   return (
     <>
       <div className="w-full">
         <Link className="h-1 p-6 text-xl font-bold" href={{ pathname: `/titles/${newTitle}` }}>
-          {newTitle}
+          {title}
         </Link>
         <div className="mt-2 px-4">
           <Separator />
@@ -20,7 +21,7 @@ export async function NewTitle({ newTitle }: { newTitle: string }) {
       </div>
       <div className="text-center text-gray-500 p-10">{t('title:noEntryFound')}</div>
       <div className="p-2 w-full">
-        <NewTitleEntryEditor newTitle={decodeURI(newTitle)} />
+        <NewTitleEntryEditor newTitle={title} />
       </div>
     </>
   )
