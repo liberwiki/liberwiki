@@ -10,7 +10,7 @@ from rest.utils.schema_helpers import error_serializer, fake_list_serializer, fa
 from rest_framework import status
 from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.exceptions import ValidationError as DRFValidationError
-from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
@@ -26,7 +26,7 @@ class BaseModelViewSet(ModelViewSet):
     endpoint = REQUIRED_BASE_MODEL_VIEWSET_ATTRIBUTE
     model = REQUIRED_BASE_MODEL_VIEWSET_ATTRIBUTE
     serializer_class = REQUIRED_BASE_MODEL_VIEWSET_ATTRIBUTE
-    permission_classes = [(IsAuthenticated & DjangoModelPermissions) | ReadOnly]
+    permission_classes = [IsAuthenticated | ReadOnly]
     allow_reverse_ordering = True
     all_viewsets = {}
     filterset_fields = {}

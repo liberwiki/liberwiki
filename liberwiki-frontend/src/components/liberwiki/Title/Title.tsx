@@ -37,11 +37,11 @@ export async function Title({
     author: searchParams.author,
     created_at__gte: searchParams.created_at__gte,
     created_at__lte: searchParams.created_at__lte,
-    ordering: searchParams.ordering,
+    ordering: searchParams.ordering || 'created_at',
   })
 
   const orderingLabels = {
-    '-date': t('advancedEntrySearch:orderByChronological'),
+    created_at: t('advancedEntrySearch:orderByChronological'),
     '-like_count': t('advancedEntrySearch:orderByLikes'),
     '-dislike_count': t('advancedEntrySearch:orderByDislikes'),
     '-bookmark_count': t('advancedEntrySearch:orderByBookmarks'),
@@ -51,7 +51,7 @@ export async function Title({
     return { pathname: `/titles/${title.slug}`, query: { ...searchParams, ordering } }
   }
 
-  const currentOrdering = _.get(orderingLabels, searchParams.ordering || '-date', orderingLabels['-date'])
+  const currentOrdering = _.get(orderingLabels, searchParams.ordering || 'created_at', orderingLabels.created_at)
   return (
     <>
       <div className="w-full">
@@ -72,7 +72,7 @@ export async function Title({
                 <OverlayTitle className="hidden">Ordering</OverlayTitle>
                 <div className="flex flex-col">
                   <Link
-                    href={newOrderingHref('-created_at')}
+                    href={newOrderingHref('created_at')}
                     className={cn(buttonVariants({ variant: 'ghost', className: 'w-full justify-start' }))}
                   >
                     {t('advancedEntrySearch:orderByChronological')}
@@ -101,7 +101,11 @@ export async function Title({
             <Overlay breakpoint="md">
               <OverlayTrigger>
                 <Button variant="ghost" className="px-0 hover:bg-transparent">
-                  <p className="font-medium text-primary hover:underline">{t('common:search')}</p>
+                  <p className="font-medium text-primary hover:underline">
+                    {t('common:search')}:{searchParams.created_at__gte ? ` ${searchParams.created_at__gte}` : ''}
+                    {searchParams.created_at__lte ? ` ${searchParams.created_at__lte}` : ''}
+                    {searchParams.author ? ` ${searchParams.author}` : ''}
+                  </p>
                 </Button>
               </OverlayTrigger>
               <OverlayContent align="start" side="bottom" className="w-full">
@@ -170,7 +174,11 @@ export async function Title({
       {entries &&
         ((entries.results.length || 0) > 0 ? (
           entries.results.map((entry) => (
-            <Entry key={entry.id} entry={includesType(includesType(entry, 'author', 'User'), 'title', 'Title')} />
+            <Entry
+              key={entry.id}
+              id={entry.id}
+              entry={includesType(includesType({ ...entry }, 'author', 'User'), 'title', 'Title')}
+            />
           ))
         ) : (
           <div className="text-center text-gray-500 p-10">{t('title:noEntryFound')}</div>

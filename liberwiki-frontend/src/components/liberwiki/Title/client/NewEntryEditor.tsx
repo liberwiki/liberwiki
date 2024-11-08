@@ -27,7 +27,8 @@ export default function NewEntryEditor(
       toast(t('entry:yourEntryHasBeenCreated'))
       const [tet, epp] = [title.entry_count + 1, config.ux.defaultEntryPageSize]
       const targetPage = tet % epp === 0 ? tet / epp : Math.floor(tet / epp) + 1
-      router.push(`?${new URLSearchParams({ page: String(targetPage) }).toString()}`)
+      router.push(`?${new URLSearchParams({ page: String(targetPage) }).toString()}`, { scroll: true })
+      router.refresh()
     } else {
       toast(t('entry:entryCreationError'))
     }

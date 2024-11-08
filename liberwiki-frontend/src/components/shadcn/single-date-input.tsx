@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import * as React from 'react'
 import { useState } from 'react'
@@ -18,8 +18,8 @@ export function SingleDateInput({ name, value = undefined, form = undefined, pla
   const [date, setDate] = useState<string>(value?.toISOString() || '')
 
   function handleSelect(date: Date | undefined) {
-    setDate(date?.toISOString() || '')
-    onChange?.(date)
+    const dateWithoutTimezone = date?.toISOString().split('T')[0]
+    setDate(dateWithoutTimezone || '')
   }
 
   return (
@@ -41,7 +41,11 @@ export function SingleDateInput({ name, value = undefined, form = undefined, pla
         form={form}
         type="hidden"
         value={date}
-        onChange={(event) => setDate(event.target.value)}
+        onChange={(event) => {
+          const dateString = event.target.value
+          const dateWithoutTimezone = new Date(dateString).toISOString().split('T')[0]
+          setDate(dateWithoutTimezone)
+        }}
         name={name}
       />
     </>

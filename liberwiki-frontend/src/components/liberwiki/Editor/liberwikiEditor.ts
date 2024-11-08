@@ -19,38 +19,41 @@ import { Markdown } from 'tiptap-markdown'
 export default function useLiberWikiEditor({ content }: { content?: object }) {
   const lowlight = createLowlight(all)
 
-  return useEditor({
-    immediatelyRender: false,
-    extensions: [
-      StarterKit.configure({
-        codeBlock: false,
-      }),
-      CodeBlockLowlight.configure({
-        lowlight,
-        defaultLanguage: 'js',
-      }),
-      Link.configure({
-        openOnClick: false,
-      }),
-      CharacterCount,
-      Color,
-      Subscript,
-      Superscript,
-      TaskItem.configure({
-        nested: true,
-      }),
-      TaskList,
-      TextStyle,
-      Typography,
-      Underline,
-      Markdown,
-      LatexBlock,
-    ],
-    editorProps: {
-      attributes: {
-        class: 'prose prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-xl focus:outline-none',
+  return useEditor(
+    {
+      immediatelyRender: false,
+      extensions: [
+        StarterKit.configure({
+          codeBlock: false,
+        }),
+        CodeBlockLowlight.configure({
+          lowlight,
+          defaultLanguage: 'js',
+        }),
+        Link.configure({
+          openOnClick: false,
+        }),
+        CharacterCount,
+        Color,
+        Subscript,
+        Superscript,
+        TaskItem.configure({
+          nested: true,
+        }),
+        TaskList,
+        TextStyle,
+        Typography,
+        Underline,
+        Markdown,
+        LatexBlock,
+      ],
+      editorProps: {
+        attributes: {
+          class: 'prose prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-xl focus:outline-none',
+        },
       },
+      content,
     },
-    content,
-  })
+    [content]
+  )
 }

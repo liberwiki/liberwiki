@@ -7,7 +7,7 @@ from rest.utils.filters import make_filters
 from rest.utils.permissions import IsSuperUser, ReadOnly, is_owner, prevent_actions
 from rest.utils.schema_helpers import fake_serializer
 from rest_framework.decorators import action
-from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .base import BaseModelViewSet, django_to_drf_validation_error
@@ -19,9 +19,9 @@ class EntryViewSet(BaseModelViewSet):
     serializer_class = EntrySerializer
 
     permission_classes = [
-        IsAuthenticated & DjangoModelPermissions & is_owner("author")
-        | IsSuperUser
-        | prevent_actions("update", "partial_update", "destroy", "create")
+        IsSuperUser
+        | (IsAuthenticated & is_owner("author"))
+        | (IsAuthenticated & prevent_actions("update", "partial_update", "destroy"))
         | ReadOnly
     ]
 

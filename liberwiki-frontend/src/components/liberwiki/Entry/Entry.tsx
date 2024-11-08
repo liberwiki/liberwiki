@@ -14,8 +14,10 @@ import { useLiberWikiAPI as sUseLiberWikiAPI } from '@/lib/serverHooks'
 import { shortFormattedDate } from '@/lib/utils'
 
 export async function Entry({
+  id,
   entry,
 }: {
+  id: string
   entry: Includes<Includes<APIType<'Entry'>, 'author', APIType<'User'>>, 'title', APIType<'Title'>>
 }) {
   const liberwiki = sUseLiberWikiAPI()
@@ -23,7 +25,7 @@ export async function Entry({
   const { data: user } = await liberwiki.me()
 
   return (
-    <Card className="w-full border-0">
+    <Card className="w-full border-0" id={id}>
       <CardContent className="pt-6">
         <div className="text-lg mb-4 overflow-x-auto">
           <Editor readonly={true} content={entry.content as object} />
@@ -50,17 +52,22 @@ export async function Entry({
                   <Icons.MoreHorizontal className="h-4 w-4" />
                 </Button>
               </OverlayTrigger>
-              <OverlayContent side="bottom" align="end" asChild>
-                <div className="flex flex-col gap-2">
-                  {(user?.id === entry.author.id || user?.is_superuser) && (
-                    <OverlayClose>
-                      <DeleteButton variant="ghost" className="w-full justify-start" entry={entry}>
-                        {t('entry:delete')}
-                      </DeleteButton>
-                    </OverlayClose>
-                  )}
-                </div>
-              </OverlayContent>
+              {(user?.id === entry.author.id || user?.is_superuser) && (
+                // When we add new actions other than delete, we should check all of them unless
+                // there are actions that can be done without being the owner of the entry.
+                // Right now it doesn't make sense to have this button at all if the user is not the owner.
+                <OverlayContent side="bottom" align="end" asChild>
+                  <div className="flex flex-col gap-2">
+                    {(user?.id === entry.author.id || user?.is_superuser) && (
+                      <OverlayClose>
+                        <DeleteButton variant="ghost" className="w-full justify-start" entry={entry}>
+                          {t('entry:delete')}
+                        </DeleteButton>
+                      </OverlayClose>
+                    )}
+                  </div>
+                </OverlayContent>
+              )}
             </Overlay>
           </div>
         </div>

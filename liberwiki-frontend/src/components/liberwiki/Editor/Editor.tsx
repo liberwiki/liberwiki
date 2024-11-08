@@ -16,15 +16,15 @@ import { EditorContent, Editor as TipTapEditor } from '@tiptap/react'
 export function Editor({
   content,
   readonly,
-  onSubmit = () => {},
+  onSubmit,
 }: {
   content?: object
   readonly: boolean
   onSubmit?: (content: object) => void
 }) {
   const { t } = useClientTranslation(['common', 'editor'])
-
   const editor = useLiberWikiEditor({ content })
+
   if (!editor) {
     return null
   }
@@ -50,7 +50,7 @@ export function Editor({
 
   async function handleSubmit() {
     if (editor) {
-      onSubmit(editor.getJSON())
+      onSubmit?.(editor.getJSON())
       editor.commands.clearContent(true)
     }
   }
