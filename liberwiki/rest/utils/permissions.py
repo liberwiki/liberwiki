@@ -42,3 +42,8 @@ class IsAnonymous(BasePermission):
     def has_permission(self, request, view):
         # Return True only if the user is not authenticated
         return not request.user.is_authenticated
+
+
+class IsSuperUser(BasePermission):
+    def has_permission(self, request, view):
+        return bool(request.user and request.user.is_superuser)

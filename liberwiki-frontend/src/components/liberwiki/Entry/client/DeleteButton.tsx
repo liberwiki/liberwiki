@@ -24,13 +24,17 @@ export default function DeleteButton(
   const { t } = useClientTranslation(['common', 'entry'])
 
   async function handleDelete() {
-    await liberwiki.deleteEntry(entry.id)
-    toast(t('entry:entryHasBenDeleted', { entryId: entry.id }))
-    if (entry.title.entry_count === 1) {
-      router.push(`/titles/${entry.title.name}`)
+    const { response } = await liberwiki.deleteEntry(entry.id)
+    if (response.ok) {
+      if (entry.title.entry_count === 1) {
+        toast(t('entry:entryHasBenDeleted', { entryId: entry.id }))
+        router.push(`/titles/${entry.title.name}`)
+      } else {
+        const targetPage = Math.max(1, Math.ceil((entry.title.entry_count - 1) / config.ux.defaultEntryPageSize))
+        router.push(`?${new URLSearchParams({ page: String(targetPage) }).toString()}`)
+      }
     } else {
-      const targetPage = Math.max(1, Math.ceil((entry.title.entry_count - 1) / config.ux.defaultEntryPageSize))
-      router.push(`?${new URLSearchParams({ page: String(targetPage) }).toString()}`)
+      toast(t('common:somethingWentWrong', { entryId: entry.id }))
     }
   }
 

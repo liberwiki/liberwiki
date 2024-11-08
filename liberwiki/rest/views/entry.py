@@ -4,7 +4,7 @@ from django_filters import BooleanFilter, ChoiceFilter, NumberFilter
 from drf_spectacular.utils import extend_schema
 from rest.serializers import EntrySerializer
 from rest.utils.filters import make_filters
-from rest.utils.permissions import ReadOnly, is_owner, prevent_actions
+from rest.utils.permissions import IsSuperUser, ReadOnly, is_owner, prevent_actions
 from rest.utils.schema_helpers import fake_serializer
 from rest_framework.decorators import action
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
@@ -19,7 +19,8 @@ class EntryViewSet(BaseModelViewSet):
     serializer_class = EntrySerializer
 
     permission_classes = [
-        IsAuthenticated & DjangoModelPermissions & (is_owner("author"))
+        IsAuthenticated & DjangoModelPermissions & is_owner("author")
+        | IsSuperUser
         | prevent_actions("update", "partial_update", "destroy", "create")
         | ReadOnly
     ]

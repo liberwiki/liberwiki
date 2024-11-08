@@ -54,8 +54,8 @@ export default function AdvancedSearch() {
               type="text"
               name="search"
               placeholder={t('common:search')}
-              autoComplete="none"
-              className="pr-20 h-10"
+              autoComplete="false"
+              className="pr-20 h-10 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
               value={search}
               onChange={handleAutocomplete}
             />

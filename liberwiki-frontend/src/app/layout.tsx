@@ -7,6 +7,7 @@ import React from 'react'
 
 import { Toaster } from '@/components/shadcn/sonner'
 
+import MonkeyPatches from '@/app/monkeypatches'
 import config from '@/config'
 import { cn } from '@/lib/utils'
 
@@ -24,11 +25,11 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <MonkeyPatches />
         <meta
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
           name="viewport"
         />
-
         {gaID && <GoogleAnalytics gaId={gaID} />}
       </head>
       <body className={cn('min-h-screen font-sans antialiased dark', inter.className)}>

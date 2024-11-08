@@ -20,7 +20,11 @@ export function cn(...inputs: ClassValue[]) {
 // We don't care about the function, we are just passing some attributes to it to be used
 // by namespacing the function itself rather than having to create a class or some similar structure
 // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-export function withAttributes<T extends Record<string, string>>(fn: Function, attributes: T): Function & T {
+export function withAttributes<T extends Record<string, string | boolean | Function | number>>(
+  fn: Function, // eslint-disable-line @typescript-eslint/no-unsafe-function-type
+  attributes: T
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+): Function & T {
   Object.keys(attributes).forEach((key) => {
     // Usage
     //
