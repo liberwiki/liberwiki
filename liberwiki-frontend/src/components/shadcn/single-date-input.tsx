@@ -15,11 +15,11 @@ export function SingleDateInput({ name, value = undefined, form = undefined, pla
   placeholder?: string,
   onChange?: (value: Date | undefined) => void
 }) {
-  const [date, setDate] = useState<string>(value?.toISOString() || '')
+  const [dateWithTime, setDateWithTime] = useState<Date | undefined>(value)
 
   function handleSelect(date: Date | undefined) {
-    const dateWithoutTimezone = date?.toISOString().split('T')[0]
-    setDate(dateWithoutTimezone || '')
+    setDateWithTime(date)
+    onChange?.(date)
   }
 
   return (
@@ -28,23 +28,24 @@ export function SingleDateInput({ name, value = undefined, form = undefined, pla
         <OverlayTrigger asChild>
           <Button
             variant="outline"
-            className={`w-full text-left font-normal justify-between ${!date && 'text-muted-foreground'}`}
+            className={`w-full text-left font-normal justify-between ${!dateWithTime && 'text-muted-foreground'}`}
           >
-            {date ? (format(date, 'PPP')) : (<span>{placeholder}</span>)}
+            {dateWithTime ? format(dateWithTime, 'PPP') : <span>{placeholder}</span>}
           </Button>
         </OverlayTrigger>
         <OverlayContent className="w-auto p-0" align="start" side="bottom">
-          <Calendar mode="single" onSelect={handleSelect} selected={(date ? new Date(date) : undefined)} />
+          <Calendar mode="single" onSelect={handleSelect} selected={dateWithTime} />
         </OverlayContent>
       </Overlay>
       <Input
         form={form}
         type="hidden"
-        value={date}
+        value={dateWithTime ? format(dateWithTime, 'yyyy-MM-dd') : ''}
         onChange={(event) => {
           const dateString = event.target.value
-          const dateWithoutTimezone = new Date(dateString).toISOString().split('T')[0]
-          setDate(dateWithoutTimezone)
+          const selectedDate = dateString ? new Date(`${dateString}T00:00:00`) : undefined
+          setDateWithTime(selectedDate)
+          onChange?.(selectedDate)
         }}
         name={name}
       />

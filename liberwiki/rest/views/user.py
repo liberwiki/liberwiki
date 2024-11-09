@@ -37,10 +37,10 @@ class UserViewSet(BaseModelViewSet):
 
     disallowed_methods = ["create", "update", "partial_update", "destroy"]
 
-    crud_extend_default_schema = dict(
-        list=dict(responses={200: PublicUserSerializer(many=True)}),
-        retrieve=dict(responses={200: PublicUserSerializer}),
-    )
+    crud_extend_default_schema = {
+        "list": {"responses": {200: PublicUserSerializer(many=True)}},
+        "retrieve": {"responses": {200: PublicUserSerializer}},
+    }
 
     @extend_schema(
         summary="Retrieve Me",

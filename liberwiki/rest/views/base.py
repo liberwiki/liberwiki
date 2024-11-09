@@ -3,14 +3,13 @@ from common.utils.pyutils import Sentinel, all_combinations, cloned, raises, wit
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.db.models.deletion import ProtectedError
 from django.utils.functional import classproperty
+from django.utils.translation import gettext as _
 from django_filters.rest_framework.filterset import FilterSet
 from drf_spectacular.utils import OpenApiParameter, OpenApiTypes, extend_schema
-from rest.utils.permissions import ReadOnly
 from rest.utils.schema_helpers import error_serializer, fake_list_serializer, fake_serializer
 from rest_framework import status
 from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.exceptions import ValidationError as DRFValidationError
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
@@ -26,7 +25,6 @@ class BaseModelViewSet(ModelViewSet):
     endpoint = REQUIRED_BASE_MODEL_VIEWSET_ATTRIBUTE
     model = REQUIRED_BASE_MODEL_VIEWSET_ATTRIBUTE
     serializer_class = REQUIRED_BASE_MODEL_VIEWSET_ATTRIBUTE
-    permission_classes = [IsAuthenticated | ReadOnly]
     allow_reverse_ordering = True
     all_viewsets = {}
     filterset_fields = {}
@@ -37,6 +35,7 @@ class BaseModelViewSet(ModelViewSet):
     crud_extend_default_schema = {}
     disallowed_methods = []
     ordering_fields = []
+    action_permissions = {}
 
     perform_create = django_to_drf_validation_error(ModelViewSet.perform_create)
     perform_update = django_to_drf_validation_error(ModelViewSet.perform_update)
@@ -131,7 +130,12 @@ class BaseModelViewSet(ModelViewSet):
 
     @classmethod
     def _disallowed_methods(cls):
-        override = lambda method: method if method.__name__ not in cls.disallowed_methods else make_disallowed_method()
+        def override(method):
+            method_name = method.__name__
+            message = _(f"{method_name} is not allowed for this endpoint")
+            disallowed = extend_schema(exclude=True)(raises(MethodNotAllowed(message)))
+            return method if method_name not in cls.disallowed_methods else disallowed
+
         cls.list = override(cls.list)
         cls.retrieve = override(cls.retrieve)
         cls.create = override(cls.create)
@@ -166,6 +170,8 @@ class BaseModelViewSet(ModelViewSet):
                 ],
                 responses={
                     200: cls.serializer_class(many=True),  # NOQA, __init_subclass__ ensures cls.serializer_class is set
+                    401: None,
+                    403: fake_serializer("Forbidden", schema={"detail": str}),
                 },
             )
             | extend_schema_kwargs
@@ -192,6 +198,8 @@ class BaseModelViewSet(ModelViewSet):
                 ],
                 responses={
                     200: cls.serializer_class,
+                    401: None,
+                    403: fake_serializer("Forbidden", schema={"detail": str}),
                 },
             )
             | extend_schema_kwargs
@@ -209,6 +217,8 @@ class BaseModelViewSet(ModelViewSet):
                 responses={
                     201: cls.serializer_class,
                     400: error_serializer(cls.serializer_class),
+                    401: None,
+                    403: fake_serializer("Forbidden", schema={"detail": str}),
                 },
             )
             | extend_schema_kwargs
@@ -230,6 +240,8 @@ class BaseModelViewSet(ModelViewSet):
                 responses={
                     200: cls.serializer_class,
                     400: error_serializer(cls.serializer_class),
+                    401: None,
+                    403: fake_serializer("Forbidden", schema={"detail": str}),
                 },
             )
             | extend_schema_kwargs
@@ -251,6 +263,8 @@ class BaseModelViewSet(ModelViewSet):
                 responses={
                     200: cls.serializer_class,
                     400: error_serializer(cls.serializer_class),
+                    401: None,
+                    403: fake_serializer("Forbidden", schema={"detail": str}),
                 },
             )
             | extend_schema_kwargs
@@ -268,13 +282,11 @@ class BaseModelViewSet(ModelViewSet):
                 responses={
                     204: None,
                     400: BaseModelViewSet.destroy.default_400_schema(f"{meta.verbose_name}DestroyError"),
+                    401: None,
+                    403: fake_serializer("Forbidden", schema={"detail": str}),
                 },
             )
             | extend_schema_kwargs
         )
         destroy_method = extend_schema(**extend_schema_kwargs)(cloned(BaseModelViewSet.destroy))
         return destroy_method
-
-
-def make_disallowed_method():
-    return extend_schema(exclude=True)(raises(MethodNotAllowed("Put is not allowed for this endpoint")))

@@ -64,6 +64,7 @@ export class LiberWikiAPI {
   // users
   // titles
   // entries
+  // invites
   public async obtainAuthToken(data: APIType<'AuthTokenRequest'>) {
     return await this.client.POST('/v0/auth/tokens/', { body: data })
   }
@@ -166,5 +167,17 @@ export class LiberWikiAPI {
 
   public async unbookmarkEntry(id: string) {
     return await this.client.POST(`/v0/entries/{id}/unbookmark/`, { params: { path: { id } } })
+  }
+
+  public async invites(filters?: APIQuery<'/v0/invitations/'>) {
+    return await this.client.GET('/v0/invitations/', { params: { query: filters } })
+  }
+
+  public async invite(id: string) {
+    return await this.client.GET(`/v0/invitations/{id}/`, { params: { path: { id } } })
+  }
+
+  public async createInvite() {
+    return await this.client.POST('/v0/invitations/')
   }
 }

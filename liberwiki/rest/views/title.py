@@ -1,9 +1,11 @@
 from core.models import Title, TitleBookmark
 from django.db.models import BooleanField, Count, Exists, OuterRef, Value
 from django_filters import NumberFilter
+from drf_spectacular.utils import extend_schema
 from rest.serializers import TitleSerializer
 from rest.utils.filters import make_filters
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .base import BaseModelViewSet, django_to_drf_validation_error
@@ -44,13 +46,35 @@ class TitleViewSet(BaseModelViewSet):
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
 
-    @action(detail=True, methods=["POST"], url_path="bookmark", serializer_class=None)
+    @extend_schema(
+        summary=f"Bookmark Title",
+        description=f"Bookmark a title by id",
+        responses={204: None, 401: None},
+    )
+    @action(
+        detail=True,
+        methods=["POST"],
+        url_path="bookmark",
+        serializer_class=None,
+        permission_classes=[IsAuthenticated],
+    )
     @django_to_drf_validation_error
     def bookmark(self, *args, **kwargs):
         TitleBookmark.bookmark(self.request.user, self.get_object())
         return Response(status=204)
 
-    @action(detail=True, methods=["POST"], url_path="unbookmark", serializer_class=None)
+    @extend_schema(
+        summary=f"Remove Title Bookmark",
+        description=f"Remove bookmark from title by id",
+        responses={204: None, 401: None},
+    )
+    @action(
+        detail=True,
+        methods=["POST"],
+        url_path="unbookmark",
+        serializer_class=None,
+        permission_classes=[IsAuthenticated],
+    )
     @django_to_drf_validation_error
     def unbookmark(self, *args, **kwargs):
         TitleBookmark.unbookmark(self.request.user, self.get_object())

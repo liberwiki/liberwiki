@@ -52,6 +52,7 @@ export async function Title({
   }
 
   const currentOrdering = _.get(orderingLabels, searchParams.ordering || 'created_at', orderingLabels.created_at)
+  const searchString = `${searchParams.created_at__gte || ''}:${searchParams.created_at__lte || ''} - ${searchParams.author || ''}`
   return (
     <>
       <div className="w-full">
@@ -102,9 +103,8 @@ export async function Title({
               <OverlayTrigger>
                 <Button variant="ghost" className="px-0 hover:bg-transparent">
                   <p className="font-medium text-primary hover:underline">
-                    {t('common:search')}:{searchParams.created_at__gte ? ` ${searchParams.created_at__gte}` : ''}
-                    {searchParams.created_at__lte ? ` ${searchParams.created_at__lte}` : ''}
-                    {searchParams.author ? ` ${searchParams.author}` : ''}
+                    {t('common:search')}
+                    {searchString ? `: ${searchString}` : ''}
                   </p>
                 </Button>
               </OverlayTrigger>
@@ -183,9 +183,11 @@ export async function Title({
         ) : (
           <div className="text-center text-gray-500 p-10">{t('title:noEntryFound')}</div>
         ))}
-      <div className="p-2 w-full">
-        <NewEntryEditor title={title} />
-      </div>
+      {(await liberwiki.me())?.data?.role !== 'READER' && (
+        <div className="p-2 w-full">
+          <NewEntryEditor title={title} />
+        </div>
+      )}
     </>
   )
 }

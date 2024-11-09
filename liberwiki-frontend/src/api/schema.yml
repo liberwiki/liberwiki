@@ -331,9 +331,21 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedEntryList'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+          description: ''
     post:
       operationId: entries_create
-      description: Create a new entry
+      description: |
+        Permissions:
+            READER can't create entries,
+            NEW_RECRUIT can create 1 entry per day,
+            CONTRIBUTOR and TRUSTED can create as many entries as they want.
       summary: Create Entry
       tags:
       - entries
@@ -365,6 +377,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/EntrySerializerError'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
           description: ''
   /v0/entries/{id}/:
     get:
@@ -402,9 +422,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/Entry'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+          description: ''
     put:
       operationId: entries_update
-      description: Update an existing entry by id
+      description: Only the author can update the entry.
       summary: Put Entry
       parameters:
       - in: path
@@ -445,9 +473,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/EntrySerializerError'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+          description: ''
     patch:
       operationId: entries_partial_update
-      description: Partially update an existing entry by id
+      description: Only the author can update the entry.
       summary: Patch Entry
       parameters:
       - in: path
@@ -487,9 +523,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/EntrySerializerError'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+          description: ''
     delete:
       operationId: entries_destroy
-      description: Delete an existing Entry by id
+      description: Only the author can delete the entry.
       summary: Delete Entry
       parameters:
       - in: path
@@ -514,6 +558,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/EntryDestroyError'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+          description: ''
   /v0/entries/{id}/bookmark/:
     post:
       operationId: entries_bookmark_create
@@ -535,6 +587,8 @@ paths:
       - cookieAuth: []
       responses:
         '204':
+          description: No response body
+        '401':
           description: No response body
   /v0/entries/{id}/downvote/:
     post:
@@ -562,7 +616,7 @@ paths:
     post:
       operationId: entries_unbookmark_create
       description: Remove bookmark from entry by id
-      summary: Remove Bookmark
+      summary: Remove Entry Bookmark
       parameters:
       - in: path
         name: id
@@ -579,6 +633,8 @@ paths:
       - cookieAuth: []
       responses:
         '204':
+          description: No response body
+        '401':
           description: No response body
   /v0/entries/{id}/unvote/:
     post:
@@ -602,6 +658,8 @@ paths:
       responses:
         '204':
           description: No response body
+        '401':
+          description: No response body
   /v0/entries/{id}/upvote/:
     post:
       operationId: entries_upvote_create
@@ -624,6 +682,143 @@ paths:
       responses:
         '204':
           description: No response body
+        '401':
+          description: No response body
+  /v0/invitations/:
+    get:
+      operationId: invitations_list
+      description: List invitations with optional filters
+      summary: List Invitations
+      parameters:
+      - in: query
+        name: include
+        schema:
+          type: string
+          enum:
+          - used_by
+        explode: false
+        style: form
+      - in: query
+        name: ordering
+        schema:
+          type: string
+        explode: false
+        style: form
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - invitations
+      security:
+      - tokenAuth: []
+      - basicAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedInvitationList'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+          description: ''
+    post:
+      operationId: invitations_create
+      description: |
+        Permissions:
+            READER can't create invites,
+            NEW_RECRUIT can't create invites,
+            CONTRIBUTOR can create 1 invite until that user is processed.
+            TRUSTED can create as many invites as they want.
+      summary: Create Invitation
+      tags:
+      - invitations
+      security:
+      - tokenAuth: []
+      - basicAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invitation'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvitationSerializerError'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+          description: ''
+  /v0/invitations/{id}/:
+    get:
+      operationId: invitations_retrieve
+      description: Retrieve invitation by id
+      summary: Retrieve Invitation
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      - in: query
+        name: include
+        schema:
+          type: string
+          enum:
+          - used_by
+        explode: false
+        style: form
+      tags:
+      - invitations
+      security:
+      - tokenAuth: []
+      - basicAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invitation'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+          description: ''
   /v0/titles/:
     get:
       operationId: titles_list
@@ -765,6 +960,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedTitleList'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+          description: ''
     post:
       operationId: titles_create
       description: Create a new title
@@ -800,6 +1003,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/TitleSerializerError'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+          description: ''
   /v0/titles/{id}/:
     get:
       operationId: titles_retrieve
@@ -834,6 +1045,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/Title'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+          description: ''
     delete:
       operationId: titles_destroy
       description: Delete an existing Title by id
@@ -861,9 +1080,19 @@ paths:
               schema:
                 $ref: '#/components/schemas/TitleDestroyError'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+          description: ''
   /v0/titles/{id}/bookmark/:
     post:
       operationId: titles_bookmark_create
+      description: Bookmark a title by id
+      summary: Bookmark Title
       parameters:
       - in: path
         name: id
@@ -879,11 +1108,15 @@ paths:
       - basicAuth: []
       - cookieAuth: []
       responses:
-        '200':
+        '204':
+          description: No response body
+        '401':
           description: No response body
   /v0/titles/{id}/unbookmark/:
     post:
       operationId: titles_unbookmark_create
+      description: Remove bookmark from title by id
+      summary: Remove Title Bookmark
       parameters:
       - in: path
         name: id
@@ -899,7 +1132,9 @@ paths:
       - basicAuth: []
       - cookieAuth: []
       responses:
-        '200':
+        '204':
+          description: No response body
+        '401':
           description: No response body
   /v0/users/:
     get:
@@ -1453,6 +1688,93 @@ components:
           description: Content of the entry. In tiptap format.
       required:
       - content
+    Forbidden:
+      type: object
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
+    Invitation:
+      type: object
+      description: |-
+        Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
+        read only.
+
+        GET /api/v1/people/5/
+        {
+            "id": 5,
+            "first_name": "John",
+            "last_name": "Doe",
+            "labels": [7]
+        }
+
+        GET /api/v1/people/5/?include=labels
+        {
+            "id": 5,
+            "first_name": "John",
+            "last_name": "Doe",
+            "labels": [
+                {
+                    "id": 7,
+                    "name": "label-name"
+                }
+            ]
+        }
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unique identifier for this object
+        user:
+          type: string
+          format: uuid
+          description: Owner of the invitation.
+          readOnly: true
+        code:
+          type: string
+          readOnly: true
+          description: Invitation code.
+        used_by:
+          type: string
+          format: uuid
+          description: User who used the invitation.
+          readOnly: true
+          nullable: true
+      required:
+      - code
+      - id
+      - used_by
+      - user
+    InvitationSerializerError:
+      type: object
+      properties:
+        id:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        user:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        code:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        used_by:
+          type: array
+          items:
+            type: string
+          readOnly: true
+      required:
+      - code
+      - id
+      - used_by
+      - user
     NullEnum:
       enum:
       - null
@@ -1475,6 +1797,30 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Entry'
+      required:
+      - count
+      - page_size
+      - total_pages
+      - results
+    PaginatedInvitationList:
+      type: object
+      properties:
+        count:
+          type: integer
+          description: Total number of items available.
+          example: 1102
+        page_size:
+          type: integer
+          description: Number of results to return per page.
+          example: 100
+        total_pages:
+          type: integer
+          description: Total number of pages.
+          example: 17
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Invitation'
       required:
       - count
       - page_size
@@ -1657,6 +2003,10 @@ components:
           title: Superuser status
           description: Designates that this user has all permissions without explicitly
             assigning them.
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          readOnly: true
         created_at:
           type: string
           format: date-time
@@ -1680,9 +2030,22 @@ components:
       - is_active
       - is_staff
       - is_superuser
+      - role
       - title_count
       - updated_at
       - username
+    RoleEnum:
+      enum:
+      - READER
+      - NEW_RECRUIT
+      - CONTRIBUTOR
+      - TRUSTED
+      type: string
+      description: |-
+        * `READER` - Reader
+        * `NEW_RECRUIT` - New Recruit
+        * `CONTRIBUTOR` - Contributor
+        * `TRUSTED` - Trusted
     SignupRequest:
       type: object
       properties:
@@ -1978,6 +2341,10 @@ components:
           title: Superuser status
           description: Designates that this user has all permissions without explicitly
             assigning them.
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          readOnly: true
         created_at:
           type: string
           format: date-time
@@ -2002,6 +2369,7 @@ components:
       - is_active
       - is_staff
       - is_superuser
+      - role
       - title_count
       - updated_at
       - username
@@ -2081,6 +2449,11 @@ components:
           items:
             type: string
           readOnly: true
+        role:
+          type: array
+          items:
+            type: string
+          readOnly: true
         created_at:
           type: array
           items:
@@ -2111,6 +2484,7 @@ components:
       - is_staff
       - is_superuser
       - last_name
+      - role
       - title_count
       - updated_at
       - username

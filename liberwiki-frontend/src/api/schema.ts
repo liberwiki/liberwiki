@@ -83,7 +83,11 @@ export interface paths {
     put?: never
     /**
      * Create Entry
-     * @description Create a new entry
+     * @description Permissions:
+     *         READER can't create entries,
+     *         NEW_RECRUIT can create 1 entry per day,
+     *         CONTRIBUTOR and TRUSTED can create as many entries as they want.
+     *
      */
     post: operations['entries_create']
     delete?: never
@@ -106,20 +110,20 @@ export interface paths {
     get: operations['entries_retrieve']
     /**
      * Put Entry
-     * @description Update an existing entry by id
+     * @description Only the author can update the entry.
      */
     put: operations['entries_update']
     post?: never
     /**
      * Delete Entry
-     * @description Delete an existing Entry by id
+     * @description Only the author can delete the entry.
      */
     delete: operations['entries_destroy']
     options?: never
     head?: never
     /**
      * Patch Entry
-     * @description Partially update an existing entry by id
+     * @description Only the author can update the entry.
      */
     patch: operations['entries_partial_update']
     trace?: never
@@ -174,7 +178,7 @@ export interface paths {
     get?: never
     put?: never
     /**
-     * Remove Bookmark
+     * Remove Entry Bookmark
      * @description Remove bookmark from entry by id
      */
     post: operations['entries_unbookmark_create']
@@ -218,6 +222,55 @@ export interface paths {
      * @description Cast an down vote to an entry by id
      */
     post: operations['entries_upvote_create']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v0/invitations/': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * List Invitations
+     * @description List invitations with optional filters
+     */
+    get: operations['invitations_list']
+    put?: never
+    /**
+     * Create Invitation
+     * @description Permissions:
+     *         READER can't create invites,
+     *         NEW_RECRUIT can't create invites,
+     *         CONTRIBUTOR can create 1 invite until that user is processed.
+     *         TRUSTED can create as many invites as they want.
+     *
+     */
+    post: operations['invitations_create']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v0/invitations/{id}/': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve Invitation
+     * @description Retrieve invitation by id
+     */
+    get: operations['invitations_retrieve']
+    put?: never
+    post?: never
     delete?: never
     options?: never
     head?: never
@@ -281,6 +334,10 @@ export interface paths {
     }
     get?: never
     put?: never
+    /**
+     * Bookmark Title
+     * @description Bookmark a title by id
+     */
     post: operations['titles_bookmark_create']
     delete?: never
     options?: never
@@ -297,6 +354,10 @@ export interface paths {
     }
     get?: never
     put?: never
+    /**
+     * Remove Title Bookmark
+     * @description Remove bookmark from title by id
+     */
     post: operations['titles_unbookmark_create']
     delete?: never
     options?: never
@@ -520,6 +581,57 @@ export interface components {
       /** @description Content of the entry. In tiptap format. */
       content: unknown
     }
+    Forbidden: {
+      detail: string
+    }
+    /** @description Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
+     *     read only.
+     *
+     *     GET /api/v1/people/5/
+     *     {
+     *         "id": 5,
+     *         "first_name": "John",
+     *         "last_name": "Doe",
+     *         "labels": [7]
+     *     }
+     *
+     *     GET /api/v1/people/5/?include=labels
+     *     {
+     *         "id": 5,
+     *         "first_name": "John",
+     *         "last_name": "Doe",
+     *         "labels": [
+     *             {
+     *                 "id": 7,
+     *                 "name": "label-name"
+     *             }
+     *         ]
+     *     } */
+    Invitation: {
+      /**
+       * Format: uuid
+       * @description Unique identifier for this object
+       */
+      readonly id: string
+      /**
+       * Format: uuid
+       * @description Owner of the invitation.
+       */
+      readonly user: string
+      /** @description Invitation code. */
+      readonly code: string
+      /**
+       * Format: uuid
+       * @description User who used the invitation.
+       */
+      readonly used_by: string | null
+    }
+    InvitationSerializerError: {
+      readonly id: string[]
+      readonly user: string[]
+      readonly code: string[]
+      readonly used_by: string[]
+    }
     /** @enum {unknown} */
     NullEnum: null
     PaginatedEntryList: {
@@ -539,6 +651,24 @@ export interface components {
        */
       total_pages: number
       results: components['schemas']['Entry'][]
+    }
+    PaginatedInvitationList: {
+      /**
+       * @description Total number of items available.
+       * @example 1102
+       */
+      count: number
+      /**
+       * @description Number of results to return per page.
+       * @example 100
+       */
+      page_size: number
+      /**
+       * @description Total number of pages.
+       * @example 17
+       */
+      total_pages: number
+      results: components['schemas']['Invitation'][]
     }
     PaginatedPublicUserList: {
       /**
@@ -681,6 +811,7 @@ export interface components {
        * @description Designates that this user has all permissions without explicitly assigning them.
        */
       readonly is_superuser: boolean
+      readonly role: components['schemas']['RoleEnum']
       /**
        * Format: date-time
        * @description Date and time this object was created
@@ -694,6 +825,14 @@ export interface components {
       readonly title_count: number
       readonly entry_count: number
     }
+    /**
+     * @description * `READER` - Reader
+     *     * `NEW_RECRUIT` - New Recruit
+     *     * `CONTRIBUTOR` - Contributor
+     *     * `TRUSTED` - Trusted
+     * @enum {string}
+     */
+    RoleEnum: 'READER' | 'NEW_RECRUIT' | 'CONTRIBUTOR' | 'TRUSTED'
     SignupRequest: {
       /**
        * Email address
@@ -855,6 +994,7 @@ export interface components {
        * @description Designates that this user has all permissions without explicitly assigning them.
        */
       readonly is_superuser: boolean
+      readonly role: components['schemas']['RoleEnum']
       /**
        * Format: date-time
        * @description Date and time this object was created
@@ -904,6 +1044,7 @@ export interface components {
       readonly is_active: string[]
       readonly is_staff: string[]
       readonly is_superuser: string[]
+      readonly role: string[]
       readonly created_at: string[]
       readonly updated_at: string[]
       readonly title_count: string[]
@@ -1126,6 +1267,21 @@ export interface operations {
           'application/json': components['schemas']['PaginatedEntryList']
         }
       }
+      /** @description No response body */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Forbidden']
+        }
+      }
     }
   }
   entries_create: {
@@ -1159,6 +1315,21 @@ export interface operations {
           'application/json': components['schemas']['EntrySerializerError']
         }
       }
+      /** @description No response body */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Forbidden']
+        }
+      }
     }
   }
   entries_retrieve: {
@@ -1180,6 +1351,21 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['Entry']
+        }
+      }
+      /** @description No response body */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Forbidden']
         }
       }
     }
@@ -1217,6 +1403,21 @@ export interface operations {
           'application/json': components['schemas']['EntrySerializerError']
         }
       }
+      /** @description No response body */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Forbidden']
+        }
+      }
     }
   }
   entries_destroy: {
@@ -1243,6 +1444,21 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['EntryDestroyError']
+        }
+      }
+      /** @description No response body */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Forbidden']
         }
       }
     }
@@ -1280,6 +1496,21 @@ export interface operations {
           'application/json': components['schemas']['EntrySerializerError']
         }
       }
+      /** @description No response body */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Forbidden']
+        }
+      }
     }
   }
   entries_bookmark_create: {
@@ -1295,6 +1526,13 @@ export interface operations {
     responses: {
       /** @description No response body */
       204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description No response body */
+      401: {
         headers: {
           [name: string]: unknown
         }
@@ -1340,6 +1578,13 @@ export interface operations {
         }
         content?: never
       }
+      /** @description No response body */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
     }
   }
   entries_unvote_create: {
@@ -1355,6 +1600,13 @@ export interface operations {
     responses: {
       /** @description No response body */
       204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description No response body */
+      401: {
         headers: {
           [name: string]: unknown
         }
@@ -1379,6 +1631,136 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+      /** @description No response body */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  invitations_list: {
+    parameters: {
+      query?: {
+        include?: 'used_by'
+        ordering?: string
+        /** @description A page number within the paginated result set. */
+        page?: number
+        /** @description Number of results to return per page. */
+        page_size?: number
+        /** @description A search term. */
+        search?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PaginatedInvitationList']
+        }
+      }
+      /** @description No response body */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Forbidden']
+        }
+      }
+    }
+  }
+  invitations_create: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Invitation']
+        }
+      }
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['InvitationSerializerError']
+        }
+      }
+      /** @description No response body */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Forbidden']
+        }
+      }
+    }
+  }
+  invitations_retrieve: {
+    parameters: {
+      query?: {
+        include?: 'used_by'
+      }
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Invitation']
+        }
+      }
+      /** @description No response body */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Forbidden']
+        }
       }
     }
   }
@@ -1428,6 +1810,21 @@ export interface operations {
           'application/json': components['schemas']['PaginatedTitleList']
         }
       }
+      /** @description No response body */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Forbidden']
+        }
+      }
     }
   }
   titles_create: {
@@ -1461,6 +1858,21 @@ export interface operations {
           'application/json': components['schemas']['TitleSerializerError']
         }
       }
+      /** @description No response body */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Forbidden']
+        }
+      }
     }
   }
   titles_retrieve: {
@@ -1482,6 +1894,21 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['Title']
+        }
+      }
+      /** @description No response body */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Forbidden']
         }
       }
     }
@@ -1512,6 +1939,21 @@ export interface operations {
           'application/json': components['schemas']['TitleDestroyError']
         }
       }
+      /** @description No response body */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Forbidden']
+        }
+      }
     }
   }
   titles_bookmark_create: {
@@ -1526,7 +1968,14 @@ export interface operations {
     requestBody?: never
     responses: {
       /** @description No response body */
-      200: {
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description No response body */
+      401: {
         headers: {
           [name: string]: unknown
         }
@@ -1546,7 +1995,14 @@ export interface operations {
     requestBody?: never
     responses: {
       /** @description No response body */
-      200: {
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description No response body */
+      401: {
         headers: {
           [name: string]: unknown
         }

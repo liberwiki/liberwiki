@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-30 13:56+0000\n"
+"POT-Creation-Date: 2024-11-09 04:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -188,15 +188,31 @@ msgstr "Başlık Yer İmi"
 msgid "Title Bookmarks"
 msgstr "Başlık Yer İmleri"
 
-#: core/models/user.py:15
+#: core/models/user.py:18
+msgid "Reader"
+msgstr "Okur"
+
+#: core/models/user.py:19
+msgid "New Recruit"
+msgstr "Çaylak"
+
+#: core/models/user.py:20
+msgid "Contributor"
+msgstr "Katkıda Bulunan"
+
+#: core/models/user.py:21
+msgid "Trusted"
+msgstr "Güvenilir"
+
+#: core/models/user.py:24
 msgid "email address"
 msgstr "Email Adresi"
 
-#: core/models/user.py:17
+#: core/models/user.py:26
 msgid "username"
 msgstr "Kullanıcı Adı"
 
-#: core/models/user.py:21
+#: core/models/user.py:30
 msgid ""
 "Required. 150 characters or fewer. Letters (lowercase), digits or hyphens "
 "only, can't start with digits or hyphens."
@@ -204,54 +220,63 @@ msgstr ""
 "Gerekli. 150 karakterden az. Yalnızca harfler (küçük harf), rakamlar veya "
 "tireler, rakamlarla veya tirelerle başlayamaz."
 
-#: core/models/user.py:32
+#: core/models/user.py:41
 msgid "A user with that username already exists."
 msgstr "Aynı kullanıcı adıyla başka kullanıcı zaten var."
 
-#: core/models/user.py:37
+#: core/models/user.py:84
 msgid "User"
 msgstr "Kullanıcı"
 
-#: core/models/user.py:38
+#: core/models/user.py:85
 msgid "Users"
 msgstr "Kullanıcılar"
 
-#: core/templates/core/mails/email_verification.html:7
+#: core/templates/core/mails/email_verification/email_verification.html:7
+#: core/templates/core/mails/email_verification/email_verification.txt:7
 #, python-format
 msgid "Hello %(name)s"
 msgstr "Merhaba %(name)s"
 
-#: core/templates/core/mails/email_verification.html:11
+#: core/templates/core/mails/email_verification/email_verification.html:11
+#: core/templates/core/mails/email_verification/email_verification.txt:9
 msgid ""
 "Thank you for your interest in joining Liber Wiki! To complete your "
 "registration, please confirm your email by clicking the link below. This "
 "will take you to the final steps of setting up your account."
 msgstr ""
-"Liber Wiki'ye katılmak için ilginiz için teşekkür ederiz! Kaydınızı tamamlamak "
-"için lütfen aşağıdaki bağlantıya tıklayarak emailinizi doğrulayın. Bu, hesabınızı "
-"oluşturmanın son adımlarına götürecektir."
+"Liber Wiki'ye katılmak için ilginiz için teşekkür ederiz! Kaydınızı "
+"tamamlamak için lütfen aşağıdaki bağlantıya tıklayarak emailinizi "
+"doğrulayın. Bu, hesabınızı oluşturmanın son adımlarına götürecektir."
 
-#: core/templates/core/mails/email_verification.html:18
+#: core/templates/core/mails/email_verification/email_verification.html:18
+#: core/templates/core/mails/email_verification/email_verification.txt:14
 msgid "Confirm Registration"
 msgstr "Üyeliğinizi Onaylayın"
 
-#: core/templates/core/mails/email_verification.html:22
+#: core/templates/core/mails/email_verification/email_verification.html:22
+#: core/templates/core/mails/email_verification/email_verification.txt:18
 msgid ""
 "If you didn't sign up for an account on Liber Wiki, you can use the same "
-"link to safely remove your email from our database or simply ignore this email."
+"link to safely remove your email from our database or simply ignore this "
+"email."
 msgstr ""
-"Liber Wiki'de bir hesap oluşturmadıysanız, aynı bağlantıyı kullanarak emailinizi "
-"veritabanımızdan güvenli bir şekilde kaldırabilir veya bu emaili yoksayabilirsiniz."
+"Liber Wiki'de bir hesap oluşturmadıysanız, aynı bağlantıyı kullanarak "
+"emailinizi veritabanımızdan güvenli bir şekilde kaldırabilir veya bu emaili "
+"yoksayabilirsiniz."
 
-#: core/templates/core/mails/email_verification.html:29
+#: core/templates/core/mails/email_verification/email_verification.html:29
+#: core/templates/core/mails/email_verification/email_verification.txt:23
 msgid "Welcome to a world of shared knowledge and insight!"
 msgstr "Bilgi ve sezginin paylaşıldığı bir dünyaya hoş geldiniz!"
 
-#: core/templates/core/mails/email_verification.html:35
+#: core/templates/core/mails/email_verification/email_verification.html:35
+#: core/templates/core/mails/email_verification/email_verification.txt:27
 msgid "Best regards"
 msgstr "Saygılarımızla"
 
-#: core/templates/core/mails/email_verification.html:35
+#: core/templates/core/mails/email_verification/email_verification.html:37
+#: core/templates/core/mails/email_verification/email_verification.txt:28
 msgid "The Liber Wiki Team"
 msgstr "Liber Wiki Ekibi"
 
@@ -263,34 +288,58 @@ msgstr "İngilizce"
 msgid "Turkish"
 msgstr "Türkçe"
 
-#: rest/serializers/auth.py:18
+#: rest/serializers/auth.py:19
 msgid "Email"
 msgstr "Email"
 
-#: rest/serializers/auth.py:20
+#: rest/serializers/auth.py:21
 msgid "Token"
 msgstr "Token"
 
-#: rest/serializers/auth.py:29
+#: rest/serializers/auth.py:30
 msgid "Invalid email or password"
 msgstr "Yanlış email ya da şifre"
 
-#: rest/serializers/auth.py:32
+#: rest/serializers/auth.py:33
 msgid "User account is disabled"
 msgstr "Kullanıcı hesabı devre dışı"
 
-#: rest/serializers/auth.py:59
+#: rest/serializers/auth.py:60
 msgid "Passwords do not match"
 msgstr "Şifreler uyuşmuyor"
 
-#: rest/serializers/auth.py:62
+#: rest/serializers/auth.py:63
 msgid "Invalid or previously used invitation code"
 msgstr "Yanlış ya da daha önce kullanılmış davetiye kodu"
 
-#: rest/serializers/auth.py:91
+#: rest/serializers/auth.py:95
 msgid "Verify your email address"
 msgstr "Email adresinizi doğrulayın"
 
-#: rest/serializers/auth.py:125 rest/serializers/auth.py:128
+#: rest/serializers/auth.py:129 rest/serializers/auth.py:132
 msgid "Invalid user or token"
 msgstr "Yanlış kullanıcı ya da token"
+
+#: rest/utils/permissions.py:18
+msgid "User is not the owner of the object"
+msgstr "Kullanıcı bu objenin sahibi değil"
+
+#: rest/utils/permissions.py:32
+#, python-brace-format
+msgid "Actions should not be: {actions}"
+msgstr "Aksiyonlar bunlar olmamalı: {actions}"
+
+#: rest/utils/permissions.py:55
+#, python-brace-format
+msgid "User property {property_name} is False"
+msgstr "Kullanıcı özelliği {property_name} yanlış"
+
+#: rest/utils/permissions.py:72
+#, python-brace-format
+msgid "User role should be at least {role}"
+msgstr "Kullanıcının rolü en az {role} olmalı"
+
+#: rest/views/base.py:135
+#, python-brace-format
+msgid "{method_name} is not allowed for this endpoint"
+msgstr "{method_name} bu endpoint için geçerli değil"
