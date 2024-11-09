@@ -21,5 +21,5 @@ class Command(BaseCommand):
                 username=CONFIG.SETUP.SUPERUSER.USERNAME,
                 email=CONFIG.SETUP.SUPERUSER.EMAIL,
                 password=CONFIG.SETUP.SUPERUSER.PASSWORD,
-                role=User.Roles.__all__[-1][0],  # Last role is always the highest
+                role=User.Roles.__all__[-1],  # Last role is always the highest
             )
