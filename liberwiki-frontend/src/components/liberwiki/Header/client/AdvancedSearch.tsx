@@ -81,7 +81,7 @@ export default function AdvancedSearch() {
                 ))}
                 {searchResults.length === 0 && (
                   <PopoverClose asChild>
-                    <div className={cn(buttonVariants({ variant: 'ghost', className: 'justify-start' }))}>
+                    <div className={cn(buttonVariants({ variant: 'ghost', className: 'justify-start text-wrap' }))}>
                       {t('advancedTitleSearch:noResults')}
                     </div>
                   </PopoverClose>

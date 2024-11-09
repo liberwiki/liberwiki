@@ -29,9 +29,11 @@ export default function DeleteButton(
       if (entry.title.entry_count === 1) {
         toast(t('entry:entryHasBenDeleted', { entryId: entry.id }))
         router.push(`/titles/${entry.title.name}`)
+        router.refresh()
       } else {
         const targetPage = Math.max(1, Math.ceil((entry.title.entry_count - 1) / config.ux.defaultEntryPageSize))
         router.push(`?${new URLSearchParams({ page: String(targetPage) }).toString()}`)
+        router.refresh()
       }
     } else {
       toast(t('common:somethingWentWrong', { entryId: entry.id }))

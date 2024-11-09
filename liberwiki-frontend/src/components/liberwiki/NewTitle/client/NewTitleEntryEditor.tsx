@@ -4,6 +4,8 @@ import { useRouter } from 'next/navigation'
 
 import React from 'react'
 
+import _ from 'lodash'
+
 import Editor from '@/components/liberwiki/Editor'
 
 import { useClientTranslation } from '@/i18n'
@@ -19,15 +21,30 @@ export default function NewTitleEntryEditor(
   const router = useRouter()
   const { t } = useClientTranslation(['title', 'entry'])
 
+  async function getTitle() {
+    const { data: title } = await liberwiki.titles({ name: newTitle, page_size: 1, page: 1 })
+    const existingTitle = _.first(title?.results)
+    if (existingTitle) {
+      return existingTitle
+    } else {
+      const { data: createdTitle, error: titleError } = await liberwiki.createTitle({ name: newTitle })
+      if (!titleError) {
+        return createdTitle
+      } else {
+        toast(t('entry:titleCreationError'))
+      }
+    }
+  }
+
   async function handleEditorSubmit(content: object) {
-    const { data: title, response: createTitleResponse } = await liberwiki.createTitle({ name: newTitle })
-    const { response: createEntryResponse } = await liberwiki.createEntry({ title: title?.id as string, content })
-    if (createTitleResponse.ok && createEntryResponse.ok) {
+    const title = await getTitle()
+    const { error: entryError } = await liberwiki.createEntry({ title: title?.id as string, content })
+    if (!entryError) {
       toast(t('entry:yourEntryHasBeenCreated'))
+      router.push(`/titles/${title?.slug}`)
     } else {
       toast(t('entry:entryCreationError'))
     }
-    router.push(`/titles/${title?.slug}`)
   }
 
   return <Editor readonly={false} onSubmit={handleEditorSubmit} {...editorProps} />

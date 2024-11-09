@@ -56,7 +56,7 @@ export async function Title({
   return (
     <>
       <div className="w-full">
-        <Link className="h-1 p-6 text-xl font-bold" href={{ pathname: `/titles/${title.slug}` }}>
+        <Link className="h-1 p-6 text-xl font-bold break-words" href={{ pathname: `/titles/${title.slug}` }}>
           {title.name}
         </Link>
         <div className="text-sm px-6 py-2 text-gray-500 flex justify-between items-center max-lg:flex-wrap">

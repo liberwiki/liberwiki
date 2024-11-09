@@ -1,3 +1,6 @@
+import re
+from functools import wraps
+
 from common.utils.pyutils import purge_iterable, purge_mapping
 from memoization import cached
 from rest_framework import serializers
@@ -67,11 +70,13 @@ def fake_serializer(
     )
     if dont_initialize:
 
-        def init():
+        @wraps(serializer.__init__)
+        def init(*a, **kw):
             # I think drf-spectacular checks the id or something because when I pass the same serializer instance
             # fields with the same serializer don't show up on the schema
             # but this way I can defer init and create new instance when we need to use the same instance
-            return serializer(**(serializer_kwargs or {}))
+            full_kwargs = {**(serializer_kwargs or {}), **kw}
+            return serializer(*a, **full_kwargs)
 
         return init
 
@@ -80,8 +85,11 @@ def fake_serializer(
 
 @cached
 def error_serializer(serializer, overrides=None):
+    error_schema = {key: "str-list" for key in serializer.Meta.fields}
+    non_field_errors = {"non_field_errors": "str-list"}
     return fake_serializer(
-        name=f"{serializer.__name__}Error",
-        schema={key: "str-list" for key in serializer.Meta.fields} | (overrides or {}),
+        name=f"{re.sub('Serializer$', '', serializer.__name__)}Error",
+        schema=error_schema | non_field_errors | (overrides or {}),
         readonly=True,
+        required=False,
     )

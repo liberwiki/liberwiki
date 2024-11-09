@@ -14,11 +14,11 @@ fi
 
 cd ../liberwiki || exit 1
 
-hash3=$(find ./locale/* -type f -print0 | sort -z | xargs -0 sha1sum | sha1sum)
-python manage.py makemessages --all
-hash4=$(find ./locale/* -type f -print0 | sort -z | xargs -0 sha1sum | sha1sum)
+hash3=$(find ./locale/**/*.po -type f -print0 | sort -z | xargs -0 sha1sum | sha1sum)
+python manage.py makemessages --all --no-obsolete --no-location
+hash4=$(find ./locale/**/*.po -type f -print0 | sort -z | xargs -0 sha1sum | sha1sum)
 
 if [ "$hash3" != "$hash4" ]; then
-	echo "Error: You have translations that are not up-to-date. Please run 'python manage.py makemessages --all' and commit the changes."
+	echo "Error: You have translations that are not up-to-date. Please run 'python manage.py makemessages --all --no-obsolete --no-location' and commit the changes."
 	exit 1
 fi

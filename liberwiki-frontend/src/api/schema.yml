@@ -32,7 +32,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SignupSerializerError'
+                $ref: '#/components/schemas/SignupError'
           description: ''
         '201':
           description: No response body
@@ -64,7 +64,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthTokenSerializerError'
+                $ref: '#/components/schemas/AuthTokenError'
           description: ''
         '200':
           content:
@@ -119,7 +119,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VerifyEmailSerializerError'
+                $ref: '#/components/schemas/VerifyEmailError'
           description: ''
         '204':
           description: No response body
@@ -376,7 +376,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EntrySerializerError'
+                $ref: '#/components/schemas/EntryError'
           description: ''
         '401':
           description: No response body
@@ -471,7 +471,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EntrySerializerError'
+                $ref: '#/components/schemas/EntryError'
           description: ''
         '401':
           description: No response body
@@ -521,7 +521,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EntrySerializerError'
+                $ref: '#/components/schemas/EntryError'
           description: ''
         '401':
           description: No response body
@@ -769,7 +769,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InvitationSerializerError'
+                $ref: '#/components/schemas/InvitationError'
           description: ''
         '401':
           description: No response body
@@ -789,6 +789,8 @@ paths:
         name: id
         schema:
           type: string
+          format: uuid
+          description: Unique identifier for this object
         required: true
       - in: query
         name: include
@@ -1001,7 +1003,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TitleSerializerError'
+                $ref: '#/components/schemas/TitleError'
           description: ''
         '401':
           description: No response body
@@ -1377,7 +1379,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserSerializerError'
+                $ref: '#/components/schemas/UserError'
           description: ''
     patch:
       operationId: users_me_partial_update
@@ -1411,7 +1413,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserSerializerError'
+                $ref: '#/components/schemas/UserError'
           description: ''
 components:
   schemas:
@@ -1422,6 +1424,34 @@ components:
           type: string
           readOnly: true
       required:
+      - token
+    AuthTokenError:
+      type: object
+      properties:
+        email:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        password:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        token:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        non_field_errors:
+          type: array
+          items:
+            type: string
+          readOnly: true
+      required:
+      - email
+      - non_field_errors
+      - password
       - token
     AuthTokenRequest:
       type: object
@@ -1437,28 +1467,6 @@ components:
       required:
       - email
       - password
-    AuthTokenSerializerError:
-      type: object
-      properties:
-        email:
-          type: array
-          items:
-            type: string
-          readOnly: true
-        password:
-          type: array
-          items:
-            type: string
-          readOnly: true
-        token:
-          type: array
-          items:
-            type: string
-          readOnly: true
-      required:
-      - email
-      - password
-      - token
     Entry:
       type: object
       description: |-
@@ -1551,43 +1559,7 @@ components:
             $ref: '#/components/schemas/ProtectedElement'
       required:
       - protected_elements
-    EntryRequest:
-      type: object
-      description: |-
-        Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
-        read only.
-
-        GET /api/v1/people/5/
-        {
-            "id": 5,
-            "first_name": "John",
-            "last_name": "Doe",
-            "labels": [7]
-        }
-
-        GET /api/v1/people/5/?include=labels
-        {
-            "id": 5,
-            "first_name": "John",
-            "last_name": "Doe",
-            "labels": [
-                {
-                    "id": 7,
-                    "name": "label-name"
-                }
-            ]
-        }
-      properties:
-        title:
-          type: string
-          format: uuid
-          description: Title of the entry.
-        content:
-          description: Content of the entry. In tiptap format.
-      required:
-      - content
-      - title
-    EntrySerializerError:
+    EntryError:
       type: object
       properties:
         id:
@@ -1645,6 +1617,11 @@ components:
           items:
             type: string
           readOnly: true
+        non_field_errors:
+          type: array
+          items:
+            type: string
+          readOnly: true
       required:
       - author
       - bookmark_count
@@ -1654,9 +1631,46 @@ components:
       - id
       - is_bookmarked
       - like_count
+      - non_field_errors
       - title
       - updated_at
       - vote
+    EntryRequest:
+      type: object
+      description: |-
+        Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
+        read only.
+
+        GET /api/v1/people/5/
+        {
+            "id": 5,
+            "first_name": "John",
+            "last_name": "Doe",
+            "labels": [7]
+        }
+
+        GET /api/v1/people/5/?include=labels
+        {
+            "id": 5,
+            "first_name": "John",
+            "last_name": "Doe",
+            "labels": [
+                {
+                    "id": 7,
+                    "name": "label-name"
+                }
+            ]
+        }
+      properties:
+        title:
+          type: string
+          format: uuid
+          description: Title of the entry.
+        content:
+          description: Content of the entry. In tiptap format.
+      required:
+      - content
+      - title
     EntryUpdateRequest:
       type: object
       description: |-
@@ -1747,7 +1761,7 @@ components:
       - id
       - used_by
       - user
-    InvitationSerializerError:
+    InvitationError:
       type: object
       properties:
         id:
@@ -1770,9 +1784,15 @@ components:
           items:
             type: string
           readOnly: true
+        non_field_errors:
+          type: array
+          items:
+            type: string
+          readOnly: true
       required:
       - code
       - id
+      - non_field_errors
       - used_by
       - user
     NullEnum:
@@ -2046,6 +2066,58 @@ components:
         * `NEW_RECRUIT` - New Recruit
         * `CONTRIBUTOR` - Contributor
         * `TRUSTED` - Trusted
+    SignupError:
+      type: object
+      properties:
+        email:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        username:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        first_name:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        last_name:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        password:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        password_confirmation:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        invitation_code:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        non_field_errors:
+          type: array
+          items:
+            type: string
+          readOnly: true
+      required:
+      - email
+      - first_name
+      - invitation_code
+      - last_name
+      - non_field_errors
+      - password
+      - password_confirmation
+      - username
     SignupRequest:
       type: object
       properties:
@@ -2083,52 +2155,6 @@ components:
       required:
       - email
       - invitation_code
-      - password
-      - password_confirmation
-      - username
-    SignupSerializerError:
-      type: object
-      properties:
-        email:
-          type: array
-          items:
-            type: string
-          readOnly: true
-        username:
-          type: array
-          items:
-            type: string
-          readOnly: true
-        first_name:
-          type: array
-          items:
-            type: string
-          readOnly: true
-        last_name:
-          type: array
-          items:
-            type: string
-          readOnly: true
-        password:
-          type: array
-          items:
-            type: string
-          readOnly: true
-        password_confirmation:
-          type: array
-          items:
-            type: string
-          readOnly: true
-        invitation_code:
-          type: array
-          items:
-            type: string
-          readOnly: true
-      required:
-      - email
-      - first_name
-      - invitation_code
-      - last_name
       - password
       - password_confirmation
       - username
@@ -2201,6 +2227,52 @@ components:
             $ref: '#/components/schemas/ProtectedElement'
       required:
       - protected_elements
+    TitleError:
+      type: object
+      properties:
+        id:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        name:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        slug:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        entry_count:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        created_by:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        is_bookmarked:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        non_field_errors:
+          type: array
+          items:
+            type: string
+          readOnly: true
+      required:
+      - created_by
+      - entry_count
+      - id
+      - is_bookmarked
+      - name
+      - non_field_errors
+      - slug
     TitleRequest:
       type: object
       description: |-
@@ -2236,46 +2308,6 @@ components:
           maxLength: 255
       required:
       - name
-    TitleSerializerError:
-      type: object
-      properties:
-        id:
-          type: array
-          items:
-            type: string
-          readOnly: true
-        name:
-          type: array
-          items:
-            type: string
-          readOnly: true
-        slug:
-          type: array
-          items:
-            type: string
-          readOnly: true
-        entry_count:
-          type: array
-          items:
-            type: string
-          readOnly: true
-        created_by:
-          type: array
-          items:
-            type: string
-          readOnly: true
-        is_bookmarked:
-          type: array
-          items:
-            type: string
-          readOnly: true
-      required:
-      - created_by
-      - entry_count
-      - id
-      - is_bookmarked
-      - name
-      - slug
     User:
       type: object
       description: |-
@@ -2373,40 +2405,7 @@ components:
       - title_count
       - updated_at
       - username
-    UserRequest:
-      type: object
-      description: |-
-        Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
-        read only.
-
-        GET /api/v1/people/5/
-        {
-            "id": 5,
-            "first_name": "John",
-            "last_name": "Doe",
-            "labels": [7]
-        }
-
-        GET /api/v1/people/5/?include=labels
-        {
-            "id": 5,
-            "first_name": "John",
-            "last_name": "Doe",
-            "labels": [
-                {
-                    "id": 7,
-                    "name": "label-name"
-                }
-            ]
-        }
-      properties:
-        first_name:
-          type: string
-          maxLength: 150
-        last_name:
-          type: string
-          maxLength: 150
-    UserSerializerError:
+    UserError:
       type: object
       properties:
         id:
@@ -2474,6 +2473,11 @@ components:
           items:
             type: string
           readOnly: true
+        non_field_errors:
+          type: array
+          items:
+            type: string
+          readOnly: true
       required:
       - created_at
       - email
@@ -2484,10 +2488,66 @@ components:
       - is_staff
       - is_superuser
       - last_name
+      - non_field_errors
       - role
       - title_count
       - updated_at
       - username
+    UserRequest:
+      type: object
+      description: |-
+        Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
+        read only.
+
+        GET /api/v1/people/5/
+        {
+            "id": 5,
+            "first_name": "John",
+            "last_name": "Doe",
+            "labels": [7]
+        }
+
+        GET /api/v1/people/5/?include=labels
+        {
+            "id": 5,
+            "first_name": "John",
+            "last_name": "Doe",
+            "labels": [
+                {
+                    "id": 7,
+                    "name": "label-name"
+                }
+            ]
+        }
+      properties:
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+    VerifyEmailError:
+      type: object
+      properties:
+        token:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        uidb64:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        non_field_errors:
+          type: array
+          items:
+            type: string
+          readOnly: true
+      required:
+      - non_field_errors
+      - token
+      - uidb64
     VerifyEmailRequest:
       type: object
       properties:
@@ -2499,22 +2559,6 @@ components:
           type: string
           writeOnly: true
           minLength: 1
-      required:
-      - token
-      - uidb64
-    VerifyEmailSerializerError:
-      type: object
-      properties:
-        token:
-          type: array
-          items:
-            type: string
-          readOnly: true
-        uidb64:
-          type: array
-          items:
-            type: string
-          readOnly: true
       required:
       - token
       - uidb64

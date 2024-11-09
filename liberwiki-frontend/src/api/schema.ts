@@ -440,14 +440,15 @@ export interface components {
     AuthToken: {
       readonly token: string
     }
-    AuthTokenRequest: {
-      email: string
-      password: string
-    }
-    AuthTokenSerializerError: {
+    AuthTokenError: {
       readonly email: string[]
       readonly password: string[]
       readonly token: string[]
+      readonly non_field_errors: string[]
+    }
+    AuthTokenRequest: {
+      email: string
+      password: string
     }
     /** @description Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
      *     read only.
@@ -509,6 +510,20 @@ export interface components {
     EntryDestroyError: {
       protected_elements: components['schemas']['ProtectedElement'][]
     }
+    EntryError: {
+      readonly id: string[]
+      readonly author: string[]
+      readonly title: string[]
+      readonly content: string[]
+      readonly created_at: string[]
+      readonly updated_at: string[]
+      readonly vote: string[]
+      readonly is_bookmarked: string[]
+      readonly like_count: string[]
+      readonly dislike_count: string[]
+      readonly bookmark_count: string[]
+      readonly non_field_errors: string[]
+    }
     /** @description Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
      *     read only.
      *
@@ -540,19 +555,6 @@ export interface components {
       title: string
       /** @description Content of the entry. In tiptap format. */
       content: unknown
-    }
-    EntrySerializerError: {
-      readonly id: string[]
-      readonly author: string[]
-      readonly title: string[]
-      readonly content: string[]
-      readonly created_at: string[]
-      readonly updated_at: string[]
-      readonly vote: string[]
-      readonly is_bookmarked: string[]
-      readonly like_count: string[]
-      readonly dislike_count: string[]
-      readonly bookmark_count: string[]
     }
     /** @description Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
      *     read only.
@@ -626,11 +628,12 @@ export interface components {
        */
       readonly used_by: string | null
     }
-    InvitationSerializerError: {
+    InvitationError: {
       readonly id: string[]
       readonly user: string[]
       readonly code: string[]
       readonly used_by: string[]
+      readonly non_field_errors: string[]
     }
     /** @enum {unknown} */
     NullEnum: null
@@ -833,6 +836,16 @@ export interface components {
      * @enum {string}
      */
     RoleEnum: 'READER' | 'NEW_RECRUIT' | 'CONTRIBUTOR' | 'TRUSTED'
+    SignupError: {
+      readonly email: string[]
+      readonly username: string[]
+      readonly first_name: string[]
+      readonly last_name: string[]
+      readonly password: string[]
+      readonly password_confirmation: string[]
+      readonly invitation_code: string[]
+      readonly non_field_errors: string[]
+    }
     SignupRequest: {
       /**
        * Email address
@@ -846,15 +859,6 @@ export interface components {
       password: string
       password_confirmation: string
       invitation_code: string
-    }
-    SignupSerializerError: {
-      readonly email: string[]
-      readonly username: string[]
-      readonly first_name: string[]
-      readonly last_name: string[]
-      readonly password: string[]
-      readonly password_confirmation: string[]
-      readonly invitation_code: string[]
     }
     /** @description Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
      *     read only.
@@ -903,6 +907,15 @@ export interface components {
     TitleDestroyError: {
       protected_elements: components['schemas']['ProtectedElement'][]
     }
+    TitleError: {
+      readonly id: string[]
+      readonly name: string[]
+      readonly slug: string[]
+      readonly entry_count: string[]
+      readonly created_by: string[]
+      readonly is_bookmarked: string[]
+      readonly non_field_errors: string[]
+    }
     /** @description Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
      *     read only.
      *
@@ -932,14 +945,6 @@ export interface components {
        * @description Name of the title.
        */
       name: string
-    }
-    TitleSerializerError: {
-      readonly id: string[]
-      readonly name: string[]
-      readonly slug: string[]
-      readonly entry_count: string[]
-      readonly created_by: string[]
-      readonly is_bookmarked: string[]
     }
     /** @description Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
      *     read only.
@@ -1008,6 +1013,22 @@ export interface components {
       readonly title_count: number
       readonly entry_count: number
     }
+    UserError: {
+      readonly id: string[]
+      readonly username: string[]
+      readonly first_name: string[]
+      readonly last_name: string[]
+      readonly email: string[]
+      readonly is_active: string[]
+      readonly is_staff: string[]
+      readonly is_superuser: string[]
+      readonly role: string[]
+      readonly created_at: string[]
+      readonly updated_at: string[]
+      readonly title_count: string[]
+      readonly entry_count: string[]
+      readonly non_field_errors: string[]
+    }
     /** @description Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
      *     read only.
      *
@@ -1035,28 +1056,14 @@ export interface components {
       first_name?: string
       last_name?: string
     }
-    UserSerializerError: {
-      readonly id: string[]
-      readonly username: string[]
-      readonly first_name: string[]
-      readonly last_name: string[]
-      readonly email: string[]
-      readonly is_active: string[]
-      readonly is_staff: string[]
-      readonly is_superuser: string[]
-      readonly role: string[]
-      readonly created_at: string[]
-      readonly updated_at: string[]
-      readonly title_count: string[]
-      readonly entry_count: string[]
+    VerifyEmailError: {
+      readonly token: string[]
+      readonly uidb64: string[]
+      readonly non_field_errors: string[]
     }
     VerifyEmailRequest: {
       token: string
       uidb64: string
-    }
-    VerifyEmailSerializerError: {
-      readonly token: string[]
-      readonly uidb64: string[]
     }
     /**
      * @description * `UPVOTE` - Upvote
@@ -1100,7 +1107,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['SignupSerializerError']
+          'application/json': components['schemas']['SignupError']
         }
       }
     }
@@ -1141,7 +1148,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['AuthTokenSerializerError']
+          'application/json': components['schemas']['AuthTokenError']
         }
       }
     }
@@ -1191,7 +1198,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['VerifyEmailSerializerError']
+          'application/json': components['schemas']['VerifyEmailError']
         }
       }
     }
@@ -1312,7 +1319,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['EntrySerializerError']
+          'application/json': components['schemas']['EntryError']
         }
       }
       /** @description No response body */
@@ -1400,7 +1407,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['EntrySerializerError']
+          'application/json': components['schemas']['EntryError']
         }
       }
       /** @description No response body */
@@ -1493,7 +1500,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['EntrySerializerError']
+          'application/json': components['schemas']['EntryError']
         }
       }
       /** @description No response body */
@@ -1706,7 +1713,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['InvitationSerializerError']
+          'application/json': components['schemas']['InvitationError']
         }
       }
       /** @description No response body */
@@ -1855,7 +1862,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['TitleSerializerError']
+          'application/json': components['schemas']['TitleError']
         }
       }
       /** @description No response body */
@@ -2133,7 +2140,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['UserSerializerError']
+          'application/json': components['schemas']['UserError']
         }
       }
     }
@@ -2166,7 +2173,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['UserSerializerError']
+          'application/json': components['schemas']['UserError']
         }
       }
     }

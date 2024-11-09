@@ -1,6 +1,7 @@
 {
   "entryHasBenDeleted": "Girdi {{entryId}} silindi.",
   "delete": "Sil",
+  "titleCreationError": "Başlığı oluştururken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
   "yourEntryHasBeenCreated": "Girdiniz oluşturuldu.",
   "entryCreationError": "Girdinizi oluştururken bir hata oluştu. Lütfen daha sonra tekrar deneyin."
 }

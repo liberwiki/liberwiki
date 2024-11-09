@@ -1,3 +1,5 @@
+from functools import wraps
+
 from common.utils.error_handling import TransformExceptions
 from common.utils.pyutils import Sentinel, all_combinations, cloned, raises, with_attrs
 from django.core.exceptions import ImproperlyConfigured, ValidationError
@@ -36,10 +38,14 @@ class BaseModelViewSet(ModelViewSet):
     disallowed_methods = []
     ordering_fields = []
     action_permissions = {}
+    request = None  # This is a hack around drf-spectacular not passing the request to the viewset methods
+    action = None  # This is a hack around drf-spectacular not passing the action to the viewset methods
 
     perform_create = django_to_drf_validation_error(ModelViewSet.perform_create)
     perform_update = django_to_drf_validation_error(ModelViewSet.perform_update)
     perform_destroy = django_to_drf_validation_error(ModelViewSet.perform_destroy)
+
+    SWAGGER_UTILITY_EXCEPTION = type("SwaggerUtilityException", (Exception,), {})
 
     def get_serializer_class(self):
         return self.serializer_class_action_map.get(self.action) or self.serializer_class or None
@@ -49,6 +55,8 @@ class BaseModelViewSet(ModelViewSet):
         return [cls.model.pk.name]  # NOQA
 
     def get_queryset(self):
+        if getattr(self, "swagger_fake_view", False):
+            raise self.SWAGGER_UTILITY_EXCEPTION
         return self.model.objects.all()  # NOQA
 
     @classproperty
@@ -93,7 +101,22 @@ class BaseModelViewSet(ModelViewSet):
         cls._override_crud_methods()
         cls._disallowed_methods()
         cls._register_viewset()
+        cls._if_swagger_return_objects_none()
         return super().__init_subclass__(**kwargs)
+
+    @classmethod
+    def _if_swagger_return_objects_none(cls):
+        def wrapper(get_queryset):
+            @wraps(get_queryset)
+            def get_queryset_(self):
+                try:
+                    return get_queryset(self)
+                except cls.SWAGGER_UTILITY_EXCEPTION:
+                    return self.model.objects.none()
+
+            return get_queryset_
+
+        cls.get_queryset = wrapper(cls.get_queryset)
 
     @classmethod
     def _allow_reverse_ordering(cls):

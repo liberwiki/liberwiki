@@ -1,9 +1,11 @@
-from core.models import Title, TitleBookmark
+from core.models import Title, TitleBookmark, User
 from django.db.models import BooleanField, Count, Exists, OuterRef, Value
 from django_filters import NumberFilter
 from drf_spectacular.utils import extend_schema
 from rest.serializers import TitleSerializer
 from rest.utils.filters import make_filters
+from rest.utils.permissions import IsSuperUser, ReadOnly, prevent_actions, user_property
+from rest.utils.schema_helpers import fake_serializer
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -15,6 +17,15 @@ class TitleViewSet(BaseModelViewSet):
     endpoint = "titles"
     model = Title
     serializer_class = TitleSerializer
+    permission_classes = [
+        IsSuperUser
+        | (
+            IsAuthenticated
+            & (user_property(User.can_create_new_entry) | prevent_actions("create"))
+            & prevent_actions("destroy")
+        )
+        | ReadOnly
+    ]
 
     filterset_fields = {
         "name": ["exact", "iexact", "contains", "icontains"],
@@ -55,7 +66,7 @@ class TitleViewSet(BaseModelViewSet):
         detail=True,
         methods=["POST"],
         url_path="bookmark",
-        serializer_class=None,
+        serializer_class=fake_serializer("BookmarkTitle", dont_initialize=True),
         permission_classes=[IsAuthenticated],
     )
     @django_to_drf_validation_error
@@ -72,7 +83,7 @@ class TitleViewSet(BaseModelViewSet):
         detail=True,
         methods=["POST"],
         url_path="unbookmark",
-        serializer_class=None,
+        serializer_class=fake_serializer("UnbookmarkTitle", dont_initialize=True),
         permission_classes=[IsAuthenticated],
     )
     @django_to_drf_validation_error

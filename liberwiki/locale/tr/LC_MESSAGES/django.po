@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-09 04:20+0000\n"
+"POT-Creation-Date: 2024-11-09 23:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,39 +18,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: administration/admin/group.py:20
 msgid "Permission Count"
 msgstr "İzin Sayısı"
 
-#: administration/admin/title.py:20
 msgid "Entry Count"
 msgstr "Girdi Sayısı"
 
-#: administration/admin/user.py:26
 msgid "Personal info"
 msgstr "Kişisel Bilgiler"
 
-#: administration/admin/user.py:27
 msgid "Permissions"
 msgstr "İzinler"
 
-#: administration/admin/user.py:28
 msgid "Important dates"
 msgstr "Önemli Tarihler"
 
-#: common/models/base.py:25
 msgid "Unique identifier for this object"
 msgstr "Objenin kimlik numarası"
 
-#: common/models/base.py:31
 msgid "Date and time this object was created"
 msgstr "Oluşturulma tarihi"
 
-#: common/models/base.py:36
 msgid "Date and time this object was last updated"
 msgstr "Güncellenme tarihi"
 
-#: common/validators/allowed_characters.py:12
 #, python-brace-format
 msgid ""
 "Enter a valid value containing only the allowed characters. "
@@ -59,160 +50,121 @@ msgstr ""
 "Yalnızca izin verilen karakterleri içeren geçerli bir değer girin. "
 "{allowed_characters}"
 
-#: core/models/entry.py:16
 msgid "Title of the entry."
 msgstr "Girdinin başlığı."
 
-#: core/models/entry.py:22
 msgid "Author of the entry."
 msgstr "Girdinin yazarı."
 
-#: core/models/entry.py:30
 msgid "Content"
 msgstr "İçerik"
 
-#: core/models/entry.py:31
 msgid "Content of the entry. In tiptap format."
 msgstr "Girdinin içeriği. TipTap formatında."
 
-#: core/models/entry.py:35
 msgid "Entry"
 msgstr "Girdi"
 
-#: core/models/entry.py:36
 msgid "Entries"
 msgstr "Girdiler"
 
-#: core/models/entry_bookmark.py:15 core/models/title_bookmark.py:15
 msgid "User who bookmarked."
 msgstr "Yer imleyen kullanıcı"
 
-#: core/models/entry_bookmark.py:21
 msgid "Entry that was bookmarked."
 msgstr "Yer imlenen girdi"
 
-#: core/models/entry_bookmark.py:33
 msgid "Entry Bookmark"
 msgstr "Girdi Yerimi"
 
-#: core/models/entry_bookmark.py:34
 msgid "Entry Bookmarks"
 msgstr "Girdi Yer İmleri"
 
-#: core/models/entry_vote.py:12
 msgid "Upvote"
 msgstr "Pozitif Oy"
 
-#: core/models/entry_vote.py:13
 msgid "Downvote"
 msgstr "Negatif Oy"
 
-#: core/models/entry_vote.py:19
 msgid "User who voted."
 msgstr "Oylayan kullanıcı"
 
-#: core/models/entry_vote.py:25
 msgid "Entry that was voted."
 msgstr "Oylanan girdi"
 
-#: core/models/entry_vote.py:30
 msgid "Vote"
 msgstr "Oy"
 
-#: core/models/entry_vote.py:41
 msgid "Entry Vote"
 msgstr "Girdi Oyu"
 
-#: core/models/entry_vote.py:42
 msgid "Entry Votes"
 msgstr "Girdi Oyları"
 
-#: core/models/invitation.py:22
 msgid "Owner of the invitation."
 msgstr "Davetiyenin Sahibi"
 
-#: core/models/invitation.py:29
 msgid "Invitation code."
 msgstr "Davetiye Kodu"
 
-#: core/models/invitation.py:39
 msgid "User who used the invitation."
 msgstr "Davetiyeyi kullanan kullanıcı"
 
-#: core/models/invitation.py:57
 #, python-brace-format
 msgid "Unable to generate a unique code after {tries} tries."
 msgstr "{tries} denemeden sonra benzersiz bir kod oluşturulamadı."
 
-#: core/models/invitation.py:60
 msgid "Invitation"
 msgstr "Davetiye"
 
-#: core/models/invitation.py:61
 msgid "Invitations"
 msgstr "Davetiyeler"
 
-#: core/models/title.py:17 core/models/title.py:42
 msgid "Title"
 msgstr "Başlık"
 
-#: core/models/title.py:25
 msgid "Name of the title."
 msgstr "Başlığın adı."
 
-#: core/models/title.py:28
 msgid "Slug"
 msgstr "Jeton"
 
-#: core/models/title.py:31
 msgid "Slug of the title to display in urls."
 msgstr "Başlığın URL'lerde görüntülenmesi için jetonu."
 
-#: core/models/title.py:37
 msgid "Creator of the title."
 msgstr "Başlığı oluşturan kullanıcı."
 
-#: core/models/title.py:43
 msgid "Titles"
 msgstr "Başlıklar"
 
-#: core/models/title_bookmark.py:21
 msgid "Title that was bookmarked."
 msgstr "Yer imlenen başlık."
 
-#: core/models/title_bookmark.py:33
 msgid "Title Bookmark"
 msgstr "Başlık Yer İmi"
 
-#: core/models/title_bookmark.py:34
 msgid "Title Bookmarks"
 msgstr "Başlık Yer İmleri"
 
-#: core/models/user.py:18
 msgid "Reader"
 msgstr "Okur"
 
-#: core/models/user.py:19
 msgid "New Recruit"
 msgstr "Çaylak"
 
-#: core/models/user.py:20
 msgid "Contributor"
 msgstr "Katkıda Bulunan"
 
-#: core/models/user.py:21
 msgid "Trusted"
 msgstr "Güvenilir"
 
-#: core/models/user.py:24
 msgid "email address"
 msgstr "Email Adresi"
 
-#: core/models/user.py:26
 msgid "username"
 msgstr "Kullanıcı Adı"
 
-#: core/models/user.py:30
 msgid ""
 "Required. 150 characters or fewer. Letters (lowercase), digits or hyphens "
 "only, can't start with digits or hyphens."
@@ -220,26 +172,19 @@ msgstr ""
 "Gerekli. 150 karakterden az. Yalnızca harfler (küçük harf), rakamlar veya "
 "tireler, rakamlarla veya tirelerle başlayamaz."
 
-#: core/models/user.py:41
 msgid "A user with that username already exists."
 msgstr "Aynı kullanıcı adıyla başka kullanıcı zaten var."
 
-#: core/models/user.py:84
 msgid "User"
 msgstr "Kullanıcı"
 
-#: core/models/user.py:85
 msgid "Users"
 msgstr "Kullanıcılar"
 
-#: core/templates/core/mails/email_verification/email_verification.html:7
-#: core/templates/core/mails/email_verification/email_verification.txt:7
 #, python-format
 msgid "Hello %(name)s"
 msgstr "Merhaba %(name)s"
 
-#: core/templates/core/mails/email_verification/email_verification.html:11
-#: core/templates/core/mails/email_verification/email_verification.txt:9
 msgid ""
 "Thank you for your interest in joining Liber Wiki! To complete your "
 "registration, please confirm your email by clicking the link below. This "
@@ -249,13 +194,9 @@ msgstr ""
 "tamamlamak için lütfen aşağıdaki bağlantıya tıklayarak emailinizi "
 "doğrulayın. Bu, hesabınızı oluşturmanın son adımlarına götürecektir."
 
-#: core/templates/core/mails/email_verification/email_verification.html:18
-#: core/templates/core/mails/email_verification/email_verification.txt:14
 msgid "Confirm Registration"
 msgstr "Üyeliğinizi Onaylayın"
 
-#: core/templates/core/mails/email_verification/email_verification.html:22
-#: core/templates/core/mails/email_verification/email_verification.txt:18
 msgid ""
 "If you didn't sign up for an account on Liber Wiki, you can use the same "
 "link to safely remove your email from our database or simply ignore this "
@@ -265,81 +206,60 @@ msgstr ""
 "emailinizi veritabanımızdan güvenli bir şekilde kaldırabilir veya bu emaili "
 "yoksayabilirsiniz."
 
-#: core/templates/core/mails/email_verification/email_verification.html:29
-#: core/templates/core/mails/email_verification/email_verification.txt:23
 msgid "Welcome to a world of shared knowledge and insight!"
 msgstr "Bilgi ve sezginin paylaşıldığı bir dünyaya hoş geldiniz!"
 
-#: core/templates/core/mails/email_verification/email_verification.html:35
-#: core/templates/core/mails/email_verification/email_verification.txt:27
 msgid "Best regards"
 msgstr "Saygılarımızla"
 
-#: core/templates/core/mails/email_verification/email_verification.html:37
-#: core/templates/core/mails/email_verification/email_verification.txt:28
 msgid "The Liber Wiki Team"
 msgstr "Liber Wiki Ekibi"
 
-#: liberwiki/settings.py:123
 msgid "English"
 msgstr "İngilizce"
 
-#: liberwiki/settings.py:124
 msgid "Turkish"
 msgstr "Türkçe"
 
-#: rest/serializers/auth.py:19
 msgid "Email"
 msgstr "Email"
 
-#: rest/serializers/auth.py:21
 msgid "Token"
 msgstr "Token"
 
-#: rest/serializers/auth.py:30
 msgid "Invalid email or password"
 msgstr "Yanlış email ya da şifre"
 
-#: rest/serializers/auth.py:33
 msgid "User account is disabled"
 msgstr "Kullanıcı hesabı devre dışı"
 
-#: rest/serializers/auth.py:60
 msgid "Passwords do not match"
 msgstr "Şifreler uyuşmuyor"
 
-#: rest/serializers/auth.py:63
 msgid "Invalid or previously used invitation code"
 msgstr "Yanlış ya da daha önce kullanılmış davetiye kodu"
 
-#: rest/serializers/auth.py:95
 msgid "Verify your email address"
 msgstr "Email adresinizi doğrulayın"
 
-#: rest/serializers/auth.py:129 rest/serializers/auth.py:132
 msgid "Invalid user or token"
 msgstr "Yanlış kullanıcı ya da token"
 
-#: rest/utils/permissions.py:18
 msgid "User is not the owner of the object"
 msgstr "Kullanıcı bu objenin sahibi değil"
 
-#: rest/utils/permissions.py:32
 #, python-brace-format
 msgid "Actions should not be: {actions}"
 msgstr "Aksiyonlar bunlar olmamalı: {actions}"
 
-#: rest/utils/permissions.py:55
 #, python-brace-format
 msgid "User property {property_name} is False"
 msgstr "Kullanıcı özelliği {property_name} yanlış"
 
-#: rest/utils/permissions.py:72
 #, python-brace-format
 msgid "User role should be at least {role}"
 msgstr "Kullanıcının rolü en az {role} olmalı"
 
-#: rest/views/base.py:135
 #, python-brace-format
 msgid "{method_name} is not allowed for this endpoint"
 msgstr "{method_name} bu endpoint için geçerli değil"

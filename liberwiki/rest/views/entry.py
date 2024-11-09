@@ -112,7 +112,7 @@ class EntryViewSet(BaseModelViewSet):
         detail=True,
         methods=["POST"],
         url_path="upvote",
-        serializer_class=None,
+        serializer_class=fake_serializer("UpvoteEntry", dont_initialize=True),
         permission_classes=[IsAuthenticated],
     )
     @django_to_drf_validation_error
@@ -129,7 +129,7 @@ class EntryViewSet(BaseModelViewSet):
         detail=True,
         methods=["POST"],
         url_path="downvote",
-        serializer_class=None,
+        serializer_class=fake_serializer("DownvoteEntry", dont_initialize=True),
         permission_classes=[IsAuthenticated],
     )
     @django_to_drf_validation_error
@@ -146,7 +146,7 @@ class EntryViewSet(BaseModelViewSet):
         detail=True,
         methods=["POST"],
         url_path="unvote",
-        serializer_class=None,
+        serializer_class=fake_serializer("UnvoteEntry", dont_initialize=True),
         permission_classes=[IsAuthenticated],
     )
     @django_to_drf_validation_error
@@ -163,7 +163,7 @@ class EntryViewSet(BaseModelViewSet):
         detail=True,
         methods=["POST"],
         url_path="bookmark",
-        serializer_class=None,
+        serializer_class=fake_serializer("BookmarkEntry", dont_initialize=True),
         permission_classes=[IsAuthenticated],
     )
     @django_to_drf_validation_error
@@ -180,7 +180,7 @@ class EntryViewSet(BaseModelViewSet):
         detail=True,
         methods=["POST"],
         url_path="unbookmark",
-        serializer_class=None,
+        serializer_class=fake_serializer("UnbookmarkEntry", dont_initialize=True),
         permission_classes=[IsAuthenticated],
     )
     @django_to_drf_validation_error
