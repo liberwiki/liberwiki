@@ -42,6 +42,7 @@ export default function NewTitleEntryEditor(
     if (!entryError) {
       toast(t('entry:yourEntryHasBeenCreated'))
       router.push(`/titles/${title?.slug}`)
+      router.refresh()
     } else {
       toast(t('entry:entryCreationError'))
     }
