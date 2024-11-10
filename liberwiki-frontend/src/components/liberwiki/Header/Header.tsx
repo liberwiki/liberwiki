@@ -19,7 +19,7 @@ export async function Header() {
     <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-primary">
       <div className="container flex h-14 items-center max-md:px-4 gap-2">
         <div className="xl:w-1/6">
-          <Link href={{ pathname: '/' }} className="items-center gap-2 hidden xl:flex">
+          <Link prefetch={true} href={{ pathname: '/' }} className="items-center gap-2 hidden xl:flex">
             <Icons.Triangle className="h-6 w-6" />
             <span className="hidden font-bold lg:inline-block">{config.name}</span>
           </Link>
@@ -32,7 +32,7 @@ export async function Header() {
         </div>
         <div className="xl:w-1/6 flex justify-end">
           {(await liberwiki.isAuthenticated()) ? (
-            <Link href={{ pathname: '/account/profile' }}>
+            <Link prefetch={true} href={{ pathname: '/account/profile' }}>
               <Button
                 variant="ghost"
                 className="px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 gap-2"
@@ -44,10 +44,10 @@ export async function Header() {
           ) : (
             <>
               <div className="hidden lg:contents">
-                <Link href={{ pathname: '/auth/login' }}>
+                <Link prefetch={true} href={{ pathname: '/auth/login' }}>
                   <Button variant="ghost">{t('common:login')}</Button>
                 </Link>
-                <Link href={{ pathname: '/auth/signup' }}>
+                <Link prefetch={true} href={{ pathname: '/auth/signup' }}>
                   <Button variant="ghost">{t('common:signup')}</Button>
                 </Link>
               </div>
@@ -66,10 +66,10 @@ export async function Header() {
                   </SheetHeader>
                   <SheetTitle className="hidden">{t('common:account')}</SheetTitle>
                   <SheetContent side="bottom" className="px-2 flex flex-col">
-                    <Link href={{ pathname: '/auth/login' }}>
+                    <Link prefetch={true} href={{ pathname: '/auth/login' }}>
                       <Button variant="ghost">{t('common:login')}</Button>
                     </Link>
-                    <Link href={{ pathname: '/auth/signup' }}>
+                    <Link prefetch={true} href={{ pathname: '/auth/signup' }}>
                       <Button variant="ghost">{t('common:signup')}</Button>
                     </Link>
                   </SheetContent>

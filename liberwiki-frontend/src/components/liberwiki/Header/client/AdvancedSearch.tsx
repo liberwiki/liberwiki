@@ -71,6 +71,7 @@ export default function AdvancedSearch() {
                 {searchResults.map((title) => (
                   <PopoverClose asChild key={title.id}>
                     <Link
+                      prefetch={true}
                       className={cn(buttonVariants({ variant: 'ghost', className: 'justify-start' }))}
                       href={`/titles/${title.slug}`}
                       key={title.id}

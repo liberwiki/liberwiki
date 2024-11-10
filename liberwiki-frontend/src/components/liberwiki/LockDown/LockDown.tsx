@@ -23,7 +23,7 @@ export async function LockDown() {
       <CardContent className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <Button asChild className="w-full" size="lg">
-            <Link href={{ pathname: '/auth/signup' }} className="gap-2">
+            <Link prefetch={true} href={{ pathname: '/auth/signup' }} className="gap-2">
               {t('lockdown:signupWithInvitationCode')}
               <Icons.ArrowRight className="h-4 w-4" />
             </Link>
@@ -32,21 +32,11 @@ export async function LockDown() {
         <SeparatorWithText text="or" />
         <div className="flex flex-col gap-2">
           <Button variant="outline" asChild className="w-full" size="lg">
-            <Link href={{ pathname: '/auth/login' }} className="gap-2">
+            <Link prefetch={true} href={{ pathname: '/auth/login' }} className="gap-2">
               {t('lockdown:haveAnAccountLogIn')}
               <Icons.LogIn className="h-4 w-4" />
             </Link>
           </Button>
-        </div>
-        <SeparatorWithText text="or" />
-        <div className="flex flex-col gap-2">
-          <Button variant="secondary" asChild className="w-full" size="lg">
-            <Link href={{ pathname: '/auth/waitlist' }} className="gap-2">
-              {t('lockdown:joinWaitlist')}
-              <Icons.Mail className="h-4 w-4" />
-            </Link>
-          </Button>
-          <p className="text-sm text-center text-muted-foreground">{t('lockdown:getNotified')}</p>
         </div>
       </CardContent>
     </Card>

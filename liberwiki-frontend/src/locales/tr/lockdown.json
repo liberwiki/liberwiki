@@ -2,7 +2,5 @@
   "lockdownTitle": "Kapalı Beta",
   "lockdownDescription": "{{name}} şu anda kapalı beta aşamasındadır. Kayıt olmak için bir davet koduna ihtiyacınız var.",
   "signupWithInvitationCode": "Davet kodu ile kaydol",
-  "haveAnAccountLogIn": "Zaten bir hesabınız var mı? Giriş yap",
-  "joinWaitlist": "Bekleme listesine katıl",
-  "getNotified": "Kodu yok mu? Açıldığımızda bildirim alın."
+  "haveAnAccountLogIn": "Zaten bir hesabınız var mı? Giriş yap"
 }

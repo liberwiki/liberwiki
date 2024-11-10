@@ -56,7 +56,11 @@ export async function Title({
   return (
     <>
       <div className="w-full">
-        <Link className="h-1 p-6 text-xl font-bold break-words" href={{ pathname: `/titles/${title.slug}` }}>
+        <Link
+          prefetch={true}
+          className="h-1 p-6 text-xl font-bold break-words"
+          href={{ pathname: `/titles/${title.slug}` }}
+        >
           {title.name}
         </Link>
         <div className="text-sm px-6 py-2 text-gray-500 flex justify-between items-center max-lg:flex-wrap">
@@ -73,24 +77,28 @@ export async function Title({
                 <OverlayTitle className="hidden">Ordering</OverlayTitle>
                 <div className="flex flex-col">
                   <Link
+                    prefetch={true}
                     href={newOrderingHref('created_at')}
                     className={cn(buttonVariants({ variant: 'ghost', className: 'w-full justify-start' }))}
                   >
                     {t('advancedEntrySearch:orderByChronological')}
                   </Link>
                   <Link
+                    prefetch={true}
                     href={newOrderingHref('-like_count')}
                     className={cn(buttonVariants({ variant: 'ghost', className: 'w-full justify-start' }))}
                   >
                     {t('advancedEntrySearch:orderByLikes')}
                   </Link>
                   <Link
+                    prefetch={true}
                     href={newOrderingHref('-dislike_count')}
                     className={cn(buttonVariants({ variant: 'ghost', className: 'w-full justify-start' }))}
                   >
                     {t('advancedEntrySearch:orderByDislikes')}
                   </Link>
                   <Link
+                    prefetch={true}
                     href={newOrderingHref('-bookmark_count')}
                     className={cn(buttonVariants({ variant: 'ghost', className: 'w-full justify-start' }))}
                   >

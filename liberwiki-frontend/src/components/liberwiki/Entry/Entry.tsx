@@ -40,7 +40,7 @@ export async function Entry({
           </div>
           <div className="flex gap-2 items-center">
             <div className="text-sm text-gray-500">
-              <Link href={{ pathname: '/' }} className="font-medium text-primary hover:underline">
+              <Link prefetch={true} href={{ pathname: '/' }} className="font-medium text-primary hover:underline">
                 {entry.author.username}
               </Link>
               <span className="mx-1">•</span>

@@ -1,7 +1,7 @@
 {
-  "entryHasBenDeleted": "Entry {{entryId}} has been deleted.",
-  "delete": "Delete",
-  "titleCreationError": "An error occurred while creating your entry. Please try again later.",
-  "yourEntryHasBeenCreated": "Your entry has been created.",
-  "entryCreationError": "An error occurred while creating your entry. Please try again later."
+  "entryHasBenDeleted": "",
+  "delete": "",
+  "titleCreationError": "",
+  "yourEntryHasBeenCreated": "",
+  "entryCreationError": ""
 }

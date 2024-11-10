@@ -76,13 +76,13 @@ export default function LoginForm() {
           {t('common:login')}
         </Button>
         <div className="w-100 flex justify-center">
-          <Link href={{ pathname: '/auth/signup' }} className="hover:underline">
+          <Link prefetch={true} href={{ pathname: '/auth/signup' }} className="hover:underline">
             {t('login:signUpInstead')}
           </Link>
         </div>
         {!config.membersOnly && (
           <div className="w-100 flex justify-center">
-            <Link href={{ pathname: '/' }} className="hover:underline">
+            <Link prefetch={true} href={{ pathname: '/' }} className="hover:underline">
               {t('common:backToWebsite')}
             </Link>
           </div>

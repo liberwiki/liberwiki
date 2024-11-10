@@ -12,7 +12,11 @@ export async function NewTitle({ newTitle }: { newTitle: string }) {
   return (
     <>
       <div className="w-full">
-        <Link className="h-1 p-6 text-xl font-bold break-words" href={{ pathname: `/titles/${newTitle}` }}>
+        <Link
+          prefetch={true}
+          className="h-1 p-6 text-xl font-bold break-words"
+          href={{ pathname: `/titles/${newTitle}` }}
+        >
           {title}
         </Link>
         <div className="mt-2 px-4">

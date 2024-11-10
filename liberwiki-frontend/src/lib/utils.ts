@@ -130,8 +130,23 @@ export function runMiddlewareIfPathMatches(path: RegExp, exemptNextPaths: boolea
   return function (middleware: (request: NextRequest) => Promise<NextResponse | void>) {
     return async function (request: NextRequest) {
       const nextPatterns = [/^\/_next/]
+      const wellKnownPatterns = [/^\/.well-known/]
+      const publicPatterns = [
+        // TODO: read the src/public directory and generate this list
+        /android-chrome-192x192.png/,
+        /android-chrome-512x512.png/,
+        /apple-touch-icon.png/,
+        /favicon.ico/,
+        /favicon-16x16.png/,
+        /favicon-32x32.png/,
+        /robots.txt/,
+        /humans.txt/,
+        /site.webmanifest/,
+      ]
 
-      if (exemptNextPaths && _.some(nextPatterns, (pattern) => pattern.test(request.nextUrl.pathname))) {
+      const ignoredPatterns = [...nextPatterns, ...wellKnownPatterns, ...publicPatterns]
+
+      if (exemptNextPaths && _.some(ignoredPatterns, (pattern) => pattern.test(request.nextUrl.pathname))) {
         return
       }
 

@@ -37,6 +37,7 @@ export async function Paginator({
   return (
     <div className={cn('flex w-full items-center justify-end gap-2', className)}>
       <Link
+        prefetch={true}
         className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}
         aria-label={t('paginator:previousPage')}
         href={{
@@ -64,9 +65,9 @@ export async function Paginator({
               <div className="flex flex-col max-h-48">
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                   <Link
+                    prefetch={true}
                     className={cn(buttonVariants({ variant: 'ghost', className: 'w-full justify-center' }))}
                     href={{ pathname, query: { ...queryParams, [pageQueryParamName]: Number(page) } }}
-                    prefetch={false}
                     key={page}
                   >
                     {page}
@@ -78,6 +79,7 @@ export async function Paginator({
         </Overlay>
         <span>/</span>
         <Link
+          prefetch={true}
           className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}
           aria-label={t('paginator:maxPage')}
           href={{ pathname, query: { ...queryParams, [pageQueryParamName]: Number(totalPages) } }}
@@ -86,6 +88,7 @@ export async function Paginator({
         </Link>
       </div>
       <Link
+        prefetch={true}
         className={cn(buttonVariants({ variant: 'outline', size: 'sm', className: '!ml-0' }))}
         aria-label={t('paginator:nextPage')}
         href={{
