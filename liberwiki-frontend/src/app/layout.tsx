@@ -1,7 +1,6 @@
 import '~/src/app/globals.css'
 
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 
 import React from 'react'
 
@@ -12,8 +11,6 @@ import config from '@/config'
 import { cn } from '@/lib/utils'
 
 import { GoogleAnalytics } from '@next/third-parties/google'
-
-const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: config.name,
@@ -32,7 +29,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         />
         {gaID && <GoogleAnalytics gaId={gaID} />}
       </head>
-      <body className={cn('min-h-screen font-sans antialiased dark', inter.className)}>
+      <body className={cn('min-h-screen font-sans antialiased dark')}>
         {children}
         <Toaster />
       </body>

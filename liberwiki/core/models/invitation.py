@@ -44,6 +44,11 @@ class Invitation(BaseModel):
     def generate_invitation_code(self):
         self.code = self.get_unique_code(tries=10)
 
+    @hook(BEFORE_CREATE)
+    def check_user_invitation_limit(self):
+        if not self.user.can_invite_new_users:
+            raise ValidationError(_("You can't invite new users."))
+
     def generate_code(self):
         # https://docs.python.org/3/library/secrets.html#recipes-and-best-practices
         alphabet = string.ascii_letters.lower() + string.digits

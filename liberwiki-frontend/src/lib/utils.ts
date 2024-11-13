@@ -75,31 +75,42 @@ export function slugify(value: string, allowUnicode: boolean = false): string {
   return value.replace(/[-\s]+/g, '-').replace(/^[-_]+|[-_]+$/g, '')
 }
 
-export function checkRequiredKeys<T extends Record<string, unknown>>(obj: T, keyGroups: Array<Array<keyof T>>): void {
+export function checkRequiredKeys<T extends Record<string, unknown>, C extends Record<string, Array<keyof T>>>(
+  obj: T,
+  conditions: C
+): keyof C {
   /**
    * Check if the object has exactly one of the required key groups.
-   * Used when a function can take multiple different sets of arguments but only some of them makes sense together.
-   * For instance, a function that can take either a or b, but not a and b at the same time and at least 1 is required.
+   * Used when a function can take multiple different sets of arguments but only some of them make sense together.
+   * For instance, a function that can take either "a" or "b and c" but not both at the same time, and at least one set is required.
    **/
+  // Usage
+  //
   // const obj1 = { a: 1, b: undefined, c: undefined, d: undefined, e: undefined };
   // const obj2 = { a: undefined, b: 1, c: 2, d: undefined, e: undefined };
   // const obj3 = { a: undefined, b: undefined, c: undefined, d: 1, e: 2 };
-  // const requiredKeys = [["a"], ["b", "c"], ["d", "e"]];
-  // checkRequiredKeys(obj1, requiredKeys);
-  // checkRequiredKeys(obj2, requiredKeys);
-  // checkRequiredKeys(obj3, requiredKeys);
-  // checkRequiredKeys({ a: 1, b: 2, c: 3 }, [["a"], ["b", "c"]]); // Throws error
-  const matchingGroups = keyGroups.filter(
-    (group) =>
-      group.every((key) => obj[key] !== undefined) &&
-      Object.keys(obj).every((key) => {
-        return group.includes(key as keyof T) || obj[key] === undefined
-      })
+  // const conditions = {
+  //   conditionName: ["a"],
+  //   condition2Name: ["b", "c"],
+  //   condition3Name: ["d", "e"]
+  // };
+  //
+  // checkRequiredKeys(obj1, conditions); // "conditionName"
+  // checkRequiredKeys(obj2, conditions); // "condition2Name"
+  // checkRequiredKeys(obj3, conditions); // "condition3Name"
+  // checkRequiredKeys({ a: 1, b: 2, c: 3 }, conditions); // Throws error
+
+  const matchingConditions = Object.entries(conditions).filter(
+    ([_, keys]) =>
+      keys.every((key) => obj[key] !== undefined) &&
+      Object.keys(obj).every((key) => keys.includes(key as keyof T) || obj[key] === undefined)
   )
 
-  if (matchingGroups.length !== 1) {
-    throw new Error(`Object keys do not match exactly one required collection. ${JSON.stringify(keyGroups)}`)
+  if (matchingConditions.length !== 1) {
+    throw new Error(`Object keys do not match exactly one required condition. ${JSON.stringify(conditions)}`)
   }
+
+  return matchingConditions[0][0] as keyof C
 }
 
 export function getLazyValue<T>(input: T | (() => T)) {

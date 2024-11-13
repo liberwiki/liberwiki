@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 
 import React from 'react'
 
 import config from '@/config'
+import { sUseTranslation } from '@/i18n'
 
 export const metadata: Metadata = {
   title: config.name,
@@ -10,5 +12,18 @@ export const metadata: Metadata = {
 }
 
 export default async function AuthLayout({ children }: { children: React.ReactNode }) {
-  return <main className="flex items-center justify-center min-h-screen">{children}</main>
+  const { t } = await sUseTranslation(['common'])
+
+  return (
+    <main className="flex flex-col items-center justify-center min-h-screen gap-2">
+      {children}
+      {!config.membersOnly && (
+        <div className="w-100 flex justify-center">
+          <Link prefetch={true} href={{ pathname: '/' }} className="hover:underline">
+            {t('common:backToWebsite')}
+          </Link>
+        </div>
+      )}
+    </main>
+  )
 }

@@ -16,5 +16,5 @@ class UsernameOREmailModelBackend(ModelBackend):
             # difference between an existing and a non-existing user (#20760).
             user_model().set_password(password)
         else:
-            if user.check_password(password) and self.user_can_authenticate(user):
+            if user.check_password(password):
                 return user

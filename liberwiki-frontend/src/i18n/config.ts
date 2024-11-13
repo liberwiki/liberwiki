@@ -10,6 +10,7 @@ export const namespaces = [
   'editor',
   'login',
   'verifyEmail',
+  'checkEmail',
   'profile',
   'entry',
   'signup',

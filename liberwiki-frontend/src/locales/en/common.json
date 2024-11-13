@@ -1,4 +1,5 @@
 {
+  "backToWebsite": "Back to the website?",
   "submit": "Submit",
   "somethingWentWrong": "Something went wrong.",
   "search": "Search",
@@ -7,7 +8,7 @@
   "signup": "Sign Up",
   "account": "Account",
   "navigation": "Navigation",
+  "or": "or",
   "email": "Email",
-  "backToWebsite": "Back to the website?",
   "username": "Username"
 }

@@ -29,7 +29,7 @@ export async function LockDown() {
             </Link>
           </Button>
         </div>
-        <SeparatorWithText text="or" />
+        <SeparatorWithText text={t('common:or')} />
         <div className="flex flex-col gap-2">
           <Button variant="outline" asChild className="w-full" size="lg">
             <Link prefetch={true} href={{ pathname: '/auth/login' }} className="gap-2">

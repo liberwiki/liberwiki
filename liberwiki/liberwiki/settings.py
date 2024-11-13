@@ -116,7 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTH_VERIFY_EMAIL_URL_TEMPLATE = "https://{domain}/auth/signup/verify-email/{uidb64}/{token}/"
 
 # Internationalization
-# LANGUAGE_CODE = config.LANGUAGE
+LANGUAGE_CODE = config.LANGUAGE
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True

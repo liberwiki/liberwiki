@@ -3,12 +3,13 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
+import React from 'react'
+
 import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '@/components/shadcn/input-otp'
 import { Label } from '@/components/shadcn/label'
 
-import config from '@/config'
 import { useClientTranslation } from '@/i18n'
 import { useFormState } from '@/lib/hooks'
 import { useLiberWikiAPI } from '@/lib/serverHooks'
@@ -47,7 +48,7 @@ export default function SignupForm() {
     const data = await liberwiki.signup(signupState)
     if (data.response.ok) {
       setSignupErrors({})
-      router.push('/auth/login')
+      router.push('/auth/signup/check-email')
     } else {
       setSignupErrors(data.error)
     }
@@ -109,12 +110,13 @@ export default function SignupForm() {
           />
         </div>
         <div className="flex flex-col gap-2">
-          <Label htmlFor="password">{t('signup:invitationCode')}</Label>
+          <Label htmlFor="password" className="flex gap-2">
+            {t('signup:invitationCode')}
+          </Label>
           <div className="flex justify-center items-center">
             <InputOTP
               pattern="[a-z0-9]+$"
               id="invitation_code"
-              required
               maxLength={8}
               onChange={handleSignupStateValue('invitation_code')}
               value={signupState.invitation_code}
@@ -147,13 +149,6 @@ export default function SignupForm() {
             {t('signup:loginInstead')}
           </Link>
         </div>
-        {!config.membersOnly && (
-          <div className="w-100 flex justify-center">
-            <Link prefetch={true} href={{ pathname: '/' }} className="hover:underline">
-              {t('common:backToWebsite')}
-            </Link>
-          </div>
-        )}
       </div>
     </form>
   )

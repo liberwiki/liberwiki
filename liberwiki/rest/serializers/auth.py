@@ -30,7 +30,7 @@ class AuthTokenSerializer(serializers.Serializer):
             raise ValidationError(_("Invalid email or password"))
 
         if not user.is_active:
-            raise ValidationError(_("User account is disabled"))
+            raise ValidationError(_("User account is not activated, please verify your email"))
 
         token, created = Token.objects.get_or_create(user=user)
 
@@ -43,11 +43,14 @@ class AuthTokenSerializer(serializers.Serializer):
 
 
 class SignupSerializer(serializers.ModelSerializer):
+    invitation = None
+
     password = serializers.CharField(write_only=True, required=True, style={"input_type": "password"})
     password_confirmation = serializers.CharField(write_only=True, required=True, style={"input_type": "password"})
     invitation_code = serializers.CharField(
         write_only=True,
-        required=True,
+        required=False,
+        allow_blank=True,
         validators=Invitation.code.field.validators,  # NOQA
     )
 
@@ -59,14 +62,15 @@ class SignupSerializer(serializers.ModelSerializer):
         if password != password2:
             raise ValidationError(_("Passwords do not match"))
 
-        if not Invitation.objects.filter(code=code, used_by__isnull=True).exists():
+        if code and not Invitation.objects.filter(code=code, used_by__isnull=True).exists():
             raise ValidationError(_("Invalid or previously used invitation code"))
 
-        self.invitation = Invitation.objects.get(code=code)  # NOQA
+        self.invitation = code and Invitation.objects.get(code=code)
         return attrs
 
     @transaction.atomic
     def create(self, validated_data):
+        role = User.Roles.CONTRIBUTOR if self.invitation else User.Roles.NEW_RECRUIT
         user = self.Meta.model.objects.create_user(  # NOQA
             email=validated_data["email"],
             username=validated_data["username"],
@@ -74,14 +78,15 @@ class SignupSerializer(serializers.ModelSerializer):
             first_name=validated_data["first_name"],
             last_name=validated_data["last_name"],
             is_active=False,
+            role=role,
         )
-        self.invitation.update(used_by=user)
+        if self.invitation:
+            self.invitation.update(used_by=user)
         self.send_verification_email(
             user,
             urlsafe_base64_encode(str(user.pk).encode()),
             PasswordResetTokenGenerator().make_token(user),
         )
-        self.invitation.update(used_by=user)
         return user
 
     @suppress_callable_to_sentry(Exception)

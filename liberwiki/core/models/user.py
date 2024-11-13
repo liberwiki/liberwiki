@@ -59,10 +59,6 @@ class User(AbstractUser, BaseModel):
                     return True
         return False
 
-    def create_invitation(self):
-        if self.can_invite_new_users:
-            return self.invitations.create(user=self)
-
     @property
     def can_create_new_entry(self):
         # This includes throttling logic, I'm not sure if this belongs here but this is APP specific

@@ -9,7 +9,6 @@ import { Button } from '@/components/shadcn/button'
 import { Input } from '@/components/shadcn/input'
 import { Label } from '@/components/shadcn/label'
 
-import config from '@/config'
 import { useClientTranslation } from '@/i18n'
 import { useFormState } from '@/lib/hooks'
 import { setCookie } from '@/lib/serverActions'
@@ -80,13 +79,6 @@ export default function LoginForm() {
             {t('login:signUpInstead')}
           </Link>
         </div>
-        {!config.membersOnly && (
-          <div className="w-100 flex justify-center">
-            <Link prefetch={true} href={{ pathname: '/' }} className="hover:underline">
-              {t('common:backToWebsite')}
-            </Link>
-          </div>
-        )}
       </div>
     </form>
   )

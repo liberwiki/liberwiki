@@ -1,4 +1,5 @@
 {
+  "backToWebsite": "Web sitesine geri dön?",
   "submit": "Gönder",
   "somethingWentWrong": "Bir şeyler ters gitti.",
   "search": "Ara",
@@ -7,7 +8,7 @@
   "signup": "Kayıt Ol",
   "account": "Hesap",
   "navigation": "Gezinme",
+  "or": "veya",
   "email": "E-posta",
-  "backToWebsite": "Web sitesine geri dön?",
   "username": "Kullanıcı Adı"
 }

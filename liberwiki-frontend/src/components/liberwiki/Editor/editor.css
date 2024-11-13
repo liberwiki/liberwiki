@@ -13,7 +13,7 @@
   pre {
     @apply bg-secondary rounded p-4 my-4 border border-secondary;
     code {
-      @apply text-primary;
+      @apply text-primary font-code;
     }
   }
 
@@ -23,6 +23,10 @@
 
   a {
     @apply text-primary underline;
+  }
+
+  blockquote p {
+    @apply border-l-4 border-gray-300 pl-4 italic;
   }
 
   ul,
