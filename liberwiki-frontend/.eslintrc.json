@@ -11,12 +11,7 @@
     "standard",
     "prettier"
   ],
-  "plugins": [
-    "@typescript-eslint",
-    "react",
-    "prettier",
-    "import"
-  ],
+  "plugins": ["@typescript-eslint", "react", "prettier", "import"],
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
@@ -75,12 +70,5 @@
     "import/no-relative-parent-imports": 0,
     "no-nested-ternary": "error"
   },
-  "ignorePatterns": [
-    "node_modules",
-    "package.json",
-    "tsconfig.json",
-    ".eslint*",
-    ".prettier*",
-    "src/components/shadcn"
-  ]
+  "ignorePatterns": ["node_modules", "package.json", "tsconfig.json", ".eslint*", ".prettier*", "src/components/shadcn"]
 }

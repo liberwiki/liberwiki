@@ -14,3 +14,28 @@ export function booleanConfig(value: string | undefined, default_?: boolean): bo
     throw new Error(`Value "${value}" cannot be parsed into a boolean.`)
   }
 }
+
+export function numberConfig(value: string | undefined, default_?: number): number {
+  if (value === undefined || value === '') {
+    if (default_ === undefined) {
+      throw new Error('Value is required.')
+    }
+    return default_
+  }
+
+  const numberValue = Number(value)
+  if (isNaN(numberValue)) {
+    throw new Error(`Value "${value}" cannot be parsed into a number.`)
+  }
+  return numberValue
+}
+
+export function stringConfig(value: string | undefined, default_?: string): string {
+  if (value === undefined || value === '') {
+    if (default_ === undefined) {
+      throw new Error('Value is required.')
+    }
+    return default_
+  }
+  return value
+}

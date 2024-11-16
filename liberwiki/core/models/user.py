@@ -70,6 +70,7 @@ class User(AbstractUser, BaseModel):
             last_entry = self.entries.order_by("created_at").last()
             if last_entry:
                 return last_entry.created_at < self.created_at + timedelta(days=1)
+            return True
         return False
 
     def role_is_at_least(self, level: str):

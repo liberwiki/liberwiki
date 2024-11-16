@@ -1,0 +1,23 @@
+{
+  "profile": {
+    "title": "Profil",
+    "description": "{{name}} profiliniz."
+  },
+  "login": {
+    "title": "{{name}}'ye giriş yapın",
+    "description": "Katkıda bulunmaya başlamak için {{name}}'ye giriş yapın. Bilginizi dünyayla paylaşın!"
+  },
+  "signup": {
+    "title": "Katkıda bulunmaya başlamak için {{name}}'ye kaydolun. Bilginizi dünyayla paylaşın!",
+    "description": "{{name}}'ye kaydolun"
+  },
+  "lockdown": {
+    "description": "{{name}} şu anda kilit modunda."
+  },
+  "title": {
+    "description": "{{title}} hakkında bilmeniz gereken her şeyi keşfedin. Aradığınız bilgiyi bulamıyor musunuz? {{name}}'ye katılın ve dünyayla paylaşan siz olun!"
+  },
+  "fallback": {
+    "description": "{{name}} herkesin katkıda bulunabileceği özgür ve açık kaynaklı bir ansiklopedidir."
+  }
+}

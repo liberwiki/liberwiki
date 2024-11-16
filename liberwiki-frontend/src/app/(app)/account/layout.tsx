@@ -1,15 +1,8 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 
 import React from 'react'
 
-import config from '@/config'
 import { sUseTranslation } from '@/i18n'
-
-export const metadata: Metadata = {
-  title: config.name,
-  description: config.name,
-}
 
 export default async function AccountLayout({ children }: { children: React.ReactNode }) {
   const { t } = await sUseTranslation(['common'])

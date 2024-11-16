@@ -1,4 +1,4 @@
-export default {
+const i18nextParserConfig = {
   locales: ['en', 'tr'],
   lexers: {
     ts: ['JavascriptLexer'],
@@ -10,3 +10,5 @@ export default {
   },
   createOldCatalogs: false,
 }
+
+export default i18nextParserConfig

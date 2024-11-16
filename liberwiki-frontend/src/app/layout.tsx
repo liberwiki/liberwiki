@@ -8,13 +8,18 @@ import { Toaster } from '@/components/shadcn/sonner'
 
 import MonkeyPatches from '@/app/monkeypatches'
 import config from '@/config'
+import { sUseTranslation } from '@/i18n'
+import { getLiberWikiMetadata } from '@/lib/metadata'
 import { cn } from '@/lib/utils'
 
 import { GoogleAnalytics } from '@next/third-parties/google'
 
-export const metadata: Metadata = {
-  title: config.name,
-  description: config.name,
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await sUseTranslation(['metadata'])
+  return await getLiberWikiMetadata({
+    title: config.name,
+    description: t('metadata:fallback.description', { name: config.name }),
+  })
 }
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

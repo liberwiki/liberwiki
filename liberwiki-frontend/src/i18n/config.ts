@@ -20,6 +20,7 @@ export const namespaces = [
   'lockdown',
   'title',
   'paginator',
+  'metadata',
 ] as const
 
 export type Language = (typeof languages)[number]
