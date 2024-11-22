@@ -1,41 +1,47 @@
-export function booleanConfig(value: string | undefined, default_?: boolean): boolean {
+type Config<T> = {
+  name: string
+  value: T | undefined | string
+  default?: T
+}
+
+export function booleanConfig(config: Config<boolean>): boolean {
   const truthyValues = ['true', '1']
   const falsyValues = ['false', '0']
 
-  const stringValue = String(value).toLowerCase()
+  const stringValue = String(config.value).toLowerCase()
 
   if (truthyValues.includes(stringValue)) {
     return true
   } else if (falsyValues.includes(stringValue)) {
     return false
-  } else if (default_ !== undefined) {
-    return default_
+  } else if (config.default !== undefined) {
+    return config.default
   } else {
-    throw new Error(`Value "${value}" cannot be parsed into a boolean.`)
+    throw new Error(`Value "${config.value}" cannot be parsed into a boolean. Please provide a valid "${config.name}"`)
   }
 }
 
-export function numberConfig(value: string | undefined, default_?: number): number {
-  if (value === undefined || value === '') {
-    if (default_ === undefined) {
-      throw new Error('Value is required.')
+export function numberConfig(config: Config<number>): number {
+  if (config.value === undefined || config.value === '') {
+    if (config.default === undefined) {
+      throw new Error(`Value is required for "${config.name}"."`)
     }
-    return default_
+    return config.default
   }
 
-  const numberValue = Number(value)
+  const numberValue = Number(config.value)
   if (isNaN(numberValue)) {
-    throw new Error(`Value "${value}" cannot be parsed into a number.`)
+    throw new Error(`Value "${config.value}" cannot be parsed into a number. Please provide a valid "${config.name}"`)
   }
   return numberValue
 }
 
-export function stringConfig(value: string | undefined, default_?: string): string {
-  if (value === undefined || value === '') {
-    if (default_ === undefined) {
-      throw new Error('Value is required.')
+export function stringConfig(config: Config<string>): string {
+  if (config.value === undefined || config.value === '') {
+    if (config.default === undefined) {
+      throw new Error(`Value is required for "${config.name}"`)
     }
-    return default_
+    return config.default
   }
-  return value
+  return config.value
 }

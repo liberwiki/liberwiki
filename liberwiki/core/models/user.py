@@ -10,7 +10,7 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 
-@track_model_history
+@track_model_history()
 class User(AbstractUser, BaseModel):
     REPR_STRING = "{self.username}"
 

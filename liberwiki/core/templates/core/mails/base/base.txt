@@ -1,4 +1,4 @@
-{{ config.NAME }},
+{{ site_name }},
 
 {% block content %}
 {% endblock content %}

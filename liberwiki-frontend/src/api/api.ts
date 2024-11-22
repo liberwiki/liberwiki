@@ -44,7 +44,7 @@ export class LiberWikiAPI {
 
   // Create the client using the wrapped fetch function
   client = createClient<paths>({
-    baseUrl: `${this.config.baseUrl}`,
+    baseUrl: `${this.config.baseURL}`,
     headers: {
       'Content-Type': 'application/json',
     },
@@ -85,12 +85,12 @@ export class LiberWikiAPI {
     return await this.client.GET('/v0/users/', { params: { query: filters } })
   }
 
-  public async user(id: string) {
-    return await this.client.GET(`/v0/users/{id}/`, { params: { path: { id } } })
+  public async user(id: string, query?: APIQuery<'/v0/users/{id}/'>) {
+    return await this.client.GET(`/v0/users/{id}/`, { params: { path: { id }, query } })
   }
 
-  public async me() {
-    return await this.client.GET('/v0/users/me/')
+  public async me(query?: APIQuery<'/v0/users/me/'>) {
+    return await this.client.GET('/v0/users/me/', { params: { query } })
   }
 
   public async putMe(data: APIType<'UserRequest'>) {
@@ -105,8 +105,8 @@ export class LiberWikiAPI {
     return await this.client.GET('/v0/titles/', { params: { query: filters } })
   }
 
-  public async title(id: string) {
-    return await this.client.GET(`/v0/titles/{id}/`, { params: { path: { id } } })
+  public async title(id: string, query?: APIQuery<'/v0/titles/{id}/'>) {
+    return await this.client.GET(`/v0/titles/{id}/`, { params: { path: { id }, query } })
   }
 
   public async createTitle(data: APIType<'TitleRequest'>) {
@@ -129,8 +129,8 @@ export class LiberWikiAPI {
     return await this.client.GET('/v0/entries/', { params: { query: filters } })
   }
 
-  public async entry(id: string) {
-    return await this.client.GET(`/v0/entries/{id}/`, { params: { path: { id } } })
+  public async entry(id: string, query?: APIQuery<'/v0/entries/{id}/'>) {
+    return await this.client.GET(`/v0/entries/{id}/`, { params: { path: { id }, query } })
   }
 
   public async createEntry(data: APIType<'EntryRequest'>) {
@@ -173,8 +173,8 @@ export class LiberWikiAPI {
     return await this.client.GET('/v0/invitations/', { params: { query: filters } })
   }
 
-  public async invite(id: string) {
-    return await this.client.GET(`/v0/invitations/{id}/`, { params: { path: { id } } })
+  public async invite(id: string, query?: APIQuery<'/v0/invitations/{id}/'>) {
+    return await this.client.GET(`/v0/invitations/{id}/`, { params: { path: { id }, query } })
   }
 
   public async createInvite() {

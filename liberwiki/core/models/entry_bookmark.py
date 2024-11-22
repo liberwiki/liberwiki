@@ -4,7 +4,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
-@track_model_history
+@track_model_history()
 class EntryBookmark(BaseModel):
     REPR_STRING = "{self.user}->bookmark->{self.entry}"
 

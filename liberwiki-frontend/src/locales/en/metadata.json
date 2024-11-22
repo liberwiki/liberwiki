@@ -11,6 +11,9 @@
     "title": "Sign up to {{name}} to start contributing. Share your knowledge with the world!",
     "description": "Sign up to {{name}}."
   },
+  "entry": {
+    "description": "See what {{author}} shared about {{title}}."
+  },
   "lockdown": {
     "description": "{{name}} is currently in lockdown mode."
   },

@@ -10,6 +10,7 @@ import { type ClassValue, clsx } from 'clsx'
 import { format } from 'date-fns'
 import { twMerge } from 'tailwind-merge'
 import resolveConfig from 'tailwindcss/resolveConfig'
+import { parse, stringify } from 'uuid'
 
 export const tailwindConfig = resolveConfig(liberwikiTailwindConfig)
 
@@ -189,4 +190,12 @@ export function preventDefault<T extends (event: Event) => unknown>(callable: T)
     event.preventDefault()
     return await callable(event)
   } as T
+}
+
+export function uuidV4toHEX(uuid: string) {
+  return Buffer.from(parse(uuid)).toString('hex')
+}
+
+export function hexToUUIDv4(hex: string) {
+  return stringify(Buffer.from(hex, 'hex'))
 }

@@ -1,6 +1,8 @@
 {
   "entryHasBenDeleted": "Entry {{entryId}} has been deleted.",
+  "linkCopiedToClipboard": "Entry link has been copied to clipboard.",
   "delete": "Delete",
+  "goToEntry": "Go to entry page",
   "titleCreationError": "An error occurred while creating your entry. Please try again later.",
   "yourEntryHasBeenCreated": "Your entry has been created.",
   "entryCreationError": "An error occurred while creating your entry. Please try again later."

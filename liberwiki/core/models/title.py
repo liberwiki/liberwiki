@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from django_lifecycle import AFTER_UPDATE, BEFORE_CREATE, hook
 
 
-@track_model_history
+@track_model_history()
 class Title(BaseModel):
     REPR_STRING = "{self.name}"
 

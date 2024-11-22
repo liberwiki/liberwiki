@@ -10,7 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from django_lifecycle import BEFORE_CREATE, hook
 
 
-@track_model_history
+@track_model_history()
 class Invitation(BaseModel):
     REPR_STRING = "{self.user}->{self.used_by}:{self.code}"
     INVITATION_TOKEN_LENGTH = 8

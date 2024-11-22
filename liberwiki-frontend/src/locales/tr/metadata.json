@@ -11,6 +11,9 @@
     "title": "Katkıda bulunmaya başlamak için {{name}}'ye kaydolun. Bilginizi dünyayla paylaşın!",
     "description": "{{name}}'ye kaydolun"
   },
+  "entry": {
+    "description": "{{author}} {{title}} hakkında paylaştıklarını görün."
+  },
   "lockdown": {
     "description": "{{name}} şu anda kilit modunda."
   },

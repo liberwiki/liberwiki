@@ -1,6 +1,8 @@
 {
   "entryHasBenDeleted": "Girdi {{entryId}} silindi.",
+  "linkCopiedToClipboard": "Girdi bağlantısı panoya kopyalandı.",
   "delete": "Sil",
+  "goToEntry": "Girdi sayfasına git",
   "titleCreationError": "Başlığı oluştururken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
   "yourEntryHasBeenCreated": "Girdiniz oluşturuldu.",
   "entryCreationError": "Girdinizi oluştururken bir hata oluştu. Lütfen daha sonra tekrar deneyin."

@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from django_lifecycle import AFTER_DELETE, hook
 
 
-@track_model_history
+@track_model_history()
 class Entry(BaseModel):
     REPR_STRING = "{self.title}#{self.hex}"
 

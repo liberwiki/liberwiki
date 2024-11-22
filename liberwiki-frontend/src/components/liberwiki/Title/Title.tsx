@@ -51,6 +51,8 @@ export async function Title({
     return { pathname: `/titles/${title.slug}`, query: { ...searchParams, ordering } }
   }
 
+  const canCreateEntry = (await liberwiki.isAuthenticated()) && (await liberwiki.me()).data?.role !== 'READER'
+
   const currentOrdering = _.get(orderingLabels, searchParams.ordering || 'created_at', orderingLabels.created_at)
   const searchString = `${searchParams.created_at__gte || ''}:${searchParams.created_at__lte || ''} - ${searchParams.author || ''}`
   return (
@@ -184,14 +186,13 @@ export async function Title({
           entries.results.map((entry) => (
             <Entry
               key={entry.id}
-              id={entry.id}
               entry={includesType(includesType({ ...entry }, 'author', 'User'), 'title', 'Title')}
             />
           ))
         ) : (
           <div className="text-center text-gray-500 p-10">{t('title:noEntryFound')}</div>
         ))}
-      {(await liberwiki.me())?.data?.role !== 'READER' && (
+      {canCreateEntry && (
         <div className="p-2 w-full">
           <NewEntryEditor title={title} />
         </div>
