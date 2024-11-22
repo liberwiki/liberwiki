@@ -196,6 +196,32 @@ export function uuidV4toHEX(uuid: string) {
   return Buffer.from(parse(uuid)).toString('hex')
 }
 
-export function hexToUUIDv4(hex: string) {
+export class InvalidHEXError extends Error {
+  constructor(message?: string) {
+    super(message)
+    this.name = 'InvalidHEXError'
+    Object.setPrototypeOf(this, InvalidHEXError.prototype)
+  }
+}
+
+export function hexToUUIDv4(hex: string): string {
+  if (!/^[0-9a-fA-F]{32}$/.test(hex)) {
+    throw new InvalidHEXError('Invalid hex string. Must be 32 hexadecimal characters.')
+  }
   return stringify(Buffer.from(hex, 'hex'))
+}
+
+export function suppress<T, ERT>(
+  exceptions: Array<new (message?: string) => Error>,
+  fn: () => T,
+  onError?: (error: unknown) => ERT
+): T | ERT | undefined {
+  try {
+    return fn()
+  } catch (error) {
+    if (exceptions.some((exception) => error instanceof exception)) {
+      return onError ? onError(error) : undefined
+    }
+    throw error
+  }
 }
