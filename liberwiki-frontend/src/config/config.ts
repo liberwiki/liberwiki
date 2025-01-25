@@ -23,12 +23,14 @@ const RAW = Object.freeze({
       gaID: process.env.NEXT_PUBLIC_LIBERWIKI__FRONT_END__DEVTOOLS__GOOGLE_ANALYTICS__GA_ID,
     },
   },
+  githubLink: process.env.NEXT_PUBLIC_LIBERWIKI__GITHUB_LINK,
 })
 
 export const config = Object.freeze({
   debug: booleanConfig({ name: 'debug', value: RAW.debug, default: false }),
   name: stringConfig({ name: 'name', value: RAW.name }),
   domain: stringConfig({ name: 'domain', value: RAW.domain }),
+  githubLink: stringConfig({ name: 'githubLink', value: RAW.githubLink, default: '' }),
   api: {
     baseURL: stringConfig({ name: 'api.baseURL', value: RAW.api.baseUrl }),
     bearerTokenCookieName: 'BearerToken',

@@ -1,15 +1,8 @@
 import { components, paths } from '@/api/schema'
 
-import { UseQueryOptions } from '@tanstack/react-query'
-import { FetchResponse } from 'openapi-fetch'
-import type { MediaType } from 'openapi-typescript-helpers'
-
 export type APIQuery<T extends keyof paths> = paths[T] extends { get: { parameters: { query?: infer Q } } } ? Q : never
 export type APIResponse<T extends keyof paths, TMethod extends keyof paths[T]> = paths[T][TMethod]
-export type RemainingUseQueryOptions<T extends keyof paths> = Omit<
-  UseQueryOptions<FetchResponse<APIResponse<T, 'get'>, unknown, MediaType>>,
-  'queryKey' | 'queryFn'
->
+
 export type APIType<T extends keyof components['schemas']> = components['schemas'][T]
 export type Includes<T, K extends keyof T, F> = Omit<T, K> & { [P in K]: F }
 

@@ -105,7 +105,7 @@ class EntryViewSet(BaseModelViewSet):
 
     @extend_schema(
         summary=f"Upvote Entry",
-        description=f"Cast an down vote to an entry by id",
+        description=f"Cast a down vote to an entry by id",
         responses={204: None, 401: None},
     )
     @action(
@@ -123,7 +123,7 @@ class EntryViewSet(BaseModelViewSet):
     @extend_schema(
         summary=f"Downvote Entry",
         description=f"Cast an up vote to an entry by id",
-        responses={204: None},
+        responses={204: None, 401: None},
     )
     @action(
         detail=True,
@@ -138,7 +138,7 @@ class EntryViewSet(BaseModelViewSet):
         return Response(status=204)
 
     @extend_schema(
-        summary=f"Remove Vote",
+        summary=f"Remove Entry Vote",
         description=f"Remove vote from entry by id",
         responses={204: None, 401: None},
     )

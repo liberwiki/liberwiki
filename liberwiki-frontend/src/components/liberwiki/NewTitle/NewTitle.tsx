@@ -7,7 +7,7 @@ import { sUseTranslation } from '@/i18n'
 
 export async function NewTitle({ newTitle }: { newTitle: string }) {
   const { t } = await sUseTranslation(['title', 'entry'])
-  const title = decodeURI(newTitle)
+  const title = decodeURIComponent(newTitle)
 
   return (
     <>

@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const { data: titles } = await liberwiki.titles({ slug: params.slug, page_size: 1, page: 1 })
   const title = _.first(titles?.results)
   return await getLiberWikiMetadata({
-    title: title ? title.name : params.slug,
+    title: title ? title.name : decodeURI(params.slug),
     description: t('metadata:title.description', { name: config.name, title: 'title' }),
   })
 }

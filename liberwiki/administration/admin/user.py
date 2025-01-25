@@ -8,6 +8,15 @@ from django.utils.translation import gettext_lazy as _
 @admin.register(User)
 class UserAdmin(BaseModelAdmin, BaseUserAdmin):
     autocomplete_fields = ["groups", "user_permissions"]
+    list_display = [
+        "username",
+        "email",
+        "is_active",
+        "is_staff",
+        "is_superuser",
+        "created_at",
+        "updated_at",
+    ]
     list_filter = [
         "role",
         "is_staff",

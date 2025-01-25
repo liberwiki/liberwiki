@@ -219,7 +219,7 @@ export interface paths {
     put?: never
     /**
      * Upvote Entry
-     * @description Cast an down vote to an entry by id
+     * @description Cast a down vote to an entry by id
      */
     post: operations['entries_upvote_create']
     delete?: never

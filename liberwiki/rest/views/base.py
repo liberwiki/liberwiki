@@ -257,7 +257,7 @@ class BaseModelViewSet(ModelViewSet):
                 summary=f"Put {meta.verbose_name}",
                 description=f"Update an existing {meta.verbose_name.lower()} by id",
                 request=fake_serializer(
-                    name=f"{meta.verbose_name}UpdateSerializer",
+                    name=f"{cls.model.__name__}UpdateSerializer",
                     base=cls.serializer_class,
                 ),
                 responses={
@@ -280,7 +280,7 @@ class BaseModelViewSet(ModelViewSet):
                 summary=f"Patch {meta.verbose_name}",
                 description=f"Partially update an existing {meta.verbose_name.lower()} by id",
                 request=fake_serializer(
-                    name=f"{meta.verbose_name}UpdateSerializer",
+                    name=f"{cls.model.__name__}UpdateSerializer",
                     base=cls.serializer_class,
                 ),
                 responses={
@@ -304,7 +304,7 @@ class BaseModelViewSet(ModelViewSet):
                 description=f"Delete an existing {meta.verbose_name} by id",
                 responses={
                     204: None,
-                    400: BaseModelViewSet.destroy.default_400_schema(f"{meta.verbose_name}DestroyError"),
+                    400: BaseModelViewSet.destroy.default_400_schema(f"{cls.model.__name__}DestroyError"),
                     401: None,
                     403: fake_serializer("Forbidden", schema={"detail": str}),
                 },

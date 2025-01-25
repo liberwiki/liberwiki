@@ -663,7 +663,7 @@ paths:
   /v0/entries/{id}/upvote/:
     post:
       operationId: entries_upvote_create
-      description: Cast an down vote to an entry by id
+      description: Cast a down vote to an entry by id
       summary: Upvote Entry
       parameters:
       - in: path

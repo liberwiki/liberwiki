@@ -51,8 +51,6 @@ export class LiberWikiAPI {
     fetch: this.fetchWrapper,
   })
 
-  private processQueryResult() {}
-
   public include(listOfResources: string[]): string {
     // Utility function to use ?include=resource1,resource2,resource3 feature of the api
     return listOfResources.join(',')
