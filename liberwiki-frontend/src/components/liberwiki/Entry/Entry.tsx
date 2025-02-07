@@ -59,6 +59,17 @@ export async function Entry({
                       </DeleteButton>
                     </OverlayClose>
                   )}
+                  {user?.id === entry.author.id && (
+                    <OverlayClose className="w-full">
+                      <Link
+                        prefetch={true}
+                        href={{ pathname: `/entries/${uuidV4toHEX(entry.id)}/edit` }}
+                        className={cn(buttonVariants({ variant: 'ghost', className: 'justify-start w-full' }))}
+                      >
+                        {t('entry:edit')}
+                      </Link>
+                    </OverlayClose>
+                  )}
                   <OverlayClose className="w-full">
                     <Link
                       prefetch={true}

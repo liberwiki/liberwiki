@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
+import { forbidden, notFound } from 'next/navigation'
 
 import _ from 'lodash'
 
@@ -34,7 +34,7 @@ export async function generateMetadata(props: { params: Promise<{ hex: string }>
   return notFound()
 }
 
-export default async function EntryPage(props: { params: Promise<{ hex: string }> }) {
+export default async function EntryEditPage(props: { params: Promise<{ hex: string }> }) {
   const params = await props.params
   const liberwiki = sUseLiberWikiAPI()
   const entryId = suppress<string, undefined>([InvalidHEXError], () => hexToUUIDv4(params.hex))
@@ -43,7 +43,11 @@ export default async function EntryPage(props: { params: Promise<{ hex: string }
     const { data: entry } = await liberwiki.entry(entryId, { include: 'author,title' })
     if (!_.isUndefined(entry)) {
       const entry_ = includesType(includesType(entry as APIType<'Entry'>, 'author', 'User'), 'title', 'Title')
-      return <EntryCard entry={entry_} />
+      const { data: me } = await liberwiki.me()
+      if (entry_.author.id !== me?.id) {
+        return forbidden()
+      }
+      return <EntryCard entry={entry_} editMode />
     }
   }
   return notFound()

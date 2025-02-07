@@ -5,7 +5,8 @@ import Title from '@/components/liberwiki/Title'
 import { APIQuery, includesType } from '@/api'
 import { useLiberWikiAPI as sUseLiberWikiAPI } from '@/lib/serverHooks'
 
-export default async function Home({ searchParams }: { searchParams: APIQuery<'/v0/entries/'> }) {
+export default async function Home(props: { searchParams: Promise<APIQuery<'/v0/entries/'>> }) {
+  const searchParams = await props.searchParams
   const liberwiki = sUseLiberWikiAPI()
 
   const { data: entries } = await liberwiki.entries({

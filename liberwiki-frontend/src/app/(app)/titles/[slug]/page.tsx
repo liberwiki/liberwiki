@@ -12,7 +12,8 @@ import { getLiberWikiMetadata } from '@/lib/metadata'
 import { useLiberWikiAPI as sUseLiberWikiAPI } from '@/lib/serverHooks'
 import '@/lib/utils'
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const params = await props.params
   const liberwiki = sUseLiberWikiAPI()
   const { t } = await sUseTranslation(['metadata'])
   const { data: titles } = await liberwiki.titles({ slug: params.slug, page_size: 1, page: 1 })
@@ -23,13 +24,12 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   })
 }
 
-export default async function TitlePage({
-  params,
-  searchParams,
-}: {
-  params: { slug: string }
-  searchParams: APIQuery<'/v0/entries/'>
+export default async function TitlePage(props: {
+  params: Promise<{ slug: string }>
+  searchParams: Promise<APIQuery<'/v0/entries/'>>
 }) {
+  const searchParams = await props.searchParams
+  const params = await props.params
   const liberwiki = sUseLiberWikiAPI()
   const { data: titles } = await liberwiki.titles({ slug: params.slug, page_size: 1, page: 1 })
   const title = _.first(titles?.results)

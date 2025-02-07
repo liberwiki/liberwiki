@@ -32,7 +32,7 @@ export default function DeleteButton(
         router.refresh()
       } else {
         const targetPage = Math.max(1, Math.ceil((entry.title.entry_count - 1) / config.ux.defaultEntryPageSize))
-        router.push(`?${new URLSearchParams({ page: String(targetPage) }).toString()}`)
+        router.push(`/titles/${entry.title.slug}/?${new URLSearchParams({ page: String(targetPage) }).toString()}`)
         router.refresh()
       }
     } else {
