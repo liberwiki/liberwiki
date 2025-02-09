@@ -28,7 +28,7 @@ ENV NEXT_PUBLIC_LIBERWIKI__GITHUB_LINK=$NEXT_PUBLIC_LIBERWIKI__GITHUB_LINK
 
 COPY . /liberwiki-frontend/
 
-RUN npm install --frozen-lockfile
+RUN npm install --frozen-lockfile --legacy-peer-deps
 RUN npm run build
 
 ENV NODE_ENV=production
