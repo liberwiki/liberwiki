@@ -54,10 +54,12 @@ class EntryViewSet(BaseModelViewSet):
 
     filterset_fields = {
         "author": ["exact"],
+        "author__username": ["exact"],
         "title": ["exact"],
         "title__slug": ["exact"],
         "created_at": ["exact", "gt", "gte", "lt", "lte"],
         "updated_at": ["exact", "gt", "gte", "lt", "lte"],
+        "is_draft": ["exact"],
     }
 
     ordering_fields = [
@@ -70,10 +72,17 @@ class EntryViewSet(BaseModelViewSet):
 
     def get_queryset(self):
         queryset = super().get_queryset()
+        queryset = self.add_drafts_for_self(queryset, self.request)
         queryset = self.annotate_votes(queryset, self.request)
         queryset = self.annotate_bookmarks(queryset, self.request)
         queryset = self.annotate_likes_dislikes_bookmarks(queryset)
         return queryset.select_related("title", "author")
+
+    @staticmethod
+    def add_drafts_for_self(queryset, request):
+        if request and request.user and request.user.is_authenticated:
+            queryset = queryset.filter(Q(is_draft=False) | Q(is_draft=True, author=request.user))
+        return queryset
 
     @staticmethod
     def annotate_likes_dislikes_bookmarks(queryset):

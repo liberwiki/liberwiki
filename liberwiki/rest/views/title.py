@@ -1,5 +1,5 @@
 from core.models import Title, TitleBookmark, User
-from django.db.models import BooleanField, Count, Exists, OuterRef, Value
+from django.db.models import BooleanField, Count, Exists, OuterRef, Q, Value
 from django_filters import NumberFilter
 from drf_spectacular.utils import extend_schema
 from rest.serializers import TitleSerializer
@@ -43,7 +43,9 @@ class TitleViewSet(BaseModelViewSet):
     def get_queryset(self):
         queryset = super().get_queryset()
         queryset = self.annotate_bookmarks(queryset, self.request)
-        return queryset.annotate(entry_count=Count("entries")).select_related("created_by")
+        return queryset.annotate(entry_count=Count("entries", filter=Q(entries__is_draft=False))).select_related(
+            "created_by"
+        )
 
     @staticmethod
     def annotate_bookmarks(queryset, request):

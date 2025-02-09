@@ -136,6 +136,10 @@ paths:
           format: uuid
         description: Unique identifier for this object
       - in: query
+        name: author__username
+        schema:
+          type: string
+      - in: query
         name: bookmark_count
         schema:
           type: number
@@ -212,6 +216,10 @@ paths:
         style: form
       - in: query
         name: is_bookmarked
+        schema:
+          type: boolean
+      - in: query
+        name: is_draft
         schema:
           type: boolean
       - in: query
@@ -612,6 +620,8 @@ paths:
       responses:
         '204':
           description: No response body
+        '401':
+          description: No response body
   /v0/entries/{id}/unbookmark/:
     post:
       operationId: entries_unbookmark_create
@@ -640,7 +650,7 @@ paths:
     post:
       operationId: entries_unvote_create
       description: Remove vote from entry by id
-      summary: Remove Vote
+      summary: Remove Entry Vote
       parameters:
       - in: path
         name: id
@@ -1510,6 +1520,8 @@ components:
           description: Title of the entry.
         content:
           description: Content of the entry. In tiptap format.
+        is_draft:
+          type: boolean
         created_at:
           type: string
           format: date-time
@@ -1582,6 +1594,11 @@ components:
           items:
             type: string
           readOnly: true
+        is_draft:
+          type: array
+          items:
+            type: string
+          readOnly: true
         created_at:
           type: array
           items:
@@ -1630,6 +1647,7 @@ components:
       - dislike_count
       - id
       - is_bookmarked
+      - is_draft
       - like_count
       - non_field_errors
       - title
@@ -1668,6 +1686,8 @@ components:
           description: Title of the entry.
         content:
           description: Content of the entry. In tiptap format.
+        is_draft:
+          type: boolean
       required:
       - content
       - title
@@ -1700,6 +1720,8 @@ components:
       properties:
         content:
           description: Content of the entry. In tiptap format.
+        is_draft:
+          type: boolean
       required:
       - content
     Forbidden:
@@ -1923,6 +1945,8 @@ components:
       properties:
         content:
           description: Content of the entry. In tiptap format.
+        is_draft:
+          type: boolean
     PatchedUserRequest:
       type: object
       description: |-
@@ -2154,7 +2178,6 @@ components:
           maxLength: 8
       required:
       - email
-      - invitation_code
       - password
       - password_confirmation
       - username

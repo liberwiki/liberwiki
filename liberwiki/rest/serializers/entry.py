@@ -18,6 +18,7 @@ class EntrySerializer(BaseModelSerializer):
             "author",
             "title",
             "content",
+            "is_draft",
             "created_at",
             "updated_at",
             "vote",

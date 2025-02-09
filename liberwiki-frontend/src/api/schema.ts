@@ -198,7 +198,7 @@ export interface paths {
     get?: never
     put?: never
     /**
-     * Remove Vote
+     * Remove Entry Vote
      * @description Remove vote from entry by id
      */
     post: operations['entries_unvote_create']
@@ -491,6 +491,7 @@ export interface components {
       title: string
       /** @description Content of the entry. In tiptap format. */
       content: unknown
+      is_draft?: boolean
       /**
        * Format: date-time
        * @description Date and time this object was created
@@ -515,6 +516,7 @@ export interface components {
       readonly author: string[]
       readonly title: string[]
       readonly content: string[]
+      readonly is_draft: string[]
       readonly created_at: string[]
       readonly updated_at: string[]
       readonly vote: string[]
@@ -555,6 +557,7 @@ export interface components {
       title: string
       /** @description Content of the entry. In tiptap format. */
       content: unknown
+      is_draft?: boolean
     }
     /** @description Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
      *     read only.
@@ -582,6 +585,7 @@ export interface components {
     EntryUpdateRequest: {
       /** @description Content of the entry. In tiptap format. */
       content: unknown
+      is_draft?: boolean
     }
     Forbidden: {
       detail: string
@@ -735,6 +739,7 @@ export interface components {
     PatchedEntryUpdateRequest: {
       /** @description Content of the entry. In tiptap format. */
       content?: unknown
+      is_draft?: boolean
     }
     /** @description Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
      *     read only.
@@ -858,7 +863,7 @@ export interface components {
       last_name?: string
       password: string
       password_confirmation: string
-      invitation_code: string
+      invitation_code?: string
     }
     /** @description Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
      *     read only.
@@ -1208,6 +1213,7 @@ export interface operations {
       query?: {
         /** @description Unique identifier for this object */
         author?: string
+        author__username?: string
         bookmark_count?: number
         bookmark_count__gt?: number
         bookmark_count__gte?: number
@@ -1225,6 +1231,7 @@ export interface operations {
         dislike_count__lte?: number
         include?: 'author' | 'author,title' | 'title'
         is_bookmarked?: boolean
+        is_draft?: boolean
         like_count?: number
         like_count__gt?: number
         like_count__gte?: number
@@ -1560,6 +1567,13 @@ export interface operations {
     responses: {
       /** @description No response body */
       204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description No response body */
+      401: {
         headers: {
           [name: string]: unknown
         }

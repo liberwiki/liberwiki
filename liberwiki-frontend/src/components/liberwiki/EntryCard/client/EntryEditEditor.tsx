@@ -20,8 +20,8 @@ export default function EntryEditEditor({
   const liberwiki = useLiberWikiAPI()
   const { t } = useClientTranslation(['entry'])
 
-  async function handleEditorSubmit(content: object) {
-    const { response: createEntryResponse } = await liberwiki.patchEntry(entry.id, { content })
+  async function handleEditorSubmit(content: object, isDraft: boolean = false) {
+    const { response: createEntryResponse } = await liberwiki.patchEntry(entry.id, { content, is_draft: isDraft })
     if (createEntryResponse.ok) {
       router.push(`/entries/${uuidV4toHEX(entry.id)}`)
     } else {
@@ -29,5 +29,5 @@ export default function EntryEditEditor({
     }
   }
 
-  return <Editor readonly={false} onSubmit={handleEditorSubmit} content={entry.content as object} />
+  return <Editor readonly={false} onSubmit={handleEditorSubmit} content={entry.content as object} draftable={false} />
 }

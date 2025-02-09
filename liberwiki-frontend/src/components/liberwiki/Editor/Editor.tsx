@@ -4,6 +4,8 @@ import '@/components/liberwiki/Editor/editor.css'
 
 import * as Icons from 'lucide-react'
 
+import _ from 'lodash'
+
 import EditorButton from '@/components/liberwiki/Editor/EditorButton'
 import useLiberWikiEditor from '@/components/liberwiki/Editor/liberwikiEditor'
 import { Button } from '@/components/shadcn/button'
@@ -17,10 +19,14 @@ export function Editor({
   content,
   readonly,
   onSubmit,
+  onDismiss,
+  draftable = false,
 }: {
   content?: object
   readonly: boolean
-  onSubmit?: (content: object) => void
+  onSubmit?: (content: object, draft?: boolean) => void
+  onDismiss?: () => void
+  draftable?: boolean
 }) {
   const { t } = useClientTranslation(['common', 'editor'])
   const editor = useLiberWikiEditor({ content })
@@ -51,6 +57,19 @@ export function Editor({
   async function handleSubmit() {
     if (editor) {
       onSubmit?.(editor.getJSON())
+      editor.commands.clearContent(true)
+    }
+  }
+
+  async function handleDraftSubmit() {
+    if (editor) {
+      onSubmit?.(editor.getJSON(), true)
+    }
+  }
+
+  async function handleDeleteDraft() {
+    if (editor) {
+      onDismiss?.()
       editor.commands.clearContent(true)
     }
   }
@@ -141,9 +160,21 @@ export function Editor({
             <span>|</span>
             <span>{t('editor:wordCount', { count: editor.storage.characterCount.words() })}</span>
           </div>
-          <Button variant="outline" size="sm" aria-label={t('common:submit')} onClick={handleSubmit}>
-            {t('common:submit')}
-          </Button>
+          <div className="flex gap-2">
+            {draftable && !_.isEmpty(content) && !readonly && (
+              <Button variant="destructive" size="sm" aria-label={t('common:submitDraft')} onClick={handleDeleteDraft}>
+                {t('common:deleteDraft')}
+              </Button>
+            )}
+            {draftable && (
+              <Button variant="outline" size="sm" aria-label={t('common:submitDraft')} onClick={handleDraftSubmit}>
+                {t('common:submitDraft')}
+              </Button>
+            )}
+            <Button variant="outline" size="sm" aria-label={t('common:submit')} onClick={handleSubmit}>
+              {t('common:submit')}
+            </Button>
+          </div>
         </div>
       </CardContent>
     </Card>

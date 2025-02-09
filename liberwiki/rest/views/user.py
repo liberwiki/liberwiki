@@ -1,5 +1,5 @@
 from core.models import User
-from django.db.models import Count
+from django.db.models import Count, Q
 from django_filters import NumberFilter
 from drf_spectacular.utils import extend_schema
 from rest.serializers import PublicUserSerializer, UserSerializer
@@ -77,4 +77,6 @@ class UserViewSet(BaseModelViewSet):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        return queryset.annotate(entry_count=Count("entries"), title_count=Count("titles"))
+        return queryset.annotate(
+            entry_count=Count("entries", filter=Q(entries__is_draft=False)), title_count=Count("titles")
+        )

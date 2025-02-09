@@ -36,9 +36,13 @@ export default function NewTitleEntryEditor(
     }
   }
 
-  async function handleEditorSubmit(content: object) {
+  async function handleEditorSubmit(content: object, isDraft: boolean = false) {
     const title = await getTitle()
-    const { error: entryError } = await liberwiki.createEntry({ title: title?.id as string, content })
+    const { error: entryError } = await liberwiki.createEntry({
+      title: title?.id as string,
+      content,
+      is_draft: isDraft,
+    })
     if (!entryError) {
       toast(t('entry:yourEntryHasBeenCreated'))
       router.push(`/titles/${title?.slug}`)
@@ -48,5 +52,5 @@ export default function NewTitleEntryEditor(
     }
   }
 
-  return <Editor readonly={false} onSubmit={handleEditorSubmit} {...editorProps} />
+  return <Editor readonly={false} onSubmit={handleEditorSubmit} {...editorProps} draftable />
 }

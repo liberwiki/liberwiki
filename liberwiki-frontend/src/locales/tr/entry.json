@@ -4,8 +4,10 @@
   "delete": "Sil",
   "edit": "Düzenle",
   "goToEntry": "Girdi sayfasına git",
+  "entryEditError": "Girdinizi güncellerken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
   "titleCreationError": "Başlığı oluştururken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
   "yourEntryHasBeenCreated": "Girdiniz oluşturuldu.",
   "entryCreationError": "Girdinizi oluştururken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
-  "entryEditError": "Girdinizi güncellerken bir hata oluştu. Lütfen daha sonra tekrar deneyin."
+  "yourDraftEntryHasBeenCreated": "Girdi taslağınız oluşturuldu.",
+  "yourDraftEntryHasBeenDeleted": "Girdi taslağı {{entryId}} silindi."
 }

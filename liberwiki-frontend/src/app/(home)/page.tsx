@@ -10,6 +10,7 @@ export default async function Home(props: { searchParams: Promise<APIQuery<'/v0/
   const liberwiki = sUseLiberWikiAPI()
 
   const { data: entries } = await liberwiki.entries({
+    is_draft: false,
     page_size: 1,
     page: 1,
     ordering: '-created_at',

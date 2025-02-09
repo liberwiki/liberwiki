@@ -30,6 +30,7 @@ class Entry(BaseModel):
         verbose_name=_("Content"),
         help_text=_("Content of the entry. In tiptap format."),
     )
+    is_draft = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = _("Entry")
