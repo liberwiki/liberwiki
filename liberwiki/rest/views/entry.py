@@ -87,6 +87,7 @@ class EntryViewSet(BaseModelViewSet):
     @staticmethod
     def annotate_likes_dislikes_bookmarks(queryset):
         dislike, like = EntryVote.VoteType.DOWNVOTE, EntryVote.VoteType.UPVOTE
+        queryset = queryset.prefetch_related("entry_votes", "entry_bookmarks")
         queryset = queryset.annotate(like_count=Count("entry_votes", filter=Q(entry_votes__vote=like)))
         queryset = queryset.annotate(dislike_count=Count("entry_votes", filter=Q(entry_votes__vote=dislike)))
         queryset = queryset.annotate(bookmark_count=Count("entry_bookmarks"))
