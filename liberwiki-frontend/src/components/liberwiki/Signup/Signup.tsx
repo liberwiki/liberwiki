@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { SignupForm } from '@/components/liberwiki/Signup/client'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/shadcn/card'
 
-import config from '@/config'
 import { sUseTranslation } from '@/i18n'
 
 export async function Signup() {
@@ -20,13 +19,11 @@ export async function Signup() {
           <SignupForm />
         </CardContent>
       </Card>
-      {!config.membersOnly && (
-        <div className="w-100 flex justify-center">
-          <Link prefetch={true} href={{ pathname: '/' }} className="hover:underline">
-            {t('common:backToWebsite')}
-          </Link>
-        </div>
-      )}
+      <div className="w-100 flex justify-center">
+        <Link prefetch={true} href={{ pathname: '/' }} className="hover:underline">
+          {t('common:backToWebsite')}
+        </Link>
+      </div>
     </>
   )
 }

@@ -43,9 +43,19 @@ class TitleViewSet(BaseModelViewSet):
     def get_queryset(self):
         queryset = super().get_queryset()
         queryset = self.annotate_bookmarks(queryset, self.request)
-        queryset = queryset.prefetch_related(Prefetch("entries", queryset=Entry.objects.filter(is_draft=False)))
-        queryset = queryset.select_related("created_by")
+        queryset = queryset.prefetch_related(
+            Prefetch("entries", queryset=Entry.objects.filter(is_draft=False)),
+            Prefetch("created_by", queryset=self.created_by_queryset()),
+        )
         return queryset.annotate(entry_count=Count("entries", filter=Q(entries__is_draft=False)))
+
+    @staticmethod
+    def created_by_queryset():
+        queryset = User.objects.annotate(
+            entry_count=Count("entries", filter=Q(entries__is_draft=False)),
+            title_count=Count("titles"),
+        )
+        return queryset
 
     @staticmethod
     def annotate_bookmarks(queryset, request):

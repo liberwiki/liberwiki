@@ -13,7 +13,6 @@ export const config = {
 const middlewares: ((request: NextRequest) => Promise<NextResponse | void>)[] = [
   HygieneMiddlewares.queryParamHygiene,
   AuthMiddlewares.redirectAuthenticatedBackTo(/^\/auth\//, '/'),
-  AuthMiddlewares.membersOnlyMode(/^(?!\/lockdown$|\/auth\/).*$/, '/lockdown'),
   AuthMiddlewares.anonymousNotAllowed(/^\/account\//, '/'),
 ]
 

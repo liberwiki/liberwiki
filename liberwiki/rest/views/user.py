@@ -42,6 +42,17 @@ class UserViewSet(BaseModelViewSet):
         "retrieve": {"responses": {200: PublicUserSerializer}},
     }
 
+    def get_queryset(self):
+        queryset = (
+            super()
+            .get_queryset()
+            .annotate(
+                entry_count=Count("entries", filter=Q(entries__is_draft=False)),
+                title_count=Count("titles"),
+            )
+        )
+        return queryset
+
     @extend_schema(
         summary="Retrieve Me",
         description="Retrieve the current user",
@@ -74,9 +85,3 @@ class UserViewSet(BaseModelViewSet):
     def put_me(self, request):
         self.kwargs["pk"] = request.user.pk
         return BaseModelViewSet.update(self, request)
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        return queryset.annotate(
-            entry_count=Count("entries", filter=Q(entries__is_draft=False)), title_count=Count("titles")
-        )

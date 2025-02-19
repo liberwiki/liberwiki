@@ -1,11 +1,12 @@
 from core.models import User
+from rest_framework import serializers
 
-from .base import BaseModelSerializer, ModelRelatedCountField
+from .base import BaseModelSerializer
 
 
 class PublicUserSerializer(BaseModelSerializer):
-    title_count = ModelRelatedCountField("titles")
-    entry_count = ModelRelatedCountField("entries")
+    title_count = serializers.IntegerField()
+    entry_count = serializers.IntegerField()
 
     class Meta:
         model = User
@@ -25,8 +26,8 @@ class PublicUserSerializer(BaseModelSerializer):
 
 
 class UserSerializer(BaseModelSerializer):
-    title_count = ModelRelatedCountField("titles")
-    entry_count = ModelRelatedCountField("entries")
+    title_count = serializers.IntegerField()
+    entry_count = serializers.IntegerField()
 
     class Meta:
         model = User

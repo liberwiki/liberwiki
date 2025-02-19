@@ -7,7 +7,6 @@ const RAW = Object.freeze({
   api: {
     baseUrl: process.env.NEXT_PUBLIC_LIBERWIKI__API__BASE_URL,
   },
-  membersOnly: process.env.NEXT_PUBLIC_LIBERWIKI__MEMBERS_ONLY,
   language: process.env.NEXT_PUBLIC_LIBERWIKI__LANGUAGE,
   devtools: {
     sentry: {
@@ -41,7 +40,6 @@ export const config = Object.freeze({
     defaultTitlePageSize: 50,
     defaultEntryPageSize: 25,
   },
-  membersOnly: booleanConfig({ name: 'membersOnly', value: RAW.membersOnly, default: true }),
   language: stringConfig({ name: 'language', value: RAW.language, default: 'en' }),
   devtools: {
     sentry: {

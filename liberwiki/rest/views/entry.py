@@ -1,5 +1,5 @@
-from core.models import Entry, EntryBookmark, EntryVote, User
-from django.db.models import BooleanField, CharField, Count, Exists, OuterRef, Q, Subquery, Value
+from core.models import Entry, EntryBookmark, EntryVote, Title, User
+from django.db.models import BooleanField, CharField, Count, Exists, OuterRef, Prefetch, Q, Subquery, Value
 from django_filters import BooleanFilter, ChoiceFilter, NumberFilter
 from drf_spectacular.utils import extend_schema
 from rest.serializers import EntrySerializer
@@ -76,7 +76,26 @@ class EntryViewSet(BaseModelViewSet):
         queryset = self.annotate_votes(queryset, self.request)
         queryset = self.annotate_bookmarks(queryset, self.request)
         queryset = self.annotate_likes_dislikes_bookmarks(queryset)
-        return queryset.select_related("title", "author")
+        queryset = queryset.prefetch_related(
+            Prefetch("author", queryset=self.author_queryset()),
+            Prefetch("title", queryset=self.title_queryset()),
+        )
+        return queryset
+
+    @staticmethod
+    def author_queryset():
+        queryset = User.objects.annotate(
+            entry_count=Count("entries", filter=Q(entries__is_draft=False)),
+            title_count=Count("titles"),
+        )
+        return queryset
+
+    @staticmethod
+    def title_queryset():
+        queryset = Title.objects.annotate(
+            entry_count=Count("entries", filter=Q(entries__is_draft=False)),
+        )
+        return queryset
 
     @staticmethod
     def add_drafts_for_self(queryset, request):

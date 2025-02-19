@@ -1,11 +1,11 @@
 from core.models import Title
 from rest_framework import serializers
 
-from .base import BaseModelSerializer, ModelRelatedCountField, s
+from .base import BaseModelSerializer, s
 
 
 class TitleSerializer(BaseModelSerializer):
-    entry_count = ModelRelatedCountField("entries")
+    entry_count = serializers.IntegerField()
     is_bookmarked = serializers.BooleanField(required=False, read_only=True)
 
     class Meta:

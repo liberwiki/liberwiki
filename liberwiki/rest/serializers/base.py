@@ -3,7 +3,7 @@ from itertools import chain
 
 from common.utils.pyutils import with_attrs
 from django.utils.module_loading import import_string
-from rest_framework.serializers import IntegerField, ModelSerializer
+from rest_framework.serializers import ModelSerializer
 
 
 class ConditionalSerializerMixin:
@@ -115,18 +115,3 @@ def s(serializer):
         return serializer_returning_inner_function
 
     return actual_serializer
-
-
-class ModelRelatedCountField(IntegerField):
-    """
-    A read-only field that returns the count of related objects in the given related_name.
-    """
-
-    def __init__(self, related_name=None, **kwargs):
-        self.related_name = related_name
-        kwargs["source"] = "*"
-        kwargs["read_only"] = True
-        super().__init__(**kwargs)
-
-    def to_representation(self, value):
-        return getattr(value, self.related_name).all().count()
