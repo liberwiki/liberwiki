@@ -4,10 +4,10 @@
   "delete": "Delete",
   "edit": "Edit",
   "goToEntry": "Go to entry page",
-  "entryEditError": "An error occurred while editing your entry. Please try again later.",
-  "titleCreationError": "An error occurred while creating your entry. Please try again later.",
+  "entryEditError": "An error occurred while editing your entry.",
+  "titleCreationError": "An error occurred while creating your entry.",
   "yourEntryHasBeenCreated": "Your entry has been created.",
-  "entryCreationError": "An error occurred while creating your entry. Please try again later.",
+  "entryCreationError": "An error occurred while creating your entry.",
   "yourDraftEntryHasBeenCreated": "Your draft entry has been created.",
   "yourDraftEntryHasBeenDeleted": "Entry draft {{entryId}} has been deleted."
 }

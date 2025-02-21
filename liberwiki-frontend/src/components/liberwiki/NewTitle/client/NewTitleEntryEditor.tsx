@@ -9,6 +9,7 @@ import _ from 'lodash'
 import Editor from '@/components/liberwiki/Editor'
 
 import { useClientTranslation } from '@/i18n'
+import { APIErrorToast } from '@/lib/liberwikiAPIUtils'
 import { useLiberWikiAPI } from '@/lib/serverHooks'
 
 import { toast } from 'sonner'
@@ -27,28 +28,34 @@ export default function NewTitleEntryEditor(
     if (existingTitle) {
       return existingTitle
     } else {
-      const { data: createdTitle, error: titleError } = await liberwiki.createTitle({ name: newTitle })
-      if (!titleError) {
+      const {
+        data: createdTitle,
+        error: createTitleError,
+        response: createTitleResponse,
+      } = await liberwiki.createTitle({ name: newTitle })
+      if (createTitleResponse.ok) {
         return createdTitle
       } else {
-        toast(t('entry:titleCreationError'))
+        APIErrorToast(createTitleError, t('entry:titleCreationError'))
       }
     }
   }
 
   async function handleEditorSubmit(content: object, isDraft: boolean = false) {
     const title = await getTitle()
-    const { error: entryError } = await liberwiki.createEntry({
-      title: title?.id as string,
-      content,
-      is_draft: isDraft,
-    })
-    if (!entryError) {
-      toast(t('entry:yourEntryHasBeenCreated'))
-      router.push(`/titles/${title?.slug}`)
-      router.refresh()
-    } else {
-      toast(t('entry:entryCreationError'))
+    if (title) {
+      const { response: createEntryResponse, error: createEntryError } = await liberwiki.createEntry({
+        title: title?.id as string,
+        content,
+        is_draft: isDraft,
+      })
+      if (createEntryResponse.ok) {
+        toast(t('entry:yourEntryHasBeenCreated'))
+        router.push(`/titles/${title?.slug}`)
+        router.refresh()
+      } else {
+        APIErrorToast(createEntryError, t('entry:entryCreationError'))
+      }
     }
   }
 

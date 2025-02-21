@@ -3,25 +3,27 @@ import string
 from common.models import BaseModel
 from common.utils.db import track_model_history
 from common.validators import AllowedCharactersValidator
+from django.conf import settings
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils.translation import gettext_lazy as _
-from django_lifecycle import AFTER_UPDATE, BEFORE_CREATE, hook
+from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook
 
 
 @track_model_history()
 class Title(BaseModel):
     REPR_STRING = "{self.name}"
+    TITLE_NAME_ALLOWED_EXTRA_CHARS = settings.TITLE_NAME_ALLOWED_EXTRA_CHARS
+    TITLE_NAME_VALIDATOR = AllowedCharactersValidator(
+        allowed_characters=string.ascii_letters + string.digits + " " + TITLE_NAME_ALLOWED_EXTRA_CHARS,
+        allowed_first=string.ascii_letters + string.digits + TITLE_NAME_ALLOWED_EXTRA_CHARS,
+        allowed_last=string.ascii_letters + string.digits + TITLE_NAME_ALLOWED_EXTRA_CHARS,
+    )
 
     name = models.CharField(
         verbose_name=_("Title"),
         max_length=255,
         unique=True,
-        validators=[
-            AllowedCharactersValidator(
-                allowed_characters=string.ascii_letters + string.digits + string.punctuation + " "
-            ),
-        ],
         help_text=_("Name of the title."),
     )
     slug = models.SlugField(
@@ -43,6 +45,11 @@ class Title(BaseModel):
         verbose_name_plural = _("Titles")
 
     @hook(BEFORE_CREATE)
-    @hook(AFTER_UPDATE)
+    @hook(BEFORE_UPDATE)
     def create_slug(self):
         self.slug = slugify(self.name)
+
+    @hook(BEFORE_CREATE)
+    @hook(BEFORE_UPDATE)
+    def validate_name(self):
+        self.TITLE_NAME_VALIDATOR(self.name)

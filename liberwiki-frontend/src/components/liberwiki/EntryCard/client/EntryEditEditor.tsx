@@ -6,10 +6,9 @@ import Editor from '@/components/liberwiki/Editor'
 
 import { APIType, Includes } from '@/api'
 import { useClientTranslation } from '@/i18n'
+import { APIErrorToast } from '@/lib/liberwikiAPIUtils'
 import { useLiberWikiAPI } from '@/lib/serverHooks'
 import { uuidV4toHEX } from '@/lib/utils'
-
-import { toast } from 'sonner'
 
 export default function EntryEditEditor({
   entry,
@@ -21,11 +20,14 @@ export default function EntryEditEditor({
   const { t } = useClientTranslation(['entry'])
 
   async function handleEditorSubmit(content: object, isDraft: boolean = false) {
-    const { response: createEntryResponse } = await liberwiki.patchEntry(entry.id, { content, is_draft: isDraft })
-    if (createEntryResponse.ok) {
+    const { response: editEntryResponse, error: editEntryError } = await liberwiki.patchEntry(entry.id, {
+      content,
+      is_draft: isDraft,
+    })
+    if (editEntryResponse.ok) {
       router.push(`/entries/${uuidV4toHEX(entry.id)}`)
     } else {
-      toast(t('entry:entryEditError'))
+      APIErrorToast(editEntryError, t('entry:entryEditError'))
     }
   }
 

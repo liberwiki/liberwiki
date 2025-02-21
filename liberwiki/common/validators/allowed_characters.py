@@ -38,7 +38,7 @@ class AllowedCharactersValidator:
 
     def _raise_if_invalid(self, should_raise, value):
         if should_raise:
-            raise ValidationError(self.message, code=self.code, params={"value": value})
+            raise ValidationError({"Incorrect Character": self.message}, code=self.code, params={"value": value})
 
     def __call__(self, value):
         """

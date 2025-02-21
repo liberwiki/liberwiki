@@ -44,6 +44,9 @@ CONFIG = config(
                 "TRACES_SAMPLE_RATE": str,
             },
         },
+        "APP": {
+            "TITLE_NAME_ALLOWED_EXTRA_CHARS": str,
+        },
     },
     prefix="LIBERWIKI",
     sep="__",

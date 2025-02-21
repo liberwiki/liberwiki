@@ -5,8 +5,8 @@ from .base import BaseModelSerializer
 
 
 class PublicUserSerializer(BaseModelSerializer):
-    title_count = serializers.IntegerField()
-    entry_count = serializers.IntegerField()
+    title_count = serializers.IntegerField(required=False, read_only=True)
+    entry_count = serializers.IntegerField(required=False, read_only=True)
 
     class Meta:
         model = User
@@ -26,8 +26,8 @@ class PublicUserSerializer(BaseModelSerializer):
 
 
 class UserSerializer(BaseModelSerializer):
-    title_count = serializers.IntegerField()
-    entry_count = serializers.IntegerField()
+    title_count = serializers.IntegerField(required=False, read_only=True)
+    entry_count = serializers.IntegerField(required=False, read_only=True)
 
     class Meta:
         model = User

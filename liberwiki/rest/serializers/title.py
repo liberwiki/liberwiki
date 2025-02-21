@@ -5,7 +5,7 @@ from .base import BaseModelSerializer, s
 
 
 class TitleSerializer(BaseModelSerializer):
-    entry_count = serializers.IntegerField()
+    entry_count = serializers.IntegerField(required=False, read_only=True)
     is_bookmarked = serializers.BooleanField(required=False, read_only=True)
 
     class Meta:

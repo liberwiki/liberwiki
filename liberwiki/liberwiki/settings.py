@@ -201,6 +201,9 @@ if not DEBUG:
         debug=config.DEBUG,
     )
 
+# CORE APP BEHAVIOR SETTINGS
+TITLE_NAME_ALLOWED_EXTRA_CHARS = config.APP.TITLE_NAME_ALLOWED_EXTRA_CHARS
+
 if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

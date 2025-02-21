@@ -11,6 +11,7 @@ import Editor from '@/components/liberwiki/Editor'
 import { APIType } from '@/api'
 import config from '@/config'
 import { useClientTranslation } from '@/i18n'
+import { APIErrorToast } from '@/lib/liberwikiAPIUtils'
 import { useLiberWikiAPI } from '@/lib/serverHooks'
 
 import { toast } from 'sonner'
@@ -31,25 +32,29 @@ export default function NewEntryEditor(
       is_draft: isDraft,
       title: title?.id as string,
     }
-    let entryResponse
+    let entryRawResponse
 
     if (isDraft) {
       if (draftEntry) {
-        entryResponse = (await liberwiki.patchEntry(draftEntry.id, entryData)).response
+        entryRawResponse = await liberwiki.patchEntry(draftEntry.id, entryData)
       } else {
-        entryResponse = (await liberwiki.createEntry(entryData)).response
+        entryRawResponse = await liberwiki.createEntry(entryData)
       }
+      const entryResponse = entryRawResponse.response
+      const createEntryError = entryRawResponse.error
       if (entryResponse.ok) {
         toast(t('entry:yourDraftEntryHasBeenCreated'))
       } else {
-        toast(t('entry:entryCreationError'))
+        APIErrorToast(createEntryError, t('entry:entryCreationError'))
       }
     } else {
       if (draftEntry) {
-        entryResponse = (await liberwiki.patchEntry(draftEntry.id, entryData)).response
+        entryRawResponse = await liberwiki.patchEntry(draftEntry.id, entryData)
       } else {
-        entryResponse = (await liberwiki.createEntry(entryData)).response
+        entryRawResponse = await liberwiki.createEntry(entryData)
       }
+      const entryResponse = entryRawResponse.response
+      const createEntryError = entryRawResponse.error
       if (entryResponse.ok) {
         toast(t('entry:yourEntryHasBeenCreated'))
         const [tet, epp] = [title.entry_count + 1, config.ux.defaultEntryPageSize]
@@ -58,7 +63,7 @@ export default function NewEntryEditor(
         router.push(targetUrl, { scroll: true })
         router.refresh()
       } else {
-        toast(t('entry:entryCreationError'))
+        APIErrorToast(createEntryError, t('entry:entryCreationError'))
       }
     }
   }
