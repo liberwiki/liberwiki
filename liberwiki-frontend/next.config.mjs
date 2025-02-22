@@ -1,13 +1,21 @@
 import {withSentryConfig} from '@sentry/nextjs';
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // For forbidden interrupts
   experimental: {
     authInterrupts: true,
+    optimizePackageImports: ["lodash"]
   },
 };
 
-export default withSentryConfig(nextConfig, {
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+})
+
+export default withSentryConfig(withBundleAnalyzer(nextConfig), {
   // For all available options, see:
   // https://github.com/getsentry/sentry-webpack-plugin#options
 

@@ -23,10 +23,10 @@ import TextStyle from '@tiptap/extension-text-style'
 import Typography from '@tiptap/extension-typography'
 import Underline from '@tiptap/extension-underline'
 import { useEditor } from '@tiptap/react'
-import { all, createLowlight } from 'lowlight'
+import { common, createLowlight } from 'lowlight'
 
 export default function useLiberWikiEditor({ content }: { content?: object }) {
-  const lowlight = createLowlight(all)
+  const lowlight = createLowlight(common)
 
   const markExtensions = [
     Subscript,
