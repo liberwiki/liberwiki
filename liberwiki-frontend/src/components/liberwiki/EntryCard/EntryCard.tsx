@@ -14,7 +14,7 @@ export async function EntryCard({
   editMode?: boolean
 }) {
   return (
-    <Card className="max-w-[48rem] w-full">
+    <Card className="max-w-[calc(52rem+26px)] w-full">
       <CardHeader className="flex flex-col gap-1 border-border border-b">
         <CardTitle className="text-2xl font-bold">
           <Link href={{ pathname: `/titles/${entry.title.slug}/` }} className="hover:underline">

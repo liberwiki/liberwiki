@@ -85,3 +85,7 @@
   @apply h-full;
   overflow-y: scroll;
 }
+
+.break-word {
+  word-break: break-word;
+}

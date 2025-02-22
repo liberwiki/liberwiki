@@ -21,7 +21,7 @@ export const NavTitle = React.forwardRef<
       className={cn(
         'rounded-md p-2 text-sm hover:bg-accent hover:text-accent-foreground focus:bg-accent',
         'focus:text-accent-foreground focus:outline-none text-muted-foreground w-full flex',
-        'justify-between items-center break-all gap-2 transition-colors',
+        'justify-between items-center break-word gap-2 transition-colors',
         className
       )}
       href={{ pathname: `/titles/${title.slug}` }}
