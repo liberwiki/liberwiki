@@ -4,7 +4,6 @@ import * as Icons from 'lucide-react'
 
 import { Button } from '@/components/shadcn/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/shadcn/card'
-import { SeparatorWithText } from '@/components/shadcn/separator-with-text'
 
 import config from '@/config'
 import { sUseTranslation } from '@/i18n'
@@ -23,15 +22,6 @@ export async function LockDown() {
       <CardContent className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <Button asChild className="w-full" size="lg">
-            <Link prefetch={true} href={{ pathname: '/auth/signup' }} className="gap-2">
-              {t('lockdown:signupWithInvitationCode')}
-              <Icons.ArrowRight className="h-4 w-4" />
-            </Link>
-          </Button>
-        </div>
-        <SeparatorWithText text={t('common:or')} />
-        <div className="flex flex-col gap-2">
-          <Button variant="outline" asChild className="w-full" size="lg">
             <Link prefetch={true} href={{ pathname: '/auth/login' }} className="gap-2">
               {t('lockdown:haveAnAccountLogIn')}
               <Icons.LogIn className="h-4 w-4" />

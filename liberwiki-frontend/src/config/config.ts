@@ -1,6 +1,7 @@
 import { booleanConfig, numberConfig, stringConfig } from '~/src/config/parsers'
 
 const RAW = Object.freeze({
+  membersOnly: process.env.NEXT_PUBLIC_LIBERWIKI__MEMBERS_ONLY,
   debug: process.env.NEXT_PUBLIC_LIBERWIKI__DEBUG,
   name: process.env.NEXT_PUBLIC_LIBERWIKI__NAME,
   domain: process.env.NEXT_PUBLIC_LIBERWIKI__DOMAIN,
@@ -26,6 +27,7 @@ const RAW = Object.freeze({
 })
 
 export const config = Object.freeze({
+  membersOnly: booleanConfig({ name: 'membersOnly', value: RAW.membersOnly, default: false }),
   debug: booleanConfig({ name: 'debug', value: RAW.debug, default: false }),
   name: stringConfig({ name: 'name', value: RAW.name }),
   domain: stringConfig({ name: 'domain', value: RAW.domain }),

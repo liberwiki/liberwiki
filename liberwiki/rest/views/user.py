@@ -43,13 +43,10 @@ class UserViewSet(BaseModelViewSet):
     }
 
     def get_queryset(self):
-        queryset = (
-            super()
-            .get_queryset()
-            .annotate(
-                entry_count=Count("entries", filter=Q(entries__is_draft=False)),
-                title_count=Count("titles"),
-            )
+        queryset = super().get_queryset()
+        queryset = queryset.annotate(
+            entry_count=Count("entries", filter=Q(entries__is_draft=False)),
+            title_count=Count("titles"),
         )
         return queryset
 

@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { LoginForm } from '@/components/liberwiki/Login/client'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/shadcn/card'
 
+import config from '@/config'
 import { sUseTranslation } from '@/i18n'
 
 export async function Login() {
@@ -19,11 +20,13 @@ export async function Login() {
           <LoginForm />
         </CardContent>
       </Card>
-      <div className="w-100 flex justify-center">
-        <Link prefetch={true} href={{ pathname: '/' }} className="hover:underline">
-          {t('common:backToWebsite')}
-        </Link>
-      </div>
+      {!config.membersOnly && (
+        <div className="w-100 flex justify-center">
+          <Link prefetch={true} href={{ pathname: '/' }} className="hover:underline">
+            {t('common:backToWebsite')}
+          </Link>
+        </div>
+      )}
     </>
   )
 }

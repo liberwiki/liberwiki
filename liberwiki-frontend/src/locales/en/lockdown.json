@@ -1,6 +1,5 @@
 {
-  "lockdownTitle": "Closed Beta",
-  "lockdownDescription": "{{name}} is currently in closed beta. You need an invitation code to sign up.",
-  "signupWithInvitationCode": "Sign up with invitation code",
+  "lockdownTitle": "Closed",
+  "lockdownDescription": "{{name}} is currently closed. Only authenticated users can enter.",
   "haveAnAccountLogIn": "Already have an account? Log in"
 }
