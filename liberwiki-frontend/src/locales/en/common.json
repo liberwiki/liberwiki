@@ -1,7 +1,8 @@
 {
   "backToWebsite": "Back to the website?",
-  "pageNotFound": "404 - Page Not Found",
+  "pageAccessDenied": "403 - Access Denied",
   "returnToHome": "Return to Home",
+  "pageNotFound": "404 - Page Not Found",
   "submitDraft": "Save As Draft",
   "deleteDraft": "Delete Draft",
   "submit": "Submit",
