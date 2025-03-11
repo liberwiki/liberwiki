@@ -18,9 +18,10 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
   const { t } = await sUseTranslation(['metadata'])
   const { data: titles } = await liberwiki.titles({ slug: params.slug, page_size: 1, page: 1 })
   const title = _.first(titles?.results)
+  const titleName = title ? title.name : decodeURI(params.slug)
   return await getLiberWikiMetadata({
-    title: title ? title.name : decodeURI(params.slug),
-    description: t('metadata:title.description', { name: config.name, title: 'title' }),
+    title: titleName,
+    description: t('metadata:title.description', { name: config.name, title: titleName }),
   })
 }
 
