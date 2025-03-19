@@ -76,9 +76,13 @@ export function Editor({
 
   return (
     <Card className="w-full text-gray-100">
-      <CardContent className="p-6 pt-6">
-        <div className="flex flex-wrap gap-2 items-center" role="toolbar" aria-label={t('editor:formattingOptions')}>
-          <div className="flex gap-2 items-center">
+      <CardContent className="p-6 pt-6 max-sm:p-4 max-sm:pt-4">
+        <div
+          className="flex flex-wrap gap-2 max-sm:gap-0 items-center"
+          role="toolbar"
+          aria-label={t('editor:formattingOptions')}
+        >
+          <div className="flex gap-2 max-sm:gap-0 items-center">
             <EditorButton
               pressed={editor.isActive('bold')}
               onPressedChange={() => editor.chain().focus().toggleBold().run()}
@@ -104,8 +108,8 @@ export function Editor({
               icon={Icons.Strikethrough}
             />
           </div>
-          <div className="w-px h-6 bg-gray-700" aria-hidden="true" />
-          <div className="flex gap-2 items-center">
+          <div className="w-px h-6 max-sm:h-4 bg-gray-700" aria-hidden="true" />
+          <div className="flex gap-2 max-sm:gap-0 items-center">
             <EditorButton
               pressed={editor.isActive('latexBlock')}
               onPressedChange={() => editor.chain().focus().toggleLatexBlock().run()}
@@ -113,8 +117,8 @@ export function Editor({
               icon={Icons.Sigma}
             />
           </div>
-          <div className="w-px h-6 bg-gray-700" aria-hidden="true" />
-          <div className="flex gap-2 items-center">
+          <div className="w-px h-6 max-sm:h-4 bg-gray-700" aria-hidden="true" />
+          <div className="flex gap-2 max-sm:gap-0 items-center">
             <EditorButton
               pressed={editor.isActive('bulletList')}
               onPressedChange={() => editor.chain().focus().toggleBulletList().run()}
@@ -128,7 +132,7 @@ export function Editor({
               icon={Icons.ListOrdered}
             />
           </div>
-          <div className="w-px h-6 bg-gray-700" aria-hidden="true" />
+          <div className="w-px h-6 max-sm:h-4 max-sm:gap-0 bg-gray-700" aria-hidden="true" />
           <div className="flex gap-2 items-center">
             <EditorButton
               pressed={editor.isActive('link')}
@@ -137,8 +141,8 @@ export function Editor({
               icon={Icons.LinkIcon}
             />
           </div>
-          <div className="w-px h-6 bg-gray-700" aria-hidden="true" />
-          <div className="flex gap-2 items-center">
+          <div className="w-px h-6 max-sm:h-4 bg-gray-700" aria-hidden="true" />
+          <div className="flex gap-2 max-sm:gap-0 items-center">
             <EditorButton
               pressed={editor.isActive('code')}
               onPressedChange={() => editor.chain().focus().toggleCode().run()}
@@ -154,13 +158,13 @@ export function Editor({
           </div>
         </div>
         <EditorContent editor={editor} className="tiptap-editor" />
-        <div className="mt-4 text-sm text-gray-400 flex items-center justify-between">
+        <div className="text-sm text-gray-400 flex items-center justify-between flex-wrap gap-2">
           <div className="flex gap-2">
             <span>{t('editor:characterCount', { count: editor.storage.characterCount.characters() })}</span>
             <span>|</span>
             <span>{t('editor:wordCount', { count: editor.storage.characterCount.words() })}</span>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 justify-end max-sm:w-full">
             {draftable && !_.isEmpty(content) && !readonly && (
               <Button variant="destructive" size="sm" aria-label={t('common:submitDraft')} onClick={handleDeleteDraft}>
                 {t('common:deleteDraft')}

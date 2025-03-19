@@ -27,22 +27,22 @@ export async function Entry({
   return (
     <Card className={cn('w-full border-0 shadow-none', classNames?.Card)} id={entry.id}>
       <CardContent className={cn('pt-6', classNames?.CardContent)}>
-        <div className="mb-4 overflow-x-auto">
+        <div className="overflow-x-auto [&_p:has(br.ProseMirror-trailingBreak)]:hidden">
           <Editor readonly={true} content={entry.content as object} />
         </div>
         <div className="flex justify-between items-center -mx-4">
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-2 max-sm:gap-0 items-center">
             <FeedbackButtons entry={entry} />
             <BookmarkButton entry={entry} />
             <ShareButton entry={entry} />
           </div>
           <div className="flex gap-2 items-center">
-            <div className="text-sm text-gray-500">
+            <div className="text-sm text-gray-500 max-sm:flex max-sm:flex-col max-sm:items-end">
               <Link prefetch={true} href={{ pathname: '/' }} className="font-medium text-primary hover:underline">
                 {entry.author.username}
               </Link>
-              <span className="mx-1">•</span>
-              <span>{shortFormattedDate(new Date(entry.created_at))}</span>
+              <span className="mx-1 max-sm:hidden">•</span>
+              <span className="max-sm:text-xs">{shortFormattedDate(new Date(entry.created_at))}</span>
             </div>
             <Overlay breakpoint="md">
               <OverlayTrigger>
