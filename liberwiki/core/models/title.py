@@ -14,6 +14,7 @@ from django_lifecycle import BEFORE_CREATE, BEFORE_UPDATE, hook
 class Title(BaseModel):
     REPR_STRING = "{self.name}"
     TITLE_NAME_ALLOWED_EXTRA_CHARS = settings.TITLE_NAME_ALLOWED_EXTRA_CHARS
+    TITLE_SLUG_CHARACTERS_LANGUAGE_MAP = settings.TITLE_SLUG_CHARACTERS_LANGUAGE_MAP
     TITLE_NAME_VALIDATOR = AllowedCharactersValidator(
         allowed_characters=string.ascii_letters + string.digits + " " + TITLE_NAME_ALLOWED_EXTRA_CHARS,
         allowed_first=string.ascii_letters + string.digits + TITLE_NAME_ALLOWED_EXTRA_CHARS,
@@ -47,7 +48,9 @@ class Title(BaseModel):
     @hook(BEFORE_CREATE)
     @hook(BEFORE_UPDATE)
     def create_slug(self):
-        self.slug = slugify(self.name)
+        # We apply normalizations for extra chars in settings
+        normalize_map = dict(char_map.split(":") for char_map in self.TITLE_SLUG_CHARACTERS_LANGUAGE_MAP.split(","))
+        self.slug = slugify("".join(normalize_map.get(char, char) for char in self.name))
 
     @hook(BEFORE_CREATE)
     @hook(BEFORE_UPDATE)

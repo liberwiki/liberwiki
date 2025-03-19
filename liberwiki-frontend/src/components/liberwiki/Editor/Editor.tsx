@@ -2,6 +2,8 @@
 
 import '@/components/liberwiki/Editor/editor.css'
 
+import { useRouter } from 'next/navigation'
+
 import * as Icons from 'lucide-react'
 
 import _ from 'lodash'
@@ -30,6 +32,7 @@ export function Editor({
 }) {
   const { t } = useClientTranslation(['common', 'editor'])
   const editor = useLiberWikiEditor({ content })
+  const router = useRouter()
 
   if (!editor) {
     return null
@@ -64,6 +67,7 @@ export function Editor({
   async function handleDraftSubmit() {
     if (editor) {
       onSubmit?.(editor.getJSON(), true)
+      router.refresh()
     }
   }
 

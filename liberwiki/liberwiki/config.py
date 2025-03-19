@@ -46,6 +46,7 @@ CONFIG = config(
         },
         "APP": {
             "TITLE_NAME_ALLOWED_EXTRA_CHARS": str,
+            "TITLE_SLUG_CHARACTERS_LANGUAGE_MAP": str,
         },
     },
     prefix="LIBERWIKI",

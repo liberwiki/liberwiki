@@ -203,6 +203,9 @@ if not DEBUG:
 
 # CORE APP BEHAVIOR SETTINGS
 TITLE_NAME_ALLOWED_EXTRA_CHARS = config.APP.TITLE_NAME_ALLOWED_EXTRA_CHARS
+TITLE_SLUG_CHARACTERS_LANGUAGE_MAP = config.APP.TITLE_SLUG_CHARACTERS_LANGUAGE_MAP
+# Format of the above setting is lang-specific-char:url-friendly-char,lang-specific-char2:url-friendly-char2
+# Example: ı:i,ş:s,ğ:g
 
 if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True

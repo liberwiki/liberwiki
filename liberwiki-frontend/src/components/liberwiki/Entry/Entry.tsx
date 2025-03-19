@@ -26,7 +26,7 @@ export async function Entry({
 
   return (
     <Card className={cn('w-full border-0 shadow-none', classNames?.Card)} id={entry.id}>
-      <CardContent className={cn('pt-6', classNames?.CardContent)}>
+      <CardContent className={cn('pt-6 flex flex-col gap-2', classNames?.CardContent)}>
         <div className="overflow-x-auto [&_p:has(br.ProseMirror-trailingBreak)]:hidden">
           <Editor readonly={true} content={entry.content as object} />
         </div>
