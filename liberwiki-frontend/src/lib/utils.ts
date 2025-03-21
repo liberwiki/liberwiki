@@ -225,3 +225,9 @@ export function suppress<T, ERT>(
     throw error
   }
 }
+
+export function setKeyValueToObjectIfValue(key: string, value: unknown, object: Record<string, unknown>) {
+  if (value) {
+    object[key] = value
+  }
+}

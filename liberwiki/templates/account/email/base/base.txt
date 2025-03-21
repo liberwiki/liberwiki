@@ -1,0 +1,7 @@
+Hello from {{ site_name }},
+
+{% block content %}
+{% endblock content %}
+
+{% blocktrans %}Thank you for using {{ site_name }}{% endblocktrans %},
+{% blocktrans %}The {{ site_name_short }} Team{% endblocktrans %}

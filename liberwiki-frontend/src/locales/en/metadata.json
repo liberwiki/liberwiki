@@ -1,26 +1,14 @@
 {
-  "profile": {
-    "title": "Profile",
-    "description": "Your profile on {{name}}."
-  },
-  "login": {
-    "title": "Login to {{name}}",
-    "description": "Login to to start contributing to to {{name}}. Share your knowledge with the world!"
-  },
-  "signup": {
-    "title": "Sign up to {{name}} to start contributing. Share your knowledge with the world!",
-    "description": "Sign up to {{name}}."
-  },
   "entry": {
     "description": "See what {{author}} shared about {{title}}."
+  },
+  "fallback": {
+    "description": "{{name}} is a a free and open source encyclopedia that anyone can contribute."
   },
   "lockdown": {
     "description": "{{name}} is currently in lockdown mode."
   },
   "title": {
     "description": "Discover everything you need to know about {{title}}. Can't find the information you're looking for? Join {{name}} and be the one to share it with the world!"
-  },
-  "fallback": {
-    "description": "{{name}} is a a free and open source encyclopedia that anyone can contribute."
   }
 }

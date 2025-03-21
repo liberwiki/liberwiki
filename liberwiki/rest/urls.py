@@ -1,13 +1,13 @@
 from django.urls import include, path, reverse_lazy
 from drf_spectacular.utils import extend_schema
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView
-from rest.views import AuthViewSet, EntryViewSet, InvitationViewSet, TitleViewSet, UserViewSet
+from rest.views import EntryViewSet, InvitationViewSet, TitleViewSet, UserViewSet
 from rest_framework.routers import DefaultRouter
 
 DefaultRouter.include_root_view = False
 router = DefaultRouter()
 
-viewsets = [EntryViewSet, TitleViewSet, UserViewSet, AuthViewSet, InvitationViewSet]
+viewsets = [EntryViewSet, TitleViewSet, UserViewSet, InvitationViewSet]
 
 for viewset in viewsets:
     router.register(viewset.endpoint, viewset, basename=viewset.endpoint)

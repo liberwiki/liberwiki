@@ -1,5 +1,5 @@
 {
-  "lockdownTitle": "Closed",
+  "haveAnAccountLogIn": "Already have an account? Log in",
   "lockdownDescription": "{{name}} is currently closed. Only authenticated users can enter.",
-  "haveAnAccountLogIn": "Already have an account? Log in"
+  "lockdownTitle": "Closed"
 }

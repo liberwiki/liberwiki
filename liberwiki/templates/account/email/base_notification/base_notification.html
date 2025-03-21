@@ -1,0 +1,24 @@
+{% extends "account/email/base/base.html" %}
+{% load account %}
+
+{% block content %}
+    {% autoescape off %}
+        <mj-text>
+            {% blocktrans %}You are receiving this mail because the following change was made to your account:{% endblocktrans %}
+        </mj-text>
+
+        {% block notification_message %}{% endblock notification_message%}
+
+        <mj-text>
+            {% blocktrans %}If you do not recognize this change then please take proper security precautions immediately. The change to your account originates from: {% endblocktrans %}
+        </mj-text>
+
+        <mj-text>
+            {% blocktrans %}- IP address: {{ip}}{% endblocktrans %}
+            <br />
+            {% blocktrans %}- Browser: {{user_agent}}{% endblocktrans %}
+            <br />
+            {% blocktrans %}- Date: {{timestamp}}{% endblocktrans %}
+        </mj-text>
+    {% endautoescape %}
+{% endblock %}

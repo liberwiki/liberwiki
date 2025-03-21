@@ -1,13 +1,13 @@
 {
-  "entryHasBenDeleted": "Entry {{entryId}} has been deleted.",
-  "linkCopiedToClipboard": "Entry link has been copied to clipboard.",
   "delete": "Delete",
   "edit": "Edit",
-  "goToEntry": "Go to entry page",
-  "entryEditError": "An error occurred while editing your entry.",
-  "titleCreationError": "An error occurred while creating your entry.",
-  "yourEntryHasBeenCreated": "Your entry has been created.",
   "entryCreationError": "An error occurred while creating your entry.",
+  "entryEditError": "An error occurred while editing your entry.",
+  "entryHasBenDeleted": "Entry {{entryId}} has been deleted.",
+  "goToEntry": "Go to entry page",
+  "linkCopiedToClipboard": "Entry link has been copied to clipboard.",
+  "titleCreationError": "An error occurred while creating your entry.",
   "yourDraftEntryHasBeenCreated": "Your draft entry has been created.",
-  "yourDraftEntryHasBeenDeleted": "Entry draft {{entryId}} has been deleted."
+  "yourDraftEntryHasBeenDeleted": "Entry draft {{entryId}} has been deleted.",
+  "yourEntryHasBeenCreated": "Your entry has been created."
 }

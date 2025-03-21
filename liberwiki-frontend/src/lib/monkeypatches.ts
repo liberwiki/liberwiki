@@ -44,5 +44,8 @@ export function globalLiberWikiAPI(window: Window) {
     }
   }
 
-  window.liberwiki = new LiberWikiAPI(() => Promise.resolve(getCookie(config.api.bearerTokenCookieName) || null))
+  window.liberwiki = new LiberWikiAPI(
+    () => Promise.resolve(getCookie(config.api.sessionCookieName) || null),
+    () => Promise.resolve(getCookie(config.api.csrfTokenCookieName) || null)
+  )
 }

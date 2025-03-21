@@ -1,45 +1,46 @@
-import _ from 'lodash'
-
+import { LiberWikiAuthAPI } from '@/api/authApi'
 import { paths } from '@/api/schema'
 import type { APIQuery, APIType } from '@/api/typeHelpers'
 import config from '@/config'
-import { removeCookie } from '@/lib/serverActions'
-import { getLazyValueAsync } from '@/lib/utils'
+import { getLazyValueAsync, setKeyValueToObjectIfValue } from '@/lib/utils'
 
 import createClient from 'openapi-fetch'
 
 export class LiberWikiAPI {
   config = config.api
-  bearerToken: string | null | (() => Promise<string | null>)
+  sessionToken: string | null | (() => Promise<string | null>)
+  csrfToken: string | null | (() => Promise<string | null>)
+  auth: LiberWikiAuthAPI
 
-  constructor(bearerToken: typeof this.bearerToken) {
-    this.bearerToken = bearerToken
+  constructor(sessionToken: typeof this.sessionToken, csrfToken: typeof this.csrfToken) {
+    this.sessionToken = sessionToken
+    this.csrfToken = csrfToken
+    this.auth = new LiberWikiAuthAPI(this.fetch)
   }
 
-  public async isAuthenticated(): Promise<boolean> {
-    return !!(await getLazyValueAsync<string | null>(this.bearerToken))
+  isAuthenticated = async () => {
+    const { response } = await this.auth.session()
+    return response?.ok
   }
 
-  fetchWrapper = async (input: RequestInfo, init?: RequestInit): Promise<Response> => {
-    const bearerToken = await getLazyValueAsync<string | null>(this.bearerToken)
+  getCurrentUser = async (): Promise<APIType<'User'> | undefined> => {
+    const { data: userData } = await this.me()
+    return userData
+  }
+
+  fetch = async (input: RequestInfo, init?: RequestInit | undefined): Promise<Response> => {
+    const sessionToken = await getLazyValueAsync<string | null>(this.sessionToken)
+    const csrfToken = await getLazyValueAsync<string | null>(this.csrfToken)
 
     init = init || {}
     init.headers = (init.headers instanceof Headers ? init.headers : { ...init.headers }) as Record<string, string>
 
-    if (bearerToken) {
-      init.headers[config.api.bearerTokenHeaderName] = `${config.api.bearerTokenPrefix} ${bearerToken}`
-    }
+    setKeyValueToObjectIfValue(config.api.sessionTokenHeaderName, sessionToken, init.headers)
+    setKeyValueToObjectIfValue(config.api.csrfTokenHeaderName, csrfToken, init.headers)
+
     init.headers['Content-Type'] = 'application/json'
-    init.cache = 'no-cache'
-    const response = await fetch(input, init)
-    try {
-      if (_.isEqual(await response.clone().json(), { detail: 'Invalid token.' })) {
-        // I do not like how this check looks, maybe the server should respond with something other than 401
-        // Specifically for invalid token error?
-        await removeCookie(config.api.bearerTokenCookieName)
-      }
-    } catch {}
-    return response
+    init.credentials = 'include'
+    return await fetch(input, init)
   }
 
   // Create the client using the wrapped fetch function
@@ -48,7 +49,7 @@ export class LiberWikiAPI {
     headers: {
       'Content-Type': 'application/json',
     },
-    fetch: this.fetchWrapper,
+    fetch: this.fetch,
   })
 
   public include(listOfResources: string[]): string {
@@ -56,28 +57,22 @@ export class LiberWikiAPI {
     return listOfResources.join(',')
   }
 
+  public hasResults(
+    resource: undefined | { results: { length: number } }
+  ): resource is { results: { length: number } } {
+    return !!resource && resource.results.length > 0
+  }
+
+  public hasNoResult(resource: undefined | { results: { length: number } }) {
+    return resource && (resource.results.length || 0) === 0
+  }
+
   // Below this are api endpoint wrappers
   // In this order:
-  // auth
   // users
   // titles
   // entries
   // invites
-  public async obtainAuthToken(data: APIType<'AuthTokenRequest'>) {
-    return await this.client.POST('/v0/auth/tokens/', { body: data })
-  }
-
-  public async deleteAuthToken() {
-    return await this.client.DELETE('/v0/auth/tokens/')
-  }
-
-  public async signup(data: APIType<'SignupRequest'>) {
-    return await this.client.POST('/v0/auth/signup/', { body: data })
-  }
-
-  public async verifyEmail(data: APIType<'VerifyEmailRequest'>) {
-    return await this.client.POST('/v0/auth/verify-email/', { body: data })
-  }
 
   public async users(filters?: APIQuery<'/v0/users/'>) {
     return await this.client.GET('/v0/users/', { params: { query: filters } })

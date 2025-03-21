@@ -1,52 +1,63 @@
 from dotenv import load_dotenv
-from iubeo import boolean, comma_separated_list, config
+from iubeo import boolean, comma_separated_list, config, integer, string
 
-load_dotenv()
+load_dotenv(verbose=True, override=False)
 
 CONFIG = config(
     {
-        "NAME": str,
-        "DEBUG": boolean,
+        "NAME": string(),
+        "DEBUG": boolean(),
         "DB": {
-            "NAME": str,
-            "USER": str,
-            "PASSWORD": str,
-            "HOST": str,
-            "PORT": str,
+            "NAME": string(),
+            "USER": string(),
+            "PASSWORD": string(),
+            "HOST": string(),
+            "PORT": string(),
         },
-        "SECRET_KEY": str,
-        "ALLOWED_HOSTS": comma_separated_list,
+        "SECRET_KEY": string(),
+        "ALLOWED_HOSTS": comma_separated_list(),
         "HOSTS": {
-            "DOMAIN": str,
-            "API_SUBDOMAIN": str,
-            "ADMIN_SUBDOMAIN": str,
+            "DOMAIN": string(),
+            "API_SUBDOMAIN": string(),
+            "ADMIN_SUBDOMAIN": string(),
+            "AUTH_SUBDOMAIN": string(),
+        },
+        "OAUTH": {
+            "GOOGLE": {
+                "CLIENT_ID": string(),
+                "CLIENT_SECRET": string(),
+            },
+            "MICROSOFT": {
+                "CLIENT_ID": string(),
+                "CLIENT_SECRET": string(),
+            },
         },
         "SETUP": {
             "SUPERUSER": {
-                "USERNAME": str,
-                "EMAIL": str,
-                "PASSWORD": str,
+                "USERNAME": string(),
+                "EMAIL": string(),
+                "PASSWORD": string(),
             },
         },
-        "LANGUAGE": str,
+        "LANGUAGE": string(),
         "EMAIL": {
             "SMTP": {
-                "HOST": str,
-                "PORT": {"TSL": int},
-                "USER": str,
-                "PASSWORD": str,
+                "HOST": string(),
+                "PORT": {"TSL": integer()},
+                "USER": string(),
+                "PASSWORD": string(),
             },
-            "DEFAULT_VERIFICATION_FROM_EMAIL": str,
+            "DEFAULT_AUTH_FROM_EMAIL": string(),
         },
         "DEVTOOLS": {
             "SENTRY": {
-                "DSN": str,
-                "TRACES_SAMPLE_RATE": str,
+                "DSN": string(),
+                "TRACES_SAMPLE_RATE": string(),
             },
         },
         "APP": {
-            "TITLE_NAME_ALLOWED_EXTRA_CHARS": str,
-            "TITLE_SLUG_CHARACTERS_LANGUAGE_MAP": str,
+            "TITLE_NAME_ALLOWED_EXTRA_CHARS": string(),
+            "TITLE_SLUG_CHARACTERS_LANGUAGE_MAP": string(),
         },
     },
     prefix="LIBERWIKI",

@@ -1,0 +1,12 @@
+{% extends "account/email/base/base.html" %}
+
+{% block content %}
+    {% autoescape off %}
+        <mj-text>{% blocktrans %}You are receiving this email because you or someone else tried to signup for an account using email address:{% endblocktrans %}</mj-text>
+        <mj-text>{{ email }}</mj-text>
+        <mj-text>{% blocktrans %}However, an account using that email address already exists. In case you have forgotten about this, please use the password forgotten procedure to recover your account:{% endblocktrans %}</mj-text>
+        <mj-button href="{{ password_reset_url }}">{% blocktrans %}Reset Password{% endblocktrans %}</mj-button>
+        <mj-text>{% blocktrans %}If the button doesn't work you can copy and paste the url to your browser.{% endblocktrans %}</mj-text>
+        <mj-text>{{ password_reset_url }}</mj-text>
+    {% endautoescape %}
+{% endblock content %}

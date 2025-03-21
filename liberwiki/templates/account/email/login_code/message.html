@@ -1,0 +1,11 @@
+{% extends "account/email/base/base.html" %}
+
+{% load account %}
+
+{% block content %}
+    {% autoescape off %}
+        <mj-text>{% blocktranslate %}Your sign-in code is listed below. Please enter it in your open browser window.{% endblocktranslate %}</mj-text>
+    {% endautoescape %}
+    <mj-text>{{ code }}</mj-text>
+    <mj-text>{% blocktranslate %}This mail can be safely ignored if you did not initiate this action.{% endblocktranslate %}</mj-text>
+{% endblock content %}

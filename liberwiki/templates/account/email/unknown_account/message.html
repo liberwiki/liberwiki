@@ -1,0 +1,12 @@
+{% extends "account/email/base/base.html" %}
+
+{% block content %}
+    {% autoescape off %}
+        <mj-text>{% blocktranslate %}You are receiving this email because you, or someone else, tried to access an account with email {{ email }}. However, we do not have any record of such an account in our database.{% endblocktranslate %}</mj-text>
+        <mj-text>{% blocktranslate %}This mail can be safely ignored if you did not initiate this action.{% endblocktranslate %}</mj-text>
+        <mj-text>{% blocktranslate %}If it was you, you can sign up for an account using the button below.{% endblocktranslate %}</mj-text>
+        <mj-button href="{{ signup_url }}">Signup</mj-button>
+        <mj-text>{% blocktrans %}If the button doesn't work you can copy and paste the url to your browser.{% endblocktrans %}</mj-text>
+        <mj-text>{{ signup_url }}</mj-text>
+    {% endautoescape %}
+{% endblock content %}

@@ -32,7 +32,7 @@ export async function Header() {
         </div>
         <div className="xl:w-1/6 flex justify-end">
           {(await liberwiki.isAuthenticated()) ? (
-            <Link prefetch={true} href={{ pathname: '/account/profile' }}>
+            <Link prefetch={true} href={{ pathname: '/profile/details' }}>
               <Button
                 variant="ghost"
                 className="px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 gap-2"

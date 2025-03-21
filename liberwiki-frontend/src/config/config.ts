@@ -6,7 +6,8 @@ const RAW = Object.freeze({
   name: process.env.NEXT_PUBLIC_LIBERWIKI__NAME,
   domain: process.env.NEXT_PUBLIC_LIBERWIKI__DOMAIN,
   api: {
-    baseUrl: process.env.NEXT_PUBLIC_LIBERWIKI__API__BASE_URL,
+    baseURL: process.env.NEXT_PUBLIC_LIBERWIKI__API__BASE_URL,
+    authBaseURL: process.env.NEXT_PUBLIC_LIBERWIKI__API__AUTH_BASE_URL,
   },
   language: process.env.NEXT_PUBLIC_LIBERWIKI__LANGUAGE,
   devtools: {
@@ -31,12 +32,15 @@ export const config = Object.freeze({
   debug: booleanConfig({ name: 'debug', value: RAW.debug, default: false }),
   name: stringConfig({ name: 'name', value: RAW.name }),
   domain: stringConfig({ name: 'domain', value: RAW.domain }),
+  url: `https://${stringConfig({ name: 'domain', value: RAW.domain })}`,
   githubLink: stringConfig({ name: 'githubLink', value: RAW.githubLink, default: '' }),
   api: {
-    baseURL: stringConfig({ name: 'api.baseURL', value: RAW.api.baseUrl }),
-    bearerTokenCookieName: 'BearerToken',
-    bearerTokenHeaderName: 'Authorization',
-    bearerTokenPrefix: 'Token',
+    baseURL: stringConfig({ name: 'api.baseURL', value: RAW.api.baseURL }),
+    authBaseURL: stringConfig({ name: 'api.authBaseURL', value: RAW.api.authBaseURL }),
+    sessionCookieName: 'sessionid',
+    sessionTokenHeaderName: 'X-Session-Token',
+    csrfTokenCookieName: 'csrftoken',
+    csrfTokenHeaderName: 'X-CSRFToken',
   },
   ux: {
     defaultTitlePageSize: 50,

@@ -1,0 +1,5 @@
+{% extends "account/email/base_notification/base_notification.txt" %}
+
+{% block notification_message %}
+    {% blocktrans %}Your email has been confirmed.{% endblocktrans %}
+{% endblock notification_message %}

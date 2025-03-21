@@ -1,13 +1,13 @@
 {
-  "entryHasBenDeleted": "Girdi {{entryId}} silindi.",
-  "linkCopiedToClipboard": "Girdi bağlantısı panoya kopyalandı.",
   "delete": "Sil",
   "edit": "Düzenle",
-  "goToEntry": "Girdi sayfasına git",
-  "entryEditError": "Girdinizi güncellerken bir hata oluştu.",
-  "titleCreationError": "Başlığı oluştururken bir hata oluştu.",
-  "yourEntryHasBeenCreated": "Girdiniz oluşturuldu.",
   "entryCreationError": "Girdinizi oluştururken bir hata oluştu.",
+  "entryEditError": "Girdinizi güncellerken bir hata oluştu.",
+  "entryHasBenDeleted": "Girdi {{entryId}} silindi.",
+  "goToEntry": "Girdi sayfasına git",
+  "linkCopiedToClipboard": "Girdi bağlantısı panoya kopyalandı.",
+  "titleCreationError": "Başlığı oluştururken bir hata oluştu.",
   "yourDraftEntryHasBeenCreated": "Girdi taslağınız oluşturuldu.",
-  "yourDraftEntryHasBeenDeleted": "Girdi taslağı {{entryId}} silindi."
+  "yourDraftEntryHasBeenDeleted": "Girdi taslağı {{entryId}} silindi.",
+  "yourEntryHasBeenCreated": "Girdiniz oluşturuldu."
 }

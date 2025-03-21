@@ -6,6 +6,7 @@ import type { InitOptions } from 'i18next'
 
 export const languages = ['en', 'tr'] as const
 export const namespaces = [
+  'auth',
   'common',
   'editor',
   'login',

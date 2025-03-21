@@ -47,6 +47,7 @@
     "@radix-ui/react-toggle-group": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.2",
     "@sentry/nextjs": "^8.35.0",
+    "@svgr/webpack": "^8.1.0",
     "@tiptap/extension-character-count": "^2.7.1",
     "@tiptap/extension-code-block-lowlight": "^2.7.1",
     "@tiptap/extension-color": "^2.7.1",

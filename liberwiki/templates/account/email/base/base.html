@@ -1,0 +1,26 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="Times, serif" color="rgb(161, 161, 170)" />
+      <mj-text font-size="16px" line-height="150%"/>
+      <mj-button background-color="rgb(9,9,11)" color="rgb(250, 250, 250)" font-size="16px" padding="15px 30px" border="1px solid rgb(39, 39, 42) " border-radius="6px"/>
+    </mj-attributes>
+  </mj-head>
+
+  <mj-body background-color="rgb(9,9,11)">
+    <mj-section background-color="rgb(9,9,11)" padding="20px">
+      <mj-column>
+        <mj-text font-size="24px" color="rgb(250,250,250)" align="center">
+          {{ site_name }}
+        </mj-text>
+        <mj-divider border-color="rgb(39, 39, 42)" />
+        {% block content %}
+        {% endblock %}
+        <mj-text>
+            {% blocktrans %}Thank you for using {{ site_name }}{% endblocktrans %}, <br />
+            {% blocktrans %}The {{ site_name_short }} Team{% endblocktrans %}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

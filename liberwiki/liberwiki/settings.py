@@ -7,6 +7,7 @@ import itertools
 from pathlib import Path
 
 import sentry_sdk
+from corsheaders.defaults import default_headers
 from django.utils.translation import gettext_lazy as _
 
 from liberwiki.config import CONFIG as config  # Django thinks config is a settings if it is all caps  # NOQA
@@ -16,6 +17,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config.SECRET_KEY
 DEBUG = config.DEBUG
 ALLOWED_HOSTS = config.ALLOWED_HOSTS
+PROTOCOL = "https" if not DEBUG else "http"
 
 # Application definition
 INSTALLED_APPS = [
@@ -41,6 +43,16 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "allauth",
+    "allauth.headless",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.microsoft",
+    "allauth.socialaccount.providers.apple",
+    "allauth.socialaccount.providers.github",
+    "allauth.socialaccount.providers.discord",
+    "allauth.socialaccount.providers.reddit",
 ]
 
 MIDDLEWARE = [
@@ -48,29 +60,33 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "pghistory.middleware.HistoryMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
+    # "django.contrib.sessions.middleware.SessionMiddleware",
+    "core.middleware.session.CookieORHeaderSessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django_hosts.middleware.HostsResponseMiddleware",
 ]
 
-APEX_DOMAIN = config.HOSTS.DOMAIN
+DOMAIN = PARENT_HOST = config.HOSTS.DOMAIN
 ADMIN_SUBDOMAIN = config.HOSTS.ADMIN_SUBDOMAIN
 API_SUBDOMAIN = config.HOSTS.API_SUBDOMAIN
+AUTH_SUBDOMAIN = config.HOSTS.AUTH_SUBDOMAIN
 
 ROOT_URLCONF = "liberwiki.urls.root"
 ROOT_HOSTCONF = "liberwiki.hosts"
 DEFAULT_HOST = API_SUBDOMAIN
-PARENT_HOST = config.HOSTS.DOMAIN
+SESSION_COOKIE_DOMAIN = f".{DOMAIN}"
+CSRF_COOKIE_DOMAIN = f".{DOMAIN}"
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -78,6 +94,9 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+            ],
+            "builtins": [
+                "django.templatetags.i18n",
             ],
         },
     },
@@ -100,19 +119,61 @@ DATABASES = {
 # AUTH
 AUTH_USER_MODEL = "core.User"
 
-AUTHENTICATION_BACKENDS = ("core.backends.auth.UsernameOREmailModelBackend",)
+ACCOUNT_ADAPTER = "core.backends.allauth.LiberWikiAllauthAccountAdapter"
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = False
+ACCOUNT_EMAIL_VERIFICATION_BY_CODE_ENABLED = False
+
+SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
+SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
+SOCIALACCOUNT_STORE_TOKENS = True
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+HEADLESS_ONLY = True
+HEADLESS_FRONTEND_URLS = {
+    "account_confirm_email": f"{PROTOCOL}://{DOMAIN}/auth/verify-email/{{key}}",
+    "account_signup": f"{PROTOCOL}://{DOMAIN}/auth/signup",
+    "account_reset_password": f"{PROTOCOL}://{DOMAIN}/auth/password-reset",
+    "account_reset_password_from_key": f"{PROTOCOL}://{DOMAIN}/auth/password-reset/{{key}}",
+    "socialaccount_login_error": f"{PROTOCOL}://{DOMAIN}/auth/provider-error",
+}
+
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "APP": {
+            "client_id": config.OAUTH.GOOGLE.CLIENT_ID,
+            "secret": config.OAUTH.GOOGLE.CLIENT_SECRET,
+        },
+        "SCOPE": ["profile", "email"],
+        "AUTH_PARAMS": {
+            "access_type": "offline",
+        },
+        "OAUTH_PKCE_ENABLED": True,
+    },
+    "microsoft": {
+        "APPS": [
+            {
+                "client_id": config.OAUTH.MICROSOFT.CLIENT_ID,
+                "secret": config.OAUTH.MICROSOFT.CLIENT_SECRET,
+                "settings": {
+                    "tenant": "consumers",
+                },
+            },
+        ],
+    },
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-        "OPTIONS": {"min_length": 12},
-    },
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator", "OPTIONS": {"min_length": 12}},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
-
-AUTH_VERIFY_EMAIL_URL_TEMPLATE = "https://{domain}/auth/signup/verify-email/{uidb64}/{token}/"
 
 # Internationalization
 LANGUAGE_CODE = config.LANGUAGE
@@ -137,8 +198,6 @@ STORAGES = {
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-X_FRAME_OPTIONS = "SAMEORIGIN"
 
 REST_FRAMEWORK = {
     "PAGE_SIZE": 100,
@@ -167,24 +226,40 @@ SPECTACULAR_SETTINGS = {
     "COMPONENT_SPLIT_REQUEST": True,
 }
 
-http_https = lambda domain: [f"http://{domain}", f"https://{domain}"]  # NOQA
-
-DOMAINS = [
-    APEX_DOMAIN,
-    f"{ADMIN_SUBDOMAIN}.{APEX_DOMAIN}",
-    f"{API_SUBDOMAIN}.{APEX_DOMAIN}",
-]
-
-CORS_ALLOWED_ORIGINS = list(itertools.chain.from_iterable(map(http_https, DOMAINS)))
-CSRF_TRUSTED_ORIGINS = list(itertools.chain.from_iterable(map(http_https, DOMAINS)))
-
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = config.EMAIL.SMTP.HOST
 EMAIL_PORT = config.EMAIL.SMTP.PORT.TSL
 EMAIL_HOST_USER = config.EMAIL.SMTP.USER
 EMAIL_HOST_PASSWORD = config.EMAIL.SMTP.PASSWORD
 EMAIL_USE_TSL = True
-DEFAULT_VERIFICATION_FROM_EMAIL = config.EMAIL.DEFAULT_VERIFICATION_FROM_EMAIL
+DEFAULT_AUTH_FROM_EMAIL = config.EMAIL.DEFAULT_AUTH_FROM_EMAIL
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_HTTPONLY = True
+SESSION_HEADER_NAME = "X-Session-Token"
+
+X_FRAME_OPTIONS = "SAMEORIGIN"
+
+http_https = lambda domain: [f"http://{domain}", f"https://{domain}"]  # NOQA
+
+DOMAINS = [
+    DOMAIN,
+    f"{ADMIN_SUBDOMAIN}.{DOMAIN}",
+    f"{API_SUBDOMAIN}.{DOMAIN}",
+    f"{AUTH_SUBDOMAIN}.{DOMAIN}",
+]
+
+CORS_ALLOWED_ORIGINS = list(itertools.chain.from_iterable(map(http_https, DOMAINS)))
+CSRF_TRUSTED_ORIGINS = list(itertools.chain.from_iterable(map(http_https, DOMAINS)))
+CORS_ALLOW_HEADERS = default_headers + (SESSION_HEADER_NAME,)
+CORS_ALLOW_CREDENTIALS = True
+
+# CORE APP BEHAVIOR SETTINGS
+TITLE_NAME_ALLOWED_EXTRA_CHARS = config.APP.TITLE_NAME_ALLOWED_EXTRA_CHARS
+TITLE_SLUG_CHARACTERS_LANGUAGE_MAP = config.APP.TITLE_SLUG_CHARACTERS_LANGUAGE_MAP
+# Format of the above setting is lang-specific-char:url-friendly-char,lang-specific-char2:url-friendly-char2
+# Example: ı:i,ş:s,ğ:g
 
 if not DEBUG:
     sentry_sdk.init(
@@ -201,12 +276,15 @@ if not DEBUG:
         debug=config.DEBUG,
     )
 
-# CORE APP BEHAVIOR SETTINGS
-TITLE_NAME_ALLOWED_EXTRA_CHARS = config.APP.TITLE_NAME_ALLOWED_EXTRA_CHARS
-TITLE_SLUG_CHARACTERS_LANGUAGE_MAP = config.APP.TITLE_SLUG_CHARACTERS_LANGUAGE_MAP
-# Format of the above setting is lang-specific-char:url-friendly-char,lang-specific-char2:url-friendly-char2
-# Example: ı:i,ş:s,ğ:g
-
 if DEBUG:
-    CORS_ALLOW_ALL_ORIGINS = True
+    # Some stuff here are hardcoded, like dev ports.
+    # This would break for instance when the ports change for development servers
+    # TODO: handle these better
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+    CSRF_COOKIE_SECURE = False
+    SESSION_COOKIE_SECURE = False
+    PORTS = ["80", "3000", "8000", "443"]
+    ORIGINS_HTTP = [f"http://{d}:{p}" for d in DOMAINS for p in PORTS] + [f"http://{d}" for d in DOMAINS]
+    ORIGINS_HTTPS = [f"https://{d}:{p}" for d in DOMAINS for p in PORTS] + [f"https://{d}" for d in DOMAINS]
+    CORS_ALLOWED_ORIGINS = ORIGINS_HTTP + ORIGINS_HTTPS
+    CSRF_TRUSTED_ORIGINS = ORIGINS_HTTP + ORIGINS_HTTPS

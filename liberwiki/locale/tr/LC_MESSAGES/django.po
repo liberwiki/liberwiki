@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-11 22:58+0000\n"
+"POT-Creation-Date: 2025-03-21 04:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,7 +33,7 @@ msgid "Personal info"
 msgstr "Kişisel Bilgiler"
 
 msgid "Metrics"
-msgstr ""
+msgstr "Metikler"
 
 msgid "Permissions"
 msgstr "İzinler"
@@ -184,60 +184,11 @@ msgstr "Kullanıcı"
 msgid "Users"
 msgstr "Kullanıcılar"
 
-#, python-format
-msgid "Hello %(name)s"
-msgstr "Merhaba %(name)s"
-
-#, python-format
-msgid "Thank you for your interest in joining %(site_name)s! To complete your registration, please confirm your email by clicking the link below. This will take you to the final steps of setting up your account."
-msgstr "%(site_name)s'ye katılmak için ilginiz için teşekkür ederiz! Kaydınızı tamamlamak için lütfen aşağıdaki bağlantıya tıklayarak emailinizi doğrulayın. Bu, hesabınızı oluşturmanın son adımlarına götürecektir."
-
-msgid "Confirm Registration"
-msgstr "Üyeliğinizi Onaylayın"
-
-#, python-format
-msgid "If you didn't sign up for an account on %(site_name)s, you can use the same link to safely remove your email from our database or simply ignore this email."
-msgstr "%(site_name)s'de bir hesap oluşturmadıysanız, aynı bağlantıyı kullanarak emailinizi veritabanımızdan güvenli bir şekilde kaldırabilir veya bu emaili yoksayabilirsiniz."
-
-msgid "Welcome to a world of shared knowledge and insight!"
-msgstr "Bilgi ve sezginin paylaşıldığı bir dünyaya hoş geldiniz!"
-
-msgid "Best regards"
-msgstr "Saygılarımızla"
-
-#, python-format
-msgid "The %(site_name)s Team"
-msgstr "%(site_name)s Ekibi"
-
 msgid "English"
 msgstr "İngilizce"
 
 msgid "Turkish"
 msgstr "Türkçe"
-
-msgid "Email"
-msgstr "Email"
-
-msgid "Token"
-msgstr "Token"
-
-msgid "Invalid email or password"
-msgstr "Yanlış email ya da şifre"
-
-msgid "User account is not activated, please verify your email"
-msgstr "Kullanıcı hesabı aktif değil, lütfen emailinizi doğrulayın"
-
-msgid "Passwords do not match"
-msgstr "Şifreler uyuşmuyor"
-
-msgid "Invalid or previously used invitation code"
-msgstr "Yanlış ya da daha önce kullanılmış davetiye kodu"
-
-msgid "Verify your email address"
-msgstr "Email adresinizi doğrulayın"
-
-msgid "Invalid user or token"
-msgstr "Yanlış kullanıcı ya da token"
 
 msgid "User is not the owner of the object"
 msgstr "Kullanıcı bu objenin sahibi değil"
@@ -257,3 +208,158 @@ msgstr "Kullanıcının rolü en az {role} olmalı"
 #, python-brace-format
 msgid "{method_name} is not allowed for this endpoint"
 msgstr "{method_name} bu endpoint için geçerli değil"
+
+msgid "You are receiving this email because you or someone else tried to signup for an account using email address:"
+msgstr "Bu emaili alıyorsunuz çünkü siz veya başka biri bu email adresiyle bir hesap oluşturmayı denedi:"
+
+msgid "However, an account using that email address already exists. In case you have forgotten about this, please use the password forgotten procedure to recover your account:"
+msgstr "Ancak bu email adresiyle zaten bir hesap mevcut. Eğer unuttuysanız, hesabınızı kurtarmak için şifre sıfırlama sürecini kullanın:"
+
+msgid "Reset Password"
+msgstr "Şifreyi Sıfırla"
+
+msgid "If the button doesn't work you can copy and paste the url to your browser."
+msgstr "Eğer buton çalışmazsa, URL'yi tarayıcınıza yapıştırabilirsiniz."
+
+msgid "However, an account using that email address already exists.  In case you have forgotten about this, please use the password forgotten procedure to recover your account:"
+msgstr "Ancak bu email adresiyle zaten bir hesap mevcut. Eğer unuttuysanız, hesabınızı kurtarmak için şifre sıfırlama sürecini kullanın:"
+
+msgid "Account Already Exists"
+msgstr "Hesap Zaten Var"
+
+#, python-format
+msgid "Thank you for using %(site_name)s"
+msgstr "%(site_name)s kullandığınız için teşekkür ederiz"
+
+#, fuzzy, python-format
+#| msgid "The %(site_name)s Team"
+msgid "The %(site_name_short)s Team"
+msgstr "%(site_name_short)s Ekibi"
+
+msgid "You are receiving this mail because the following change was made to your account:"
+msgstr "Bu maili alıyorsunuz çünkü hesabınızda aşağıdaki değişiklik yapıldı:"
+
+msgid "If you do not recognize this change then please take proper security precautions immediately. The change to your account originates from: "
+msgstr "Bu değişikliği tanımıyorsanız lütfen hemen gerekli güvenlik önlemlerini alın. Değişiklik şuradan yapılmıştır:"
+
+#, python-format
+msgid "- IP address: %(ip)s"
+msgstr "- IP adresi: %(ip)s"
+
+#, python-format
+msgid "- Browser: %(user_agent)s"
+msgstr "- Tarayıcı: %(user_agent)s"
+
+#, python-format
+msgid "- Date: %(timestamp)s"
+msgstr "- Tarih: %(timestamp)s"
+
+msgid "If you do not recognize this change then please take proper security precautions immediately. The change to your account originates from:"
+msgstr "Bu değişikliği tanımıyorsanız lütfen hemen gerekli güvenlik önlemlerini alın. Değişiklik şuradan yapılmıştır:"
+
+#, python-format
+msgid "Your email has been changed from %(from_email)s to %(to_email)s."
+msgstr "Email adresiniz %(from_email)s iken %(to_email)s olarak değiştirildi."
+
+msgid "Email Changed"
+msgstr "Email Değiştirildi"
+
+msgid "Your email has been confirmed."
+msgstr "Email adresiniz onaylandı."
+
+#, fuzzy
+#| msgid "Confirm Registration"
+msgid "Email Confirmation"
+msgstr "Üyeliğinizi Onaylayın"
+
+#, python-format
+msgid "You're receiving this email because user %(user_display)s has given your email address to register an account on %(site_url)s."
+msgstr "%(user_display)s adlı kullanıcı bu email adresiyle %(site_url)s üzerinde bir hesap kaydetmeye çalıştı."
+
+msgid "Your email verification code is listed below. Please enter it in your open browser window."
+msgstr "Email doğrulama kodunuz aşağıdadır. Lütfen açık tarayıcı penceresine girin."
+
+msgid "To confirm this is correct, click the button below."
+msgstr "Doğruluğunu onaylamak için aşağıdaki butona tıklayın."
+
+#, fuzzy
+#| msgid "Verify your email address"
+msgid "Confirm Your email"
+msgstr "Email adresinizi doğrulayın"
+
+#, python-format
+msgid "To confirm this is correct, go to %(activate_url)s"
+msgstr "Doğruluğu onaylamak için %(activate_url)s adresine gidin"
+
+#, fuzzy
+#| msgid "Verify your email address"
+msgid "Please Confirm Your Email Address"
+msgstr "Email adresinizi doğrulayın"
+
+#, python-format
+msgid "Email address %(deleted_email)s has been removed from your account."
+msgstr "%(deleted_email)s email adresi hesabınızdan silindi."
+
+msgid "Email Removed"
+msgstr "Email Silindi"
+
+msgid "Your sign-in code is listed below. Please enter it in your open browser window."
+msgstr "Giriş kodunuz aşağıda, lütfen açık penrecedeki tarayıcıya girin."
+
+msgid "This mail can be safely ignored if you did not initiate this action."
+msgstr "Bunu siz başlatmadıysanız güvenli bir şekilde bu emaili gözardı edebilirsiniz."
+
+msgid "Sign-In Code"
+msgstr "Giriş Kodu"
+
+msgid "Your password has been changed."
+msgstr "Şifreniz değiştirildi"
+
+msgid "Password Changed"
+msgstr "Şifre Değişti"
+
+msgid "Your password has been reset."
+msgstr "Şifreniz sıfırlandı."
+
+msgid "Password Reset"
+msgstr "Şifre Sıfırlandı"
+
+msgid "You're receiving this email because you or someone else has requested a password reset for your user account."
+msgstr "Bu emaili alıyorsunuz çünkü siz veya başka biri hesabınız için şifre sıfırlama talebinde bulundu."
+
+msgid "It can be safely ignored if you did not request a password reset."
+msgstr "Eğer bu işlemi siz yapmadıysanız güvenle göz ardı edebilirsiniz."
+
+msgid "Click the button below to reset your password."
+msgstr "Şifrenizi sıfırlamak için aşağıdaki butona tıklayın."
+
+#, python-format
+msgid "In case you forgot, your username is %(username)s."
+msgstr "Unutmanız durumunda kullanıcı adınız: %(username)s."
+
+msgid "You're receiving this email because you or someone else has requested a password reset for your user account. It can be safely ignored if you did not request a password reset. Click the link below to reset your password."
+msgstr "Bu emaili alıyorsunuz çünkü siz veya başka biri hesabınız için şifre sıfırlama talebinde bulundu. Bu isteği siz yapmadıysanız güvenle göz ardı edebilirsiniz. Şifrenizi sıfırlamak için aşağıdaki bağlantıya tıklayın."
+
+#, fuzzy
+#| msgid "Passwords do not match"
+msgid "Password Reset Email"
+msgstr "Şifreler uyuşmuyor"
+
+msgid "Your password has been set."
+msgstr "Şifreniz ayarlandı."
+
+msgid "Password Set"
+msgstr "Şifre Ayarlandı"
+
+#, python-format
+msgid "You are receiving this email because you, or someone else, tried to access an account with email %(email)s. However, we do not have any record of such an account in our database."
+msgstr "Bu emaili alıyorsunuz çünkü siz veya başka biri %(email)s adresiyle bir hesaba erişmeye çalıştı. Ancak veritabanımızda böyle bir hesap bulunmamaktadır."
+
+msgid "If it was you, you can sign up for an account using the button below."
+msgstr "Eğer bu sizseniz, aşağıdaki butonu kullanarak bir hesap oluşturabilirsiniz."
+
+msgid "If it was you, you can sign up for an account using the link below."
+msgstr "Eğer bu sizseniz, aşağıdaki bağlantıyı kullanarak bir hesap oluşturabilirsiniz."
+
+msgid "Unknown Account"
+msgstr "Bilinmeyen Hesap"

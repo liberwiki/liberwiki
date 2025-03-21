@@ -4,11 +4,27 @@ const require = createRequire(import.meta.url);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // For forbidden interrupts
   experimental: {
+    turbo: {
+      rules:  {
+        '*.svg': {
+          loaders: ['@svgr/webpack'],
+          as: "*.js"
+        },
+      }
+    },
+    // For forbidden interrupts
     authInterrupts: true,
     optimizePackageImports: ["lodash"]
   },
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.svg$/i,
+      use: ['@svgr/webpack'],
+    });
+
+    return config
+  }
 };
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({

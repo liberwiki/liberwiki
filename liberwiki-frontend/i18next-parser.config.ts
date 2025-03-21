@@ -8,6 +8,7 @@ const i18nextParserConfig = {
   react: {
     useSuspense: false,
   },
+  sort: true,
   createOldCatalogs: false,
 }
 
