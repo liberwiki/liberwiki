@@ -53,6 +53,7 @@ export const config = Object.freeze({
     csrfTokenCookieName: _authCookiePrefix ? `${_authCookiePrefix}_csrftoken` : 'csrftoken',
     sessionTokenHeaderName: _authHeaderPrefix ? `X-${_authHeaderPrefix}-Session-Token` : 'X-Session-Token',
     csrfTokenHeaderName: _authHeaderPrefix ? `X-${_authHeaderPrefix}-CSRFToken` : 'X-CSRFToken',
+    csrfTokenPostKey: 'csrfmiddlewaretoken',
   },
   ux: {
     defaultTitlePageSize: 50,
