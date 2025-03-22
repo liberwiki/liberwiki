@@ -58,6 +58,8 @@ CONFIG = config(
         "APP": {
             "TITLE_NAME_ALLOWED_EXTRA_CHARS": string(),
             "TITLE_SLUG_CHARACTERS_LANGUAGE_MAP": string(),
+            "AUTH_COOKIE_AND_HEADER_PREFIX": string(missing_default=None),
+            "AUTH_COOKIE_DOMAIN": string(missing_default=None),
         },
     },
     prefix="LIBERWIKI",

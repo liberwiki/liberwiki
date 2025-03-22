@@ -46,11 +46,13 @@ export async function Login() {
           </div>
         </CardContent>
       </Card>
-      <div className="flex justify-center items-center gap-2">
-        <Link href={{ pathname: '/auth/signup' }} className="hover:underline">
-          {t('common:signup')}
-        </Link>
-      </div>
+      {!config.membersOnly && (
+        <div className="flex justify-center items-center gap-2">
+          <Link href={{ pathname: '/auth/signup' }} className="hover:underline">
+            {t('common:signup')}
+          </Link>
+        </div>
+      )}
     </>
   )
 }

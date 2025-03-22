@@ -26,8 +26,8 @@ export function Editor({
 }: {
   content?: object
   readonly: boolean
-  onSubmit?: (content: object, draft?: boolean) => void
-  onDismiss?: () => void
+  onSubmit?: (content: object, draft?: boolean) => Promise<void>
+  onDismiss?: () => Promise<void>
   draftable?: boolean
 }) {
   const { t } = useClientTranslation(['common', 'editor'])
@@ -59,22 +59,24 @@ export function Editor({
 
   async function handleSubmit() {
     if (editor) {
-      onSubmit?.(editor.getJSON())
+      await onSubmit?.(editor.getJSON())
       editor.commands.clearContent(true)
+      router.refresh()
     }
   }
 
   async function handleDraftSubmit() {
     if (editor) {
-      onSubmit?.(editor.getJSON(), true)
+      await onSubmit?.(editor.getJSON(), true)
       router.refresh()
     }
   }
 
   async function handleDeleteDraft() {
     if (editor) {
-      onDismiss?.()
+      await onDismiss?.()
       editor.commands.clearContent(true)
+      router.refresh()
     }
   }
 

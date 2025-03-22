@@ -1,5 +1,7 @@
 import { booleanConfig, numberConfig, stringConfig } from '~/src/config/parsers'
 
+import _ from 'lodash'
+
 const RAW = Object.freeze({
   membersOnly: process.env.NEXT_PUBLIC_LIBERWIKI__MEMBERS_ONLY,
   debug: process.env.NEXT_PUBLIC_LIBERWIKI__DEBUG,
@@ -8,6 +10,7 @@ const RAW = Object.freeze({
   api: {
     baseURL: process.env.NEXT_PUBLIC_LIBERWIKI__API__BASE_URL,
     authBaseURL: process.env.NEXT_PUBLIC_LIBERWIKI__API__AUTH_BASE_URL,
+    authCookieAndHeaderPrefix: process.env.NEXT_PUBLIC_LIBERWIKI__APP__AUTH_COOKIE_AND_HEADER_PREFIX,
   },
   language: process.env.NEXT_PUBLIC_LIBERWIKI__LANGUAGE,
   devtools: {
@@ -27,6 +30,15 @@ const RAW = Object.freeze({
   githubLink: process.env.NEXT_PUBLIC_LIBERWIKI__GITHUB_LINK,
 })
 
+const __authCookieAndHeaderPrefix = stringConfig({
+  name: 'authCookieAndHeaderPrefix',
+  value: RAW.api.authCookieAndHeaderPrefix,
+  default: '',
+})
+
+const _authCookiePrefix = _.lowerCase(__authCookieAndHeaderPrefix)
+const _authHeaderPrefix = _.capitalize(__authCookieAndHeaderPrefix)
+
 export const config = Object.freeze({
   membersOnly: booleanConfig({ name: 'membersOnly', value: RAW.membersOnly, default: false }),
   debug: booleanConfig({ name: 'debug', value: RAW.debug, default: false }),
@@ -37,10 +49,10 @@ export const config = Object.freeze({
   api: {
     baseURL: stringConfig({ name: 'api.baseURL', value: RAW.api.baseURL }),
     authBaseURL: stringConfig({ name: 'api.authBaseURL', value: RAW.api.authBaseURL }),
-    sessionCookieName: 'sessionid',
-    sessionTokenHeaderName: 'X-Session-Token',
-    csrfTokenCookieName: 'csrftoken',
-    csrfTokenHeaderName: 'X-CSRFToken',
+    sessionCookieName: _authCookiePrefix ? `${_authCookiePrefix}_sessionid` : 'sessionid',
+    csrfTokenCookieName: _authCookiePrefix ? `${_authCookiePrefix}_csrftoken` : 'csrftoken',
+    sessionTokenHeaderName: _authHeaderPrefix ? `X-${_authHeaderPrefix}-Session-Token` : 'X-Session-Token',
+    csrfTokenHeaderName: _authHeaderPrefix ? `X-${_authHeaderPrefix}-CSRFToken` : 'X-CSRFToken',
   },
   ux: {
     defaultTitlePageSize: 50,

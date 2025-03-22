@@ -13,8 +13,11 @@ export const config = {
 const middlewares: ((request: NextRequest) => Promise<NextResponse | void>)[] = [
   HygieneMiddlewares.queryParamHygiene,
   AuthMiddlewares.redirectAuthenticatedBackTo(/^\/auth\//, '/'),
-  AuthMiddlewares.membersOnlyMode(/^(?!\/lockdown$|\/auth\/login$).*$/, '/lockdown'),
-  AuthMiddlewares.anonymousNotAllowed(/^\/account\//, '/'),
+  AuthMiddlewares.membersOnlyMode(
+    /^(?!\/lockdown$|\/auth(\/forgot-password|\/login|\/password-reset|\/password-reset-email-sent|\/verify-email)$).*$/,
+    '/lockdown'
+  ),
+  AuthMiddlewares.anonymousNotAllowed(/^\/profile\//, '/'),
 ]
 
 export async function middleware(request: NextRequest) {
