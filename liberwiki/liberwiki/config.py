@@ -60,6 +60,7 @@ CONFIG = config(
             "TITLE_SLUG_CHARACTERS_LANGUAGE_MAP": string(),
             "AUTH_COOKIE_AND_HEADER_PREFIX": string(missing_default=None),
             "AUTH_COOKIE_DOMAIN": string(missing_default=None),
+            "OAUTH2_REDIRECT_DOMAIN_OVERRIDE": string(missing_default=None),
         },
     },
     prefix="LIBERWIKI",

@@ -11,10 +11,12 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-from liberwiki.monkeypatches import monkeypatch_drf_spectacular
+from liberwiki.monkeypatches import monkeypatch_allauth_oauth2_client, monkeypatch_drf_spectacular
 
 monkeypatch_drf_spectacular()
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "liberwiki.settings")
 
 application = get_wsgi_application()
+
+monkeypatch_allauth_oauth2_client()  # Requires apps to be loaded
