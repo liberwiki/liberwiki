@@ -1,4 +1,8 @@
 {
+  "completedSignupSuccessfully": "Completed signup successfully",
+  "completeSignup": "Complete Signup",
+  "completeSignupDescription": "Please fill out the following information to complete your signup",
+  "completeSignupFailed": "Complete signup failed",
   "connect": "Connect",
   "connections": "Connections",
   "connectionsDescription": "All your connected accounts for this account",
@@ -24,8 +28,10 @@
   "passwordSetSuccessfully": "Password set successfully",
   "resendVerificationEmail": "Resend Verification Email",
   "setANewPassword": "Set a new password",
+  "setANewUsername": "Set a new username",
   "setPassword": "Set Password",
   "titleCount": "Title Count",
+  "username": "Username",
   "userProfile": "User Profile",
   "userProfileDescription": "Your account information and statistics",
   "youDontHaveAnyEmailAddresses": "You don't have any email addresses"

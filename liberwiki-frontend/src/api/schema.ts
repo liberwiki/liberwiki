@@ -4,70 +4,6 @@
  */
 
 export interface paths {
-  '/v0/auth/signup/': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Signup
-     * @description Signup with an invitation code
-     */
-    post: operations['auth_signup_create']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/v0/auth/tokens/': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Obtain Auth Token
-     * @description Get your active auth token
-     */
-    post: operations['auth_tokens_create']
-    /**
-     * Delete Auth Token
-     * @description Delete auth token, logging out of all devices
-     */
-    delete: operations['auth_tokens_destroy']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/v0/auth/verify-email/': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Verify Email
-     * @description Verify email address
-     */
-    post: operations['auth_verify_email_create']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/v0/entries/': {
     parameters: {
       query?: never
@@ -433,23 +369,30 @@ export interface paths {
     patch: operations['users_me_partial_update']
     trace?: never
   }
+  '/v0/users/me/complete-signup/': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Complete Signup
+     * @description Complete the signup process for the current user
+     */
+    post: operations['users_me_complete_signup_create']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
 }
 export type webhooks = Record<string, never>
 export interface components {
   schemas: {
-    AuthToken: {
-      readonly token: string
-    }
-    AuthTokenError: {
-      readonly email: string[]
-      readonly password: string[]
-      readonly token: string[]
-      readonly non_field_errors: string[]
-    }
-    AuthTokenRequest: {
-      email: string
-      password: string
-    }
     /** @description Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
      *     read only.
      *
@@ -841,30 +784,6 @@ export interface components {
      * @enum {string}
      */
     RoleEnum: 'READER' | 'NEW_RECRUIT' | 'CONTRIBUTOR' | 'TRUSTED'
-    SignupError: {
-      readonly email: string[]
-      readonly username: string[]
-      readonly first_name: string[]
-      readonly last_name: string[]
-      readonly password: string[]
-      readonly password_confirmation: string[]
-      readonly invitation_code: string[]
-      readonly non_field_errors: string[]
-    }
-    SignupRequest: {
-      /**
-       * Email address
-       * Format: email
-       */
-      email: string
-      /** @description Required. 150 characters or fewer. Letters (lowercase), digits or hyphens only, can't start with digits or hyphens. */
-      username: string
-      first_name?: string
-      last_name?: string
-      password: string
-      password_confirmation: string
-      invitation_code?: string
-    }
     /** @description Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
      *     read only.
      *
@@ -1017,6 +936,40 @@ export interface components {
       readonly updated_at: string
       readonly title_count: number
       readonly entry_count: number
+      readonly signup_completed: string
+    }
+    UserCompleteSignupError: {
+      readonly username: string[]
+      readonly password: string[]
+      readonly non_field_errors: string[]
+    }
+    /** @description Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
+     *     read only.
+     *
+     *     GET /api/v1/people/5/
+     *     {
+     *         "id": 5,
+     *         "first_name": "John",
+     *         "last_name": "Doe",
+     *         "labels": [7]
+     *     }
+     *
+     *     GET /api/v1/people/5/?include=labels
+     *     {
+     *         "id": 5,
+     *         "first_name": "John",
+     *         "last_name": "Doe",
+     *         "labels": [
+     *             {
+     *                 "id": 7,
+     *                 "name": "label-name"
+     *             }
+     *         ]
+     *     } */
+    UserCompleteSignupRequest: {
+      /** @description Required. 150 characters or fewer. Letters (lowercase), digits or hyphens only, can't start with digits or hyphens. */
+      username: string
+      password: string
     }
     UserError: {
       readonly id: string[]
@@ -1032,6 +985,7 @@ export interface components {
       readonly updated_at: string[]
       readonly title_count: string[]
       readonly entry_count: string[]
+      readonly signup_completed: string[]
       readonly non_field_errors: string[]
     }
     /** @description Serializes the nested field, doesn't turn the serializer into read-only automatically(should it?) but it is
@@ -1061,15 +1015,6 @@ export interface components {
       first_name?: string
       last_name?: string
     }
-    VerifyEmailError: {
-      readonly token: string[]
-      readonly uidb64: string[]
-      readonly non_field_errors: string[]
-    }
-    VerifyEmailRequest: {
-      token: string
-      uidb64: string
-    }
     /**
      * @description * `UPVOTE` - Upvote
      *     * `DOWNVOTE` - Downvote
@@ -1085,129 +1030,6 @@ export interface components {
 }
 export type $defs = Record<string, never>
 export interface operations {
-  auth_signup_create: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['SignupRequest']
-        'application/x-www-form-urlencoded': components['schemas']['SignupRequest']
-        'multipart/form-data': components['schemas']['SignupRequest']
-      }
-    }
-    responses: {
-      /** @description No response body */
-      201: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['SignupError']
-        }
-      }
-    }
-  }
-  auth_tokens_create: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['AuthTokenRequest']
-        'application/x-www-form-urlencoded': components['schemas']['AuthTokenRequest']
-        'multipart/form-data': components['schemas']['AuthTokenRequest']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['AuthToken']
-        }
-      }
-      201: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['AuthToken']
-        }
-      }
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['AuthTokenError']
-        }
-      }
-    }
-  }
-  auth_tokens_destroy: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description No response body */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  auth_verify_email_create: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['VerifyEmailRequest']
-        'application/x-www-form-urlencoded': components['schemas']['VerifyEmailRequest']
-        'multipart/form-data': components['schemas']['VerifyEmailRequest']
-      }
-    }
-    responses: {
-      /** @description No response body */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['VerifyEmailError']
-        }
-      }
-    }
-  }
   entries_list: {
     parameters: {
       query?: {
@@ -2188,6 +2010,39 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['UserError']
+        }
+      }
+    }
+  }
+  users_me_complete_signup_create: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UserCompleteSignupRequest']
+        'application/x-www-form-urlencoded': components['schemas']['UserCompleteSignupRequest']
+        'multipart/form-data': components['schemas']['UserCompleteSignupRequest']
+      }
+    }
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['User']
+        }
+      }
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['UserCompleteSignupError']
         }
       }
     }

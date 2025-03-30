@@ -140,3 +140,22 @@ def all_combinations(options):
     Returns all possible combinations of the given options
     """
     return [list(comb) for r in range(1, len(options) + 1) for comb in combinations(options, r)]
+
+
+def check_required_keys(obj, conditions):
+    """
+    Check if the object has exactly one of the required key groups.
+    Used when a function can take multiple different sets of arguments but only some of them make sense together.
+    For instance, a function that can take either "a" or "b and c" but not both at the same time,
+    and at least one set is required.
+    """
+    matching_conditions = [
+        name
+        for name, keys in conditions.items()
+        if all(obj.get(key) is not None for key in keys) and all(key in keys or obj[key] is None for key in obj)
+    ]
+
+    if len(matching_conditions) != 1:
+        raise ValueError(f"Object keys do not match exactly one required condition. {conditions}")
+
+    return matching_conditions[0]

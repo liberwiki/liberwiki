@@ -1,5 +1,6 @@
 import { isDynamicServerError } from 'next/dist/client/components/hooks-server-context'
 
+import type { AuthApiSessionType } from '@/api/authApiTypes'
 import config from '@/config'
 import { checkRequiredKeys } from '@/lib/utils'
 
@@ -44,8 +45,8 @@ export class LiberWikiAuthAPI {
     return await this.fetch('/config')
   }
 
-  public async session() {
-    return await this.fetch('/auth/session')
+  public async session(): AuthApiSessionType {
+    return (await this.fetch('/auth/session')) as AuthApiSessionType
   }
 
   public async signup(data: { username: string; email: string; password: string }) {

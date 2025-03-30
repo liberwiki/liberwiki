@@ -1,9 +1,11 @@
 import string
+import uuid
 from datetime import timedelta
 
 from common.models import BaseModel
 from common.utils.db import get_longest_choice_length, track_model_history
 from common.validators import AllowedCharactersValidator
+from core.managers import UserManager
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models import Q
@@ -13,6 +15,10 @@ from django.utils.translation import gettext_lazy as _
 @track_model_history()
 class User(AbstractUser, BaseModel):
     REPR_STRING = "{self.username}"
+    UNUSABLE_USERNAME_PREFIX = "!"
+    SIGNUP_COMPLETED_FIELD = "signup_completed"
+
+    objects = UserManager()
 
     class Roles(models.TextChoices):
         READER = "READER", _("Reader")
@@ -76,6 +82,19 @@ class User(AbstractUser, BaseModel):
     def role_is_at_least(self, level: str):
         hierarchy = self.Roles.__all__[::-1]
         return hierarchy.index(self.role) <= hierarchy.index(level)
+
+    def set_unusable_username(self):
+        setattr(self, self.USERNAME_FIELD, f"{self.UNUSABLE_USERNAME_PREFIX}{uuid.uuid4()}")
+
+    @property
+    def has_unusable_username(self):
+        return self.username.startswith(self.UNUSABLE_USERNAME_PREFIX)
+
+    def save(self, *args, **kwargs):
+        if self.has_unusable_username:
+            with self.skip_field_validators("username"):
+                return super().save(*args, **kwargs)
+        return super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = _("User")

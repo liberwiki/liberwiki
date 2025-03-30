@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.db.models import Count, Q
 from django.utils.translation import gettext_lazy as _
+from more_admin_filters import BooleanAnnotationFilter
 
 
 @admin.register(User)
@@ -26,6 +27,7 @@ class UserAdmin(BaseModelAdmin, BaseUserAdmin):
         "is_active",
         "created_at",
         "updated_at",
+        BooleanAnnotationFilter.init(User.SIGNUP_COMPLETED_FIELD),
     ]
     readonly_fields = [
         "last_login",

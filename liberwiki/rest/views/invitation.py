@@ -1,7 +1,6 @@
 from core.models import Invitation, User
 from rest.serializers import InvitationSerializer
-from rest.utils.permissions import IsSuperUser, ReadOnly, user_property
-from rest_framework.permissions import IsAuthenticated
+from rest.utils.permissions import IsAuthenticatedANDSignupCompleted, IsSuperUser, ReadOnly, user_property
 
 from .base import BaseModelViewSet, django_to_drf_validation_error
 
@@ -10,7 +9,9 @@ class InvitationViewSet(BaseModelViewSet):
     endpoint = "invitations"
     model = Invitation
     serializer_class = InvitationSerializer
-    permission_classes = [IsSuperUser | (IsAuthenticated & user_property(User.can_invite_new_users)) | ReadOnly]
+    permission_classes = [
+        IsSuperUser | (IsAuthenticatedANDSignupCompleted & user_property(User.can_invite_new_users)) | ReadOnly
+    ]
 
     crud_extend_default_schema = {
         "create": {

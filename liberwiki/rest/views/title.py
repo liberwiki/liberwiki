@@ -4,10 +4,15 @@ from django_filters import NumberFilter
 from drf_spectacular.utils import extend_schema
 from rest.serializers import TitleSerializer
 from rest.utils.filters import make_filters
-from rest.utils.permissions import IsSuperUser, ReadOnly, prevent_actions, user_property
+from rest.utils.permissions import (
+    IsAuthenticatedANDSignupCompleted,
+    IsSuperUser,
+    ReadOnly,
+    prevent_actions,
+    user_property,
+)
 from rest.utils.schema_helpers import fake_serializer
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .base import BaseModelViewSet, django_to_drf_validation_error
@@ -20,7 +25,7 @@ class TitleViewSet(BaseModelViewSet):
     permission_classes = [
         IsSuperUser
         | (
-            IsAuthenticated
+            IsAuthenticatedANDSignupCompleted
             & (user_property(User.can_create_new_entry) | prevent_actions("create"))
             & prevent_actions("destroy")
         )
@@ -53,7 +58,7 @@ class TitleViewSet(BaseModelViewSet):
     def created_by_queryset():
         queryset = User.objects.annotate(
             entry_count=Count("entries", filter=Q(entries__is_draft=False)),
-            title_count=Count("titles"),
+            title_count=Count("titles", distinct=True),
         )
         return queryset
 
@@ -79,7 +84,7 @@ class TitleViewSet(BaseModelViewSet):
         methods=["POST"],
         url_path="bookmark",
         serializer_class=fake_serializer("BookmarkTitle", dont_initialize=True),
-        permission_classes=[IsAuthenticated],
+        permission_classes=[IsAuthenticatedANDSignupCompleted],
     )
     @django_to_drf_validation_error
     def bookmark(self, *args, **kwargs):
@@ -96,7 +101,7 @@ class TitleViewSet(BaseModelViewSet):
         methods=["POST"],
         url_path="unbookmark",
         serializer_class=fake_serializer("UnbookmarkTitle", dont_initialize=True),
-        permission_classes=[IsAuthenticated],
+        permission_classes=[IsAuthenticatedANDSignupCompleted],
     )
     @django_to_drf_validation_error
     def unbookmark(self, *args, **kwargs):

@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "administration.apps.AdministrationConfig",  # Needs to be after admin_interface + rest_framework.authtoken
     "django_filters",
+    "more_admin_filters",
     "drf_spectacular",
     "django_hosts",
     "django_extensions",
@@ -60,6 +61,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "pghistory.middleware.HistoryMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     # "django.contrib.sessions.middleware.SessionMiddleware",
     "core.middleware.session.CookieORHeaderSessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
@@ -119,11 +121,13 @@ DATABASES = {
 AUTH_USER_MODEL = "core.User"
 
 ACCOUNT_ADAPTER = "core.backends.allauth.LiberWikiAllauthAccountAdapter"
-ACCOUNT_EMAIL_REQUIRED = True
+SOCIALACCOUNT_ADAPTER = "core.backends.allauth.LiberWikiAllauthSocialAccountAdapter"
+HEADLESS_ADAPTER = "core.backends.allauth.LiberWikiAllauthHeadlessAccountAdapter"
+ACCOUNT_SIGNUP_FIELDS = ["email*", "username*"]
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = False
 ACCOUNT_EMAIL_VERIFICATION_BY_CODE_ENABLED = False
-ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+ACCOUNT_LOGIN_METHODS = ["username", "email"]
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = PROTOCOL
 
 

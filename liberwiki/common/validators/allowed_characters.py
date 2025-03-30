@@ -45,9 +45,10 @@ class AllowedCharactersValidator:
         Validate that the input contains only the allowed characters and starts/ends with allowed characters.
         """
         value = str(value)
-        self._raise_if_invalid(value[0] not in self.allowed_first, value)
-        self._raise_if_invalid(value[-1] not in self.allowed_last, value)
-        self._raise_if_invalid(any(char not in self.allowed_characters for char in value), value)
+        if value:
+            self._raise_if_invalid(value[0] not in self.allowed_first, value)
+            self._raise_if_invalid(value[-1] not in self.allowed_last, value)
+            self._raise_if_invalid(any(char not in self.allowed_characters for char in value), value)
 
     def __eq__(self, other):
         return (

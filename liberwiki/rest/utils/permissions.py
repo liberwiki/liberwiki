@@ -1,3 +1,6 @@
+from operator import attrgetter
+
+from common.utils.pyutils import check_required_keys
 from django.utils.translation import gettext as _
 from rest_framework.permissions import SAFE_METHODS, BasePermission
 
@@ -35,20 +38,27 @@ def prevent_actions(*actions):
     return type(name, bases, attrs)
 
 
-def user_property(property_):
+def user_property(property_=None, attribute=None):
+    # Either property_ or attribute should be supplied, and not both
+    check_required_keys(
+        dict(property_=property_, attribute=attribute),
+        dict(property=["property_"], attribute=["attribute"]),
+    )
+    getter = property_.fget if property_ else attrgetter(attribute)
+
     def has_permission(self, request, view):  # NOQA
-        has_perm = property_.fget(request.user)
+        has_perm = getter(request.user)
         if hasattr(has_perm, "reason"):
             self.message = has_perm.reason
         return has_perm
 
     def has_object_permission(self, request, view, obj):  # NOQA
-        has_perm = property_.fget(request.user)
+        has_perm = getter(request.user)
         if hasattr(has_perm, "reason"):
             self.message = has_perm.reason
         return has_perm
 
-    property_name = property_.fget.__name__
+    property_name = property_.fget.__name__ if property_ else attribute
     name = f"UserAttributePermission(property={property_name})"
     bases = (BasePermission,)
     attrs = dict(
@@ -89,3 +99,14 @@ class IsAnonymous(BasePermission):
 class IsSuperUser(BasePermission):
     def has_permission(self, request, view):
         return bool(request.user and request.user.is_superuser)
+
+
+class IsAuthenticatedANDSignupCompleted(BasePermission):
+    """
+    Custom permission to only allow access to authenticated users who have completed signup.
+    """
+
+    def has_permission(self, request, view):
+        # Check if the user is authenticated and has completed signup
+        user = request.user
+        return bool(user and user.is_authenticated and getattr(user, user.SIGNUP_COMPLETED_FIELD, False))

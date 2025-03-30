@@ -1,4 +1,8 @@
 {
+  "completedSignupSuccessfully": "Kayıt başarılı bir şekilde tamamlandı",
+  "completeSignup": "Kayıt Tamamla",
+  "completeSignupDescription": "Lütfen kayıt işlemini tamamlamak için aşağıdaki bilgileri doldurun",
+  "completeSignupFailed": "Kayıt tamamlama işlemi başarısız oldu",
   "connect": "Bağla",
   "connections": "Bağlantılar",
   "connectionsDescription": "Bu hesaba bağlı bütün bağlantılarınız",
@@ -24,8 +28,10 @@
   "passwordSetSuccessfully": "Şifre başarılı bir şekilde oluşturuldu",
   "resendVerificationEmail": "Doğrulama Emailini Tekrar Yolla",
   "setANewPassword": "Yeni şifre oluşturun",
+  "setANewUsername": "Yeni kullanıcı adı oluşturun",
   "setPassword": "Şifre Oluştur",
   "titleCount": "Başlık Sayısı",
+  "username": "Kullanıcı Adı",
   "userProfile": "Kullanıcı Profili",
   "userProfileDescription": "Hesap bilgilerinizi ve istatistikleriniz",
   "youDontHaveAnyEmailAddresses": "Hiç email adresiniz yok"

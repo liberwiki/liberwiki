@@ -1,4 +1,5 @@
 import uuid
+from contextlib import contextmanager
 from uuid import UUID
 
 from django.db import models, transaction
@@ -17,6 +18,7 @@ from django_lifecycle import (
 
 class BaseModel(LifecycleModelMixin, models.Model):
     REPR_STRING = "{self.__class__.__name__}(id={self.id})"
+    _skip_full_clean = False
 
     id = models.UUIDField(
         primary_key=True,
@@ -69,7 +71,8 @@ class BaseModel(LifecycleModelMixin, models.Model):
             self._run_hooked_methods(BEFORE_UPDATE, **kwargs)
 
         self._run_hooked_methods(BEFORE_SAVE, **kwargs)
-        self.full_clean()
+        if not self._skip_full_clean:
+            self.full_clean()
         save(*args, **kwargs)
         self._run_hooked_methods(AFTER_SAVE, **kwargs)
 
@@ -112,3 +115,26 @@ class BaseModel(LifecycleModelMixin, models.Model):
 
     def __repr__(self):
         return self.REPR_STRING.format(self=self)
+
+    @contextmanager
+    def skip_full_clean(self):
+        original_value = self._skip_full_clean
+        self._skip_full_clean = True
+        try:
+            yield
+        finally:
+            self._skip_full_clean = original_value
+
+    @contextmanager
+    def skip_field_validators(self, *field_names):
+        original_validators = {}
+        for field_name in field_names:
+            field = self._meta.get_field(field_name)
+            original_validators[field_name] = field.validators
+            field.validators = []
+        try:
+            yield
+        finally:
+            for field_name, validators in original_validators.items():
+                field = self._meta.get_field(field_name)
+                field.validators = validators

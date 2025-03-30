@@ -7,6 +7,17 @@ import { runMiddlewareIfPathMatches } from '@/lib/utils'
 
 const membersOnly = config.membersOnly
 
+export function redirectAuthenticatedIncompleteSignup(path: RegExp, redirectTo: string) {
+  return runMiddlewareIfPathMatches(path)(async function (request: NextRequest) {
+    const liberwiki = useLiberWikiAPI()
+    const isAuthenticated = await liberwiki.isAuthenticated()
+    const signupCompleted = await liberwiki.signupCompleted()
+    if (isAuthenticated && !signupCompleted) {
+      return NextResponse.redirect(new URL(redirectTo, request.url))
+    }
+  })
+}
+
 export function redirectAuthenticatedBackTo(path: RegExp, redirectTo: string) {
   return runMiddlewareIfPathMatches(path)(async function (request: NextRequest) {
     const liberwiki = useLiberWikiAPI()

@@ -4,10 +4,16 @@ from django_filters import BooleanFilter, ChoiceFilter, NumberFilter
 from drf_spectacular.utils import extend_schema
 from rest.serializers import EntrySerializer
 from rest.utils.filters import make_filters
-from rest.utils.permissions import IsSuperUser, ReadOnly, is_owner, prevent_actions, user_property
+from rest.utils.permissions import (
+    IsAuthenticatedANDSignupCompleted,
+    IsSuperUser,
+    ReadOnly,
+    is_owner,
+    prevent_actions,
+    user_property,
+)
 from rest.utils.schema_helpers import fake_serializer
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .base import BaseModelViewSet, django_to_drf_validation_error
@@ -21,7 +27,7 @@ class EntryViewSet(BaseModelViewSet):
     permission_classes = [
         IsSuperUser
         | (
-            IsAuthenticated
+            IsAuthenticatedANDSignupCompleted
             & (user_property(User.can_create_new_entry) | prevent_actions("create"))
             & (is_owner("author") | prevent_actions("update", "partial_update", "destroy"))
         )
@@ -86,7 +92,7 @@ class EntryViewSet(BaseModelViewSet):
     def author_queryset():
         queryset = User.objects.annotate(
             entry_count=Count("entries", filter=Q(entries__is_draft=False)),
-            title_count=Count("titles"),
+            title_count=Count("titles", distinct=True),
         )
         return queryset
 
@@ -142,7 +148,7 @@ class EntryViewSet(BaseModelViewSet):
         methods=["POST"],
         url_path="upvote",
         serializer_class=fake_serializer("UpvoteEntry", dont_initialize=True),
-        permission_classes=[IsAuthenticated],
+        permission_classes=[IsAuthenticatedANDSignupCompleted],
     )
     @django_to_drf_validation_error
     def upvote(self, *args, **kwargs):
@@ -159,7 +165,7 @@ class EntryViewSet(BaseModelViewSet):
         methods=["POST"],
         url_path="downvote",
         serializer_class=fake_serializer("DownvoteEntry", dont_initialize=True),
-        permission_classes=[IsAuthenticated],
+        permission_classes=[IsAuthenticatedANDSignupCompleted],
     )
     @django_to_drf_validation_error
     def downvote(self, *args, **kwargs):
@@ -176,7 +182,7 @@ class EntryViewSet(BaseModelViewSet):
         methods=["POST"],
         url_path="unvote",
         serializer_class=fake_serializer("UnvoteEntry", dont_initialize=True),
-        permission_classes=[IsAuthenticated],
+        permission_classes=[IsAuthenticatedANDSignupCompleted],
     )
     @django_to_drf_validation_error
     def unvote(self, *args, **kwargs):
@@ -193,7 +199,7 @@ class EntryViewSet(BaseModelViewSet):
         methods=["POST"],
         url_path="bookmark",
         serializer_class=fake_serializer("BookmarkEntry", dont_initialize=True),
-        permission_classes=[IsAuthenticated],
+        permission_classes=[IsAuthenticatedANDSignupCompleted],
     )
     @django_to_drf_validation_error
     def bookmark(self, *args, **kwargs):
@@ -210,7 +216,7 @@ class EntryViewSet(BaseModelViewSet):
         methods=["POST"],
         url_path="unbookmark",
         serializer_class=fake_serializer("UnbookmarkEntry", dont_initialize=True),
-        permission_classes=[IsAuthenticated],
+        permission_classes=[IsAuthenticatedANDSignupCompleted],
     )
     @django_to_drf_validation_error
     def unbookmark(self, *args, **kwargs):

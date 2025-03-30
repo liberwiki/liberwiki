@@ -1,7 +1,7 @@
 import * as Icons from 'lucide-react'
 
+import LogoutButton from '@/components/liberwiki/LogoutButton'
 import { InfoItem } from '@/components/liberwiki/Profile/Details/InfoItem'
-import { LogoutButton } from '@/components/liberwiki/Profile/Details/client'
 
 import { sUseTranslation } from '@/i18n'
 import { useLiberWikiAPI as sUseLiberWikiAPI } from '@/lib/serverHooks'
