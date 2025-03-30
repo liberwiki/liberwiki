@@ -160,6 +160,7 @@ SOCIALACCOUNT_PROVIDERS = {
             "access_type": "offline",
         },
         "OAUTH_PKCE_ENABLED": True,
+        "VERIFIED_EMAIL": True,
     },
     "microsoft": {
         "APPS": [
@@ -171,6 +172,7 @@ SOCIALACCOUNT_PROVIDERS = {
                 },
             },
         ],
+        "VERIFIED_EMAIL": True,
     },
 }
 
