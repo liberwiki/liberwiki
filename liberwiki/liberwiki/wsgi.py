@@ -18,10 +18,11 @@ from liberwiki.monkeypatches import (
 )
 
 monkeypatch_drf_spectacular()
-monkeypatch_allauth_username_email_login()
+
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "liberwiki.settings")
 
 application = get_wsgi_application()
 
+monkeypatch_allauth_username_email_login()  # Requires apps to be loaded
 monkeypatch_allauth_oauth2_client()  # Requires apps to be loaded
