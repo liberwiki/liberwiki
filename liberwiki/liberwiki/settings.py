@@ -136,7 +136,7 @@ SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
 SOCIALACCOUNT_STORE_TOKENS = True
 
 AUTHENTICATION_BACKENDS = [
-    "django.contrib.auth.backends.ModelBackend",
+    "common.backends.auth.UsernameOREmailModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 

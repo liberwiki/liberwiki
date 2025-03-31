@@ -11,9 +11,14 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-from liberwiki.monkeypatches import monkeypatch_allauth_oauth2_client, monkeypatch_drf_spectacular
+from liberwiki.monkeypatches import (
+    monkeypatch_allauth_oauth2_client,
+    monkeypatch_allauth_username_email_login,
+    monkeypatch_drf_spectacular,
+)
 
 monkeypatch_drf_spectacular()
+monkeypatch_allauth_username_email_login()
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "liberwiki.settings")
 
