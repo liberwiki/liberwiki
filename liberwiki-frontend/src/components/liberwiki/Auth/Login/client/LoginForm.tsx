@@ -54,6 +54,7 @@ export default function LoginForm() {
       toast(t('auth:loginFailed'))
     } else {
       router.push('/')
+      router.refresh()
       toast(t('auth:loggedInSuccessfully'))
     }
   }

@@ -18,6 +18,7 @@ export default function LogoutButton(props: Omit<React.ComponentPropsWithoutRef<
   async function handleLogout() {
     await liberwiki.auth.logout()
     router.push('/')
+    router.refresh()
     toast(t('profile:loggedOut'))
   }
 
