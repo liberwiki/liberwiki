@@ -30,7 +30,7 @@ def monkeypatch_allauth_username_email_login():
     from allauth.core import context
 
     def clean(self):
-        cleaned_data = super().clean()
+        cleaned_data = super(allauth.headless.account.inputs.LoginInput, self).clean()
         if self.errors:
             return cleaned_data
         credentials = {}
