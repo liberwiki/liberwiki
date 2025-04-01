@@ -22,7 +22,7 @@ export default function FollowButton({ title }: { title: APIType<'Title'> }) {
   return (
     <Button onClick={handleBookmark} variant="ghost" className="px-0 hover:bg-transparent">
       <p className="font-medium text-primary hover:underline">
-        {isBookmarked ? t('title:follow') : t('title:unfollow')}
+        {isBookmarked ? t('title:unfollow') : t('title:follow')}
       </p>
     </Button>
   )
