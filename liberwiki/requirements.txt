@@ -1,6 +1,6 @@
 wheel==0.44.0
 Django==5.1
-iubeo==0.3.0
+iubeo==0.4.1
 python-dotenv==1.0.1
 psycopg[binary]==3.2.3
 sentry-sdk==2.13.0
