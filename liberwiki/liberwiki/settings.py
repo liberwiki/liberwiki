@@ -32,8 +32,6 @@ INSTALLED_APPS = [
     "admin_interface",
     "corsheaders",
     "rest_framework",
-    "rest_framework.authtoken",
-    "administration.apps.AdministrationConfig",  # Needs to be after admin_interface + rest_framework.authtoken
     "django_filters",
     "more_admin_filters",
     "drf_spectacular",
@@ -55,6 +53,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.github",
     "allauth.socialaccount.providers.discord",
     "allauth.socialaccount.providers.reddit",
+    "administration.apps.AdministrationConfig",
 ]
 
 MIDDLEWARE = [
