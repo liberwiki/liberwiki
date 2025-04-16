@@ -60,18 +60,18 @@ export async function Emails() {
                       </MarkEmailPrimaryButton>
                     )}
                     {!email.verified && (
-                      <>
-                        <ResendVerificationEmailButton
-                          variant="ghost"
-                          className="w-full justify-start"
-                          email={email.email}
-                        >
-                          {t('profile:resendVerificationEmail')}
-                        </ResendVerificationEmailButton>
-                        <DeleteEmailButton variant="ghost" className="w-full justify-start" email={email.email}>
-                          {t('profile:deleteEmail')}
-                        </DeleteEmailButton>
-                      </>
+                      <ResendVerificationEmailButton
+                        variant="ghost"
+                        className="w-full justify-start"
+                        email={email.email}
+                      >
+                        {t('profile:resendVerificationEmail')}
+                      </ResendVerificationEmailButton>
+                    )}
+                    {!email.primary && (
+                      <DeleteEmailButton variant="ghost" className="w-full justify-start" email={email.email}>
+                        Delete Email
+                      </DeleteEmailButton>
                     )}
                   </OverlayClose>
                 </OverlayContent>

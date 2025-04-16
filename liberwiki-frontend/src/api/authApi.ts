@@ -45,7 +45,7 @@ export class LiberWikiAuthAPI {
     return await this.fetch('/config')
   }
 
-  public async session(): AuthApiSessionType {
+  public async session(): Promise<AuthApiSessionType> {
     return (await this.fetch('/auth/session')) as AuthApiSessionType
   }
 

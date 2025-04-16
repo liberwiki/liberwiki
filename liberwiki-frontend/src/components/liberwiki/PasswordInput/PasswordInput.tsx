@@ -23,7 +23,7 @@ export function PasswordInput({ className, ...props }: React.ComponentProps<type
         type="button"
         variant="ghost"
         size="icon"
-        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+        className="absolute right-0 top-0.5 px-3 py-2 hover:bg-transparent"
         onClick={togglePasswordVisibility}
       >
         {showPassword ? (

@@ -17,7 +17,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config.SECRET_KEY
 DEBUG = config.DEBUG
 ALLOWED_HOSTS = config.ALLOWED_HOSTS
-PROTOCOL = "https" if not DEBUG else "http"
+PROTOCOL = "https"
+SECURE_SSL_REDIRECT = False  # Only because we use cloudflare without full or strict
 
 # Application definition
 INSTALLED_APPS = [
@@ -123,12 +124,13 @@ AUTH_USER_MODEL = "core.User"
 ACCOUNT_ADAPTER = "core.backends.allauth.LiberWikiAllauthAccountAdapter"
 SOCIALACCOUNT_ADAPTER = "core.backends.allauth.LiberWikiAllauthSocialAccountAdapter"
 HEADLESS_ADAPTER = "core.backends.allauth.LiberWikiAllauthHeadlessAccountAdapter"
-ACCOUNT_SIGNUP_FIELDS = ["email*", "username*"]
+ACCOUNT_SIGNUP_FIELDS = ["email*", "username*", "password1*"]
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = False
 ACCOUNT_EMAIL_VERIFICATION_BY_CODE_ENABLED = False
 ACCOUNT_LOGIN_METHODS = ["username", "email"]
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = PROTOCOL
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 
 
 SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
@@ -285,12 +287,6 @@ if not DEBUG:
         # Set traces_sample_rate to 1.0 to capture 100%
         # of transactions for tracing.
         traces_sample_rate=config.DEVTOOLS.SENTRY.TRACES_SAMPLE_RATE,
-        _experiments={
-            # Set continuous_profiling_auto_start to True
-            # to automatically start the profiler on when
-            # possible.
-            "continuous_profiling_auto_start": True,
-        },
         debug=config.DEBUG,
     )
 

@@ -27,6 +27,11 @@ const RAW = Object.freeze({
       gaID: process.env.NEXT_PUBLIC_LIBERWIKI__FRONT_END__DEVTOOLS__GOOGLE_ANALYTICS__GA_ID,
     },
   },
+  verification: {
+    microsoft: {
+      associatedApplicationID: process.env.NEXT_PUBLIC_LIBERWIKI__VERIFICATION__MICROSOFT__ASSOCIATED_APPLICATION_ID,
+    },
+  },
   githubLink: process.env.NEXT_PUBLIC_LIBERWIKI__GITHUB_LINK,
 })
 
@@ -82,6 +87,15 @@ export const config = Object.freeze({
     },
     googleAnalytics: {
       gaID: stringConfig({ name: 'googleAnalytics.gaID', value: RAW.devtools.googleAnalytics.gaID, default: '' }),
+    },
+  },
+  verification: {
+    microsoft: {
+      associatedApplicationID: stringConfig({
+        name: 'verification.microsoft.associatedApplicationID',
+        value: RAW.verification.microsoft.associatedApplicationID,
+        default: '',
+      }),
     },
   },
 })

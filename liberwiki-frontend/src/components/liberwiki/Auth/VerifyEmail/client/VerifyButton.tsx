@@ -27,7 +27,7 @@ export default function VerifyButton(
         .groupBy('param')
         .mapValues((i) => i.map((i) => i.message))
         .value()
-      toast(t('auth:emailVerificationFailed'), { description: fieldErrors.key.join('\n') })
+      toast(t('auth:emailVerificationFailed'), { description: fieldErrors.key?.join('\n') })
     } else {
       toast(t('auth:emailVerifiedSuccessfully'))
       router.push('/auth/login')

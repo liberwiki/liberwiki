@@ -1,4 +1,4 @@
-export type AuthApiSessionType = Promise<{
+export type AuthApiSessionType = {
   response?: Response
   data?: {
     status: number
@@ -18,4 +18,4 @@ export type AuthApiSessionType = Promise<{
     }
   }
   error?: unknown
-}>
+}

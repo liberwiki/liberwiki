@@ -4,13 +4,13 @@ from django.db.models import Count, Q
 from django_filters import NumberFilter
 from drf_spectacular.utils import extend_schema
 from rest.serializers import PublicUserSerializer, UserSerializer
+from rest.serializers.user import UserCompleteSignupSerializer
 from rest.utils.filters import make_filters
 from rest.utils.schema_helpers import error_serializer
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from ..serializers.user import UserCompleteSignupSerializer
 from .base import BaseModelViewSet
 
 
