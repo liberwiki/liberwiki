@@ -3,6 +3,9 @@ from django.core.exceptions import ValidationError
 from django.utils.deconstruct import deconstructible
 from django.utils.translation import gettext_lazy as _
 
+# Looking back, maybe this should've simply been a regex validator.
+# TODO: Consider using regex validator instead of this custom validator.
+
 
 @deconstructible
 class AllowedCharactersValidator:

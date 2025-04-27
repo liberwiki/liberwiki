@@ -34,13 +34,17 @@ class User(AbstractUser, BaseModel):
         unique=True,
         help_text=_(
             "Required. 150 characters or fewer. "
-            "Letters (lowercase), digits or hyphens only, can't start with digits or hyphens."
+            "Letters (lowercase), digits, dots or hyphens only, must start with letters."
         ),
         validators=[
             AllowedCharactersValidator(
-                allowed_characters=string.ascii_lowercase + string.digits + "-",
+                allowed_characters=string.ascii_lowercase + string.digits + "-_.",
                 allowed_first=string.ascii_lowercase,
-                allowed_last=string.ascii_lowercase + string.digits,
+                allowed_last=string.ascii_lowercase + string.digits + "-_.",
+                message=(
+                    "Username must start with a lowercase letter, "
+                    "and can only contain lowercase letters, digits, hyphens, underscores, and periods."
+                ),
             ),
         ],
         error_messages={

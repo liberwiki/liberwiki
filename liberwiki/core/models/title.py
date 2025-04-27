@@ -19,6 +19,7 @@ class Title(BaseModel):
         allowed_characters=string.ascii_letters + string.digits + " " + TITLE_NAME_ALLOWED_EXTRA_CHARS,
         allowed_first=string.ascii_letters + string.digits + TITLE_NAME_ALLOWED_EXTRA_CHARS,
         allowed_last=string.ascii_letters + string.digits + TITLE_NAME_ALLOWED_EXTRA_CHARS,
+        message=("Title name can only contain letters, numbers, " "and the following characters: {allowed_characters}"),
     )
 
     name = models.CharField(
