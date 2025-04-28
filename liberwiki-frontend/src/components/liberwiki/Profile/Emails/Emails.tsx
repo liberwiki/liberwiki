@@ -70,7 +70,7 @@ export async function Emails() {
                     )}
                     {!email.primary && (
                       <DeleteEmailButton variant="ghost" className="w-full justify-start" email={email.email}>
-                        Delete Email
+                        {t('profile:deleteEmail')}
                       </DeleteEmailButton>
                     )}
                   </OverlayClose>

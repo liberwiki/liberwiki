@@ -1,4 +1,5 @@
 {
+  "couldNotSharePost": "Gönderiyi otomatik olarak paylaşamadık veya bağlantıyı kopyalayamadık. Yine de bu gönderiyi bağlantıyı kopyalayarak manuel olarak paylaşabilirsiniz.",
   "delete": "Sil",
   "edit": "Düzenle",
   "entryCreationError": "Girdinizi oluştururken bir hata oluştu.",

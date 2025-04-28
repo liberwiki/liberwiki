@@ -1,4 +1,5 @@
 {
+  "couldNotSharePost": "Couldn't share or copy the post link automatically. You still can share this post manually by copying the link.",
   "delete": "Delete",
   "edit": "Edit",
   "entryCreationError": "An error occurred while creating your entry.",
