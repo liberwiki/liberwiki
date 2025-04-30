@@ -16,9 +16,11 @@ import { cn, shortFormattedDate, uuidV4toHEX } from '@/lib/utils'
 export async function Entry({
   entry,
   classNames,
+  isAuthenticated = false,
 }: {
   entry: Includes<Includes<APIType<'Entry'>, 'author', APIType<'User'>>, 'title', APIType<'Title'>>
   classNames?: Partial<Record<'Card' | 'CardContent', string>>
+  isAuthenticated?: boolean
 }) {
   const liberwiki = sUseLiberWikiAPI()
   const { t } = await sUseTranslation(['entry'])
@@ -32,8 +34,8 @@ export async function Entry({
         </div>
         <div className="flex justify-between items-center -mx-4">
           <div className="flex gap-2 max-sm:gap-0 items-center">
-            <FeedbackButtons entry={entry} />
-            <BookmarkButton entry={entry} />
+            <FeedbackButtons entry={entry} isAuthenticated={isAuthenticated} />
+            <BookmarkButton entry={entry} isAuthenticated={isAuthenticated} />
             <ShareButton entry={entry} />
           </div>
           <div className="flex gap-2 items-center">

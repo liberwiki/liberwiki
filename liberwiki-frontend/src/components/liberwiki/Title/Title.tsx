@@ -2,6 +2,7 @@ import Link from 'next/link'
 
 import _ from 'lodash'
 
+import AuthenticatedOnlyActionButton from '@/components/liberwiki/AuthenticatedOnlyActionButton'
 import Entry from '@/components/liberwiki/Entry'
 import Paginator from '@/components/liberwiki/Paginator'
 import { FollowButton, NewEntryEditor } from '@/components/liberwiki/Title/client'
@@ -28,6 +29,7 @@ export async function Title({
   const entryPerPage = config.ux.defaultEntryPageSize
   const liberwiki = sUseLiberWikiAPI()
   const { t } = await sUseTranslation(['common', 'title', 'entry', 'advancedEntrySearch'])
+  const isAuthenticated = await liberwiki.isAuthenticated()
 
   const { data: entries } = await liberwiki.entries({
     is_draft: false,
@@ -195,6 +197,7 @@ export async function Title({
             <Entry
               key={entry.id}
               entry={includesType(includesType({ ...entry }, 'author', 'User'), 'title', 'Title')}
+              isAuthenticated={isAuthenticated}
             />
           ))
         ) : (
@@ -203,6 +206,13 @@ export async function Title({
       {canCreateEntry && (
         <div className="p-2 w-full">
           <NewEntryEditor title={title} content={entryContent} />
+        </div>
+      )}
+      {!(await liberwiki.isAuthenticated()) && (
+        <div className="w-full flex justify-center p-8 border border-gray-700 rounded-md mb-4">
+          <AuthenticatedOnlyActionButton isAuthenticated={false} variant="outline">
+            {t('entry:addYourEntry')}
+          </AuthenticatedOnlyActionButton>
         </div>
       )}
     </>

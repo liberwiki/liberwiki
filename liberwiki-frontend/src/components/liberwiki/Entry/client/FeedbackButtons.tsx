@@ -6,7 +6,7 @@ import * as Icons from 'lucide-react'
 
 import _ from 'lodash'
 
-import { Button } from '@/components/shadcn/button'
+import AuthenticatedOnlyActionButton from '@/components/liberwiki/AuthenticatedOnlyActionButton'
 
 import { APIType, Includes } from '@/api/typeHelpers'
 import { useLiberWikiAPI } from '@/lib/serverHooks'
@@ -14,8 +14,10 @@ import { cn } from '@/lib/utils'
 
 export default function FeedbackButtons({
   entry,
+  isAuthenticated,
 }: {
   entry: Includes<Includes<APIType<'Entry'>, 'author', APIType<'User'>>, 'title', APIType<'Title'>>
+  isAuthenticated: boolean
 }) {
   const liberwiki = useLiberWikiAPI()
   const [feedback, setFeedback] = useState<APIType<'VoteEnum'> | null>(entry.vote)
@@ -40,12 +42,22 @@ export default function FeedbackButtons({
 
   return (
     <>
-      <Button variant="ghost" size="icon" onClick={handleVote('UPVOTE')}>
+      <AuthenticatedOnlyActionButton
+        variant="ghost"
+        size="icon"
+        onClick={handleVote('UPVOTE')}
+        isAuthenticated={isAuthenticated}
+      >
         <Icons.ArrowBigUp className={cn('h-5 w-5', feedback === 'UPVOTE' && 'fill-green-500 text-green-500')} />
-      </Button>
-      <Button variant="ghost" size="icon" onClick={handleVote('DOWNVOTE')}>
+      </AuthenticatedOnlyActionButton>
+      <AuthenticatedOnlyActionButton
+        variant="ghost"
+        size="icon"
+        onClick={handleVote('DOWNVOTE')}
+        isAuthenticated={isAuthenticated}
+      >
         <Icons.ArrowBigDown className={cn('h-5 w-5', feedback === 'DOWNVOTE' && 'fill-destructive text-destructive')} />
-      </Button>
+      </AuthenticatedOnlyActionButton>
     </>
   )
 }
