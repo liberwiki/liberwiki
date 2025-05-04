@@ -29,10 +29,17 @@ export default function AdvancedSearch() {
 
   const { t } = useClientTranslation(['common', 'advancedTitleSearch'])
 
+  const debouncedFetchRef = React.useRef(
+    _.debounce(async (query: string) => {
+      const { data: titles } = await liberwiki.titles({ name__icontains: query })
+      setSearchResults(titles?.results || [])
+    }, 300)
+  )
+
   async function handleAutocomplete(event: React.ChangeEvent<HTMLInputElement>) {
-    setSearch(event.target.value)
-    const { data: titles } = await liberwiki.titles({ name__icontains: event.target.value })
-    setSearchResults(titles?.results || [])
+    const query = event.target.value
+    setSearch(query)
+    debouncedFetchRef.current(query)
   }
 
   async function handleSearch(event: React.FormEvent<HTMLFormElement>) {
