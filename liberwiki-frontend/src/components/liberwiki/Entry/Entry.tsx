@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 import * as Icons from 'lucide-react'
 
-import Editor from '@/components/liberwiki/Editor'
+import { EditorHTMLContent } from '@/components/liberwiki/Editor/Editor'
 import { BookmarkButton, DeleteButton, FeedbackButtons, ShareButton } from '@/components/liberwiki/Entry/client'
 import { Button, buttonVariants } from '@/components/shadcn/button'
 import { Card, CardContent } from '@/components/shadcn/card'
@@ -30,7 +30,7 @@ export async function Entry({
     <Card className={cn('w-full border-0 shadow-none', classNames?.Card)} id={entry.id}>
       <CardContent className={cn('pt-6 flex flex-col gap-2', classNames?.CardContent)}>
         <div className="overflow-x-auto [&_p:has(br.ProseMirror-trailingBreak)]:hidden">
-          <Editor readonly={true} content={entry.content as object} />
+          <EditorHTMLContent content={entry.content as object} />
         </div>
         <div className="flex justify-between items-center -mx-4">
           <div className="flex gap-2 max-sm:gap-0 items-center">

@@ -22,10 +22,11 @@ import Text from '@tiptap/extension-text'
 import TextStyle from '@tiptap/extension-text-style'
 import Typography from '@tiptap/extension-typography'
 import Underline from '@tiptap/extension-underline'
-import { useEditor } from '@tiptap/react'
+import { generateHTML } from '@tiptap/html'
+import { JSONContent, useEditor } from '@tiptap/react'
 import { common, createLowlight } from 'lowlight'
 
-export default function useLiberWikiEditor({ content }: { content?: object }) {
+function getLiberWikiEditorExtensions({ forHTMLGeneration = false }: { forHTMLGeneration?: boolean } = {}) {
   const lowlight = createLowlight(common)
 
   const markExtensions = [
@@ -69,12 +70,16 @@ export default function useLiberWikiEditor({ content }: { content?: object }) {
     LatexBlock,
   ]
 
-  const otherExtensions = [CharacterCount, History]
+  const otherExtensions = forHTMLGeneration ? [] : [CharacterCount, History]
 
+  return [...markExtensions, ...nodeExtensions, ...codeBlockExtensions, ...otherExtensions]
+}
+
+export default function useLiberWikiEditor({ content }: { content?: object }) {
   return useEditor(
     {
       immediatelyRender: false,
-      extensions: [...markExtensions, ...nodeExtensions, ...codeBlockExtensions, ...otherExtensions],
+      extensions: getLiberWikiEditorExtensions(),
       editorProps: {
         attributes: {
           class: 'prose prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-xl focus:outline-none',
@@ -84,4 +89,8 @@ export default function useLiberWikiEditor({ content }: { content?: object }) {
     },
     [content]
   )
+}
+
+export function getLiberWikiEditorContentHTML(content: JSONContent) {
+  return generateHTML(content, getLiberWikiEditorExtensions({ forHTMLGeneration: true }))
 }

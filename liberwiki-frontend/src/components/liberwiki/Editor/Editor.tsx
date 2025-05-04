@@ -9,13 +9,23 @@ import * as Icons from 'lucide-react'
 import _ from 'lodash'
 
 import EditorButton from '@/components/liberwiki/Editor/EditorButton'
-import useLiberWikiEditor from '@/components/liberwiki/Editor/liberwikiEditor'
+import useLiberWikiEditor, { getLiberWikiEditorContentHTML } from '@/components/liberwiki/Editor/liberwikiEditor'
 import { Button } from '@/components/shadcn/button'
 import { Card, CardContent } from '@/components/shadcn/card'
 
 import { useClientTranslation } from '@/i18n'
 
 import { EditorContent, Editor as TipTapEditor } from '@tiptap/react'
+
+export function EditorHTMLContent({ content }: { content: object }) {
+  const editorHTML = getLiberWikiEditorContentHTML(content)
+  return (
+    <div
+      className="ProseMirror prose prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-xl focus:outline-none"
+      dangerouslySetInnerHTML={{ __html: editorHTML }}
+    />
+  )
+}
 
 export function Editor({
   content,
