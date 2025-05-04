@@ -127,15 +127,6 @@ export function Editor({
           <div className="w-px h-6 max-sm:h-4 bg-gray-700" aria-hidden="true" />
           <div className="flex gap-2 max-sm:gap-0 items-center">
             <EditorButton
-              pressed={editor.isActive('latexBlock')}
-              onPressedChange={() => editor.chain().focus().toggleLatexBlock().run()}
-              ariaLabel={t('editor:toggleLatex')}
-              icon={Icons.Sigma}
-            />
-          </div>
-          <div className="w-px h-6 max-sm:h-4 bg-gray-700" aria-hidden="true" />
-          <div className="flex gap-2 max-sm:gap-0 items-center">
-            <EditorButton
               pressed={editor.isActive('bulletList')}
               onPressedChange={() => editor.chain().focus().toggleBulletList().run()}
               ariaLabel={t('editor:toggleBulletList')}

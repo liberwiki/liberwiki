@@ -1,5 +1,3 @@
-import LatexBlock from '@/components/liberwiki/Editor/TipTapLatexExtension'
-
 import BlockQuote from '@tiptap/extension-blockquote'
 import Bold from '@tiptap/extension-bold'
 import BulletList from '@tiptap/extension-bullet-list'
@@ -67,7 +65,6 @@ function getLiberWikiEditorExtensions({ forHTMLGeneration = false }: { forHTMLGe
         class: 'font-code',
       },
     }),
-    LatexBlock,
   ]
 
   const otherExtensions = forHTMLGeneration ? [] : [CharacterCount, History]
