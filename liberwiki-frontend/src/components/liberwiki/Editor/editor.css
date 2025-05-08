@@ -11,7 +11,7 @@
   }
 
   pre {
-    @apply bg-secondary rounded p-4 my-4 border border-secondary;
+    @apply bg-secondary rounded p-4 my-4 border border-secondary whitespace-pre-wrap;
     code {
       @apply text-primary font-code;
     }
