@@ -31,7 +31,7 @@ class LiberWikiAllauthAccountAdapter(DefaultAccountAdapter):
         """
         Save the user instance and set the username to an unusable value.
         """
-        cm = user.skip_field_validators("username") if user.has_unusable_username() else nullcontext()
+        cm = user.skip_field_validators("username") if user.has_unusable_username else nullcontext()
         with cm:
             user = super().save_user(request, user, form, commit)
         return user
@@ -44,9 +44,9 @@ class LiberWikiAllauthAccountAdapter(DefaultAccountAdapter):
 class LiberWikiAllauthSocialAccountAdapter(DefaultSocialAccountAdapter):
     def save_user(self, request, sociallogin, form=None):
         user = sociallogin.user
-        cm = user.skip_field_validators("username") if user.has_unusable_username() else nullcontext()
+        cm = user.skip_field_validators("username") if user.has_unusable_username else nullcontext()
         with cm:
-            user = super().save_user(request, user, form, commit)
+            user = super().save_user(request, user, form)
         return user
 
 
