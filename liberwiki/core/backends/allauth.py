@@ -46,7 +46,7 @@ class LiberWikiAllauthSocialAccountAdapter(DefaultSocialAccountAdapter):
         user = sociallogin.user
         cm = user.skip_field_validators("username") if user.has_unusable_username else nullcontext()
         with cm:
-            user = super().save_user(request, user, form)
+            user = super().save_user(request, sociallogin, form)
         return user
 
 
