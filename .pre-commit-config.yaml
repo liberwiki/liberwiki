@@ -20,7 +20,7 @@ repos:
         args: [--profile=black, -m=3, -l=120]
 
   - repo: https://github.com/hakancelikdev/unimport
-    rev: 1.2.1
+    rev: 1.3.0
     hooks:
       - id: unimport
         args: [--remove, --include-star-import]
